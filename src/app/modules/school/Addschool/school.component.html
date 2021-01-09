@@ -1,0 +1,35 @@
+<div class="container">
+
+  <mat-card class="header_card">
+    <p style="line-height: 30px;">
+      <span style="float: left;">Add School</span> <span style="float: right;"><a>Home</a> > Add School </span>
+    </p>
+  </mat-card>
+
+  <mat-card class="content_box">
+    <form action="" [formGroup]="objectForm">
+      <div class="row">
+        <div class="col-md-4" formArrayName="schools">
+          <div class="row" *ngFor='let School of SchoolList;index as i'>
+            <p style="line-height: 20px;"> School * </p>
+            <input type="text" formControlName="{{i}}">
+          </div>
+
+        </div>
+        <div class="col-md-2" style="margin-top: 30px;" *ngIf = 'editFlag'>
+          <button mat-mini-fab color="accent" (click)='addSchool()'>
+            <mat-icon>plus_one</mat-icon>
+          </button>
+        </div>
+      </div>
+
+
+      <div class="row" style="margin-top: 10px;">
+        <button mat-raised-button color="accent" style="margin: 4px;" (click)="onSubmit()" *ngIf = 'editFlag'>Save</button>
+        <button mat-raised-button color="accent" style="margin: 4px;" (click)="onUpdate()" *ngIf = '!editFlag'>Update</button>
+        <button mat-raised-button color="accent" style="margin: 4px;">Reset</button>
+      </div>
+    </form>
+  </mat-card>
+
+</div>

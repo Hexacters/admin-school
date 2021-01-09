@@ -1,0 +1,49 @@
+:host{
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+.mainComp{
+    height: 100vh;
+    min-height: 100vh;
+    background-color: rgb(213, 216, 218);
+}
+.header{
+    width:100%; 
+    padding: 0;
+    margin: 0;
+}
+mat-drawer{
+    width: 300px;
+    height: 100%;
+}
+mat-drawer-container{
+    max-width: 100%;
+    height: auto;
+    min-height: 89.5%;
+    overflow: hidden;
+    background-color: rgb(213, 216, 218);
+}
+mat-drawer-content{
+    overflow: hidden;
+    margin: 0px;
+    padding: 10px;
+}
+.mat-drawer-inner-container{
+    overflow-y: hidden;
+}
+button{
+    width: 100%;
+    border-radius: 20px 20px;
+    height: 40px;
+    outline: none;
+}
+// .stickLeft{
+//     height: 100%;
+//     width: 40px;
+//     background-color: white;
+//     left: 0px;
+//     top: 0;
+//     position: fixed;
+//     align-content: left;
+// }

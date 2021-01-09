@@ -1,0 +1,66 @@
+<div class="container">
+    <div class="row">
+        <mat-card class="header_card">
+            <p style="line-height: 30px;">
+                <span style="float: left;">View School</span> <span style="float: right;"><a>Home</a> > View School
+                </span>
+            </p>
+        </mat-card>
+    </div>
+
+    <div class="row">
+        <mat-card class="content_box">
+            <p style="line-height: 20px;"> Enter School Name * </p>
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef> No. </th>
+                        <td mat-cell *matCellDef="let element;index as i"> {{i+1}} </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="schoolName">
+                        <th mat-header-cell *matHeaderCellDef> School Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.schoolName}} </td>
+                    </ng-container>
+                    <!--  -->
+
+                    <ng-container matColumnDef="departmentName">
+                        <th mat-header-cell *matHeaderCellDef> Department Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.departmentName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="programName">
+                        <th mat-header-cell *matHeaderCellDef> Programme Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.programName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="update">
+                        <th mat-header-cell *matHeaderCellDef> Update </th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-icon color="primary" (click)='updateDepartment(element)'>edit</mat-icon>  
+                        </td>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="delete">
+                        <th mat-header-cell *matHeaderCellDef> delete </th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-icon color="primary" (click)='deleteDepartment(element.id)'>delete</mat-icon>  
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+                <mat-paginator [length]='10' [pageSizeOptions]="[5,10]" showFirstLastButtons>
+                </mat-paginator>
+            </div>
+        </mat-card>
+    </div>
+
+
+</div>

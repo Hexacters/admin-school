@@ -1,0 +1,83 @@
+<div class="container">
+   
+    <!-- submit form block-->
+    <mat-card>
+        
+        <form #userForm="ngForm" [formGroup]="objectForm" (ngSubmit)="onSubmit()">
+          <mat-form-field floatLabel="never">
+            <mat-label>Select Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option>None</mat-option>
+              <mat-option> *ngFor="let state of states" [value]="state">{{state.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+           <input type="text" id="category" placeholder="Search.." name="subCategory" formControlName="subCategory">
+           <button mat-raised-button color="accent" type="submit">Submit</button>
+        </form>
+        
+    </mat-card> 
+
+   <!-- get data container -->
+    <div class="mat-elevation-z8" style="background-color: white;">
+     <!--  filter items here -->
+      <div class="search-div">
+        <button mat-raised-button>
+          <mat-icon color="accent">add</mat-icon>Create
+        </button>
+        <mat-form-field class="search-form-field" floatLabel="never" align="end" appearance="outline">
+          <mat-label >search..</mat-label> 
+             <input matInput type="text" [(ngModel)]="value" (keyup)="applyFilter($event.target.value)" #filteredVal>
+               <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="search..." (click)="value=''" >
+                 <mat-icon color="warn" (click)="closeFilter(filteredVal)">close</mat-icon>
+               </button>
+          </mat-form-field>
+      </div>
+
+    <table mat-table [dataSource]="dataSource">
+  
+      <!-- sn Column -->
+      <ng-container matColumnDef="sn">
+        <th mat-header-cell *matHeaderCellDef>S. No. </th>
+        <td mat-cell *matCellDef="let element; index as i"> {{i+1}} </td>
+      </ng-container>
+  
+      <!-- Category Column -->
+      <ng-container matColumnDef="Category">
+        <th mat-header-cell *matHeaderCellDef>Category </th>
+        <td mat-cell *matCellDef="let element ; index as i"> {{element.category.name}} </td>
+      </ng-container>
+
+      <!-- Sub-Category Column -->
+      <ng-container matColumnDef="SubCategory">
+        <th mat-header-cell *matHeaderCellDef>SubCategory </th>
+        <td mat-cell *matCellDef="let element ; index as i"> {{element.name}} </td>
+      </ng-container>
+  
+      <!-- Weight Column -->
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef> EDIT </th>
+        <td mat-cell *matCellDef="let element ; index as i">
+            <button mat-raised-button>
+                <mat-icon color="primary" style="margin-left: 5px;">edit</mat-icon>
+            </button>
+        </td>
+      </ng-container>
+  
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef>DELETE</th>
+        <td mat-cell *matCellDef="let element ; index as i">
+          <button mat-raised-button (click)="onDelete(element.id)">
+            <mat-icon color="warn" style="margin-left: 5px;">delete_outline</mat-icon>
+          </button></td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+
+</div>
+

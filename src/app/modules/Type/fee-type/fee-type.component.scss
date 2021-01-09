@@ -1,0 +1,38 @@
+.container{
+    align-items: center;
+}
+.header_card{
+    width: 100%;
+    height: 60px;
+    margin: 10px 0px;
+    box-shadow: 0 0 20px #8c8c8c;
+}
+.content_box{
+    width: 100%;
+    min-height: 300px;
+    margin: 10px 0px;
+    box-shadow: 0 0 20px #8c8c8c;
+}
+
+input{
+    width: 100%; 
+    height: 30px;
+}
+.mat-button-focus-overlay { 
+    background-color: transparent!important; 
+}
+
+.mat-icon-button .mat-button-base .cdk-focussed .cdk-mouse-focussed{
+    border-color: transparent !important;
+}
+.mat-icon-button :focus{
+    border-color: transparent !important;
+    border: none;
+}
+button{
+    border: none;
+}
+.mat-button-focus-overlay{
+    border: none;
+
+}

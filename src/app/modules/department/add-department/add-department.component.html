@@ -1,0 +1,48 @@
+<div class="container">
+
+  <mat-card class="header_card">
+    <p style="line-height: 30px;">
+      <span style="float: left;">Add Department</span> <span style="float: right;"><a>Home</a> > Add Department </span>
+    </p>
+  </mat-card>
+
+
+  <mat-card class="content_box">
+    <form action="" [formGroup]="objectForm">
+      <div class="row">
+        <div class="col-md-4 ml-1">
+          <div class="row" style="display: flex;">
+            <label for="cars">SELECT SCHOOL:</label>
+            <select size="1" formControlName="schoolName" (ngModelChange)='selectSchool($event)'>
+              <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-4" formArrayName="departments">
+          <div class="row" *ngFor='let department of departmentList;index as i'>
+            <p style="line-height: 20px;"> School * </p>
+            <input type="text" formControlName="{{i}}">
+          </div>
+
+        </div>
+        <div class="col-md-2" style="margin-top: 30px;">
+          <button mat-mini-fab color="accent" (click)='addDepartment()'>
+            <mat-icon>plus_one</mat-icon>
+          </button>
+        </div>
+
+      </div>
+
+
+      <div class="row" style="margin-top: 10px;">
+        <button mat-raised-button color="accent" style="margin: 4px;" (click)="onSubmit()"  *ngIf ='editFlag'>Save</button>
+        <button mat-raised-button color="accent" style="margin: 4px;" (click)="update()" *ngIf = '!editFlag'>Update</button>
+        <button mat-raised-button color="accent" style="margin: 4px;">Reset</button>
+      </div>
+    </form>
+  </mat-card>
+
+
+
+</div>

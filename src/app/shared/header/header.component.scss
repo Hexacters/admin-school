@@ -1,0 +1,35 @@
+mat-toolbar{
+    display: flex;
+    justify-content: space-between;
+    background-color: #2f6184;
+    color: white;
+}
+mat-menu{
+    padding: 0;
+}
+span{
+    display: flex;
+}
+.mat-button-focus-overlay { 
+    background-color: transparent!important; 
+}
+
+.mat-icon-button .mat-button-base .cdk-focussed .cdk-mouse-focussed{
+    border-color: transparent !important;
+}
+.mat-icon-button :focus{
+    border-color: transparent !important;
+    border: none;
+}
+button{
+    border: none;
+}
+.mat-button-focus-overlay{
+    border: none;
+
+}
+button{
+    width: 100%;
+    border-radius: 100%;
+    outline: none;
+}

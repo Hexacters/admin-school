@@ -1,0 +1,11 @@
+<div class="mainComp">
+    <app-header (toggleSide)="toggleSide($event)"></app-header>
+    <mat-drawer-container>
+        <mat-drawer #drawer1 mode="side" [opened]="sideBarToggle">
+            <app-sidebar></app-sidebar>
+        </mat-drawer>
+        <mat-drawer-content>
+            <router-outlet></router-outlet>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>
