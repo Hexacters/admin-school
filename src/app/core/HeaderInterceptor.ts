@@ -21,8 +21,8 @@ export class HeaderInterceptor implements HttpInterceptor {
             }
 
             let accessToken = '';
-            if (JSON.parse(sessionStorage.getItem('userDetails'))) {
-                accessToken = JSON.parse(sessionStorage.getItem('userDetails')).token;
+            if (JSON.parse(localStorage.getItem('userDetails'))) {
+                accessToken = JSON.parse(localStorage.getItem('userDetails')).token;
             }
 
             if (accessToken == undefined || accessToken == null) {

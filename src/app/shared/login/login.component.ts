@@ -18,8 +18,7 @@ export class LoginComponent implements OnInit {
 
     login() {
         this._loginData.getLogin(this.userName, this.password).subscribe(res => {
-            console.log(res)
-            sessionStorage.setItem('userDetails', JSON.stringify(res));
+            localStorage.setItem('userDetails', JSON.stringify(res));
             this._router.navigate(['/dashboard'])
         })
 

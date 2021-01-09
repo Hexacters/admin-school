@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { UtilityServiceService } from 'src/app/utility-service.service';
 
 @Component({
@@ -15,17 +16,18 @@ export class FeeTypeviewComponent implements OnInit {
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-    constructor(private _dataService: UtilityServiceService) { }
+    constructor(
+        private _dataService: UtilityServiceService,
+        private router: Router
+    ) { }
 
     ngOnInit() {
 
         this._dataService.getFeetypeList().subscribe(res => {
-            this.dataSource = new MatTableDataSource(res);
+            const result = res.filter(e => !!e.id);
+            this.dataSource = new MatTableDataSource(result);
             this.dataSource.paginator = this.paginator;
         })
-    }
-
-    ngAfterViewInit() {
     }
 
     deleteSchool(id) {
@@ -34,10 +36,9 @@ export class FeeTypeviewComponent implements OnInit {
         });
     }
 
-    updateSchool(element) {
-        // this._dataService.updateSchool(element.id,element.schoolName).subscribe(res=>{
-        //   this.ngOnInit;
-        // })
+    updateFeeType(element) {
+        this.router.navigate(['feeType/edit'])
+        sessionStorage.setItem('feeType', JSON.stringify(element))
     }
 
 

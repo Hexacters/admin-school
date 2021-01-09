@@ -43,7 +43,7 @@ export class ViewProgrammeComponent implements OnInit {
 
   updateDepartment(element) {
     this.router.navigate(['programm/edit'])
-    sessionStorage.setItem('program', JSON.stringify(element))
+    sessionStorage.setItem('programm', JSON.stringify(element))
 }
 
 

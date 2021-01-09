@@ -2,17 +2,17 @@
 
   <mat-card class="header_card">
     <p style="line-height: 30px;">
-      <span style="float: left;">Add Department</span> <span style="float: right;"><a>Home</a> > Add Department </span>
+      <span style="float: left;">Add Division</span> <span style="float: right;"><a>Home</a> > Add Division </span>
     </p>
   </mat-card>
 
 
   <mat-card class="content_box">
     <form action="" [formGroup]="objectForm">
-      <div class="row">
-        <div class="col-md-3 mr-2 ml-3">
+      <div class="row m-0">
+        <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
-            <label for="cars">SELECT SCHOOL:</label>
+            <label class="m-0" for="cars">SELECT SCHOOL:</label>
             <select size="1" formControlName="schoolName" (ngModelChange)='selectSchool($event)'>
               <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}</option>
             </select>
@@ -21,7 +21,7 @@
 
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
-            <label for="cars">SELECT DEPARTMENT:</label>
+            <label class="m-0" for="cars">SELECT DEPARTMENT:</label>
             <select size="1" formControlName="departmentName" (ngModelChange)='selectDepartment($event)'>
               <option *ngFor=' let department of departmentList' [value]="department.id">{{department.departmentName}}</option>
             </select>
@@ -30,7 +30,7 @@
 
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
-            <label for="cars">SELECT PROGRAMME:</label>
+            <label class="m-0" for="cars">SELECT PROGRAMME:</label>
             <select size="1" formControlName="programmeName" (ngModelChange)='selectProgramme($event)'>
               <option *ngFor=' let programme of programmeList' [value]="programme.id">{{programme.programName}}</option>
             </select>
@@ -39,24 +39,24 @@
 
       </div>
 
-      <div class="row ml-1">
+      <div class="row m-0 mt-3">
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
-            <label for="cars">SELECT SEMESTER:</label>
+            <label class="m-0" for="cars">SELECT SEMESTER:</label>
             <select size="1" formControlName="semesterName" (ngModelChange)='selectSemester($event)'>
               <option *ngFor=' let semester of semesterList' [value]="semester.id">{{semester.semesterName}}</option>
             </select>
           </div>
         </div>
 
-        <div class="col-md-3 mr-2" formArrayName="division">
-          <div class="row" *ngFor='let division of divisionList;index as i'>
-            <p style="line-height: 20px;"> PROGRAMME * </p>
+        <div class="col-md-3 mr-2 ml-1" formArrayName="division">
+          <div class="row" *ngFor="let division of divisionList;index as i">
+            <p class="m-0 mb-1"> DIVISION NAME * </p>
             <input type="text" formControlName="{{i}}">
           </div>
 
         </div>
-        <div class="col-md-2" style="margin-top: 30px;">
+        <div class="col-md-2" style="margin-top: 20px;">
           <button mat-mini-fab color="accent" (click)='addDivision()'>
             <mat-icon>plus_one</mat-icon>
           </button>
@@ -64,9 +64,9 @@
       </div>
 
 
-      <div class="row" style="margin-top: 10px;">
-        <button mat-raised-button color="accent" style="margin: 4px;" (click)="onSubmit()">Save</button>
-        <button mat-raised-button color="accent" style="margin: 4px;">Reset</button>
+      <div class="row m-0 mt-3">
+        <button mat-raised-button color="primary" class="mr-3" (click)="onSubmit()">Save</button>
+        <button mat-stroked-button color="warn" class="mr-3">Reset</button>
       </div>
     </form>
   </mat-card>

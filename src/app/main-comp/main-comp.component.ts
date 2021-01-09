@@ -13,7 +13,7 @@ export class MainCompComponent implements OnInit {
     constructor(private router: Router) { }
 
     ngOnInit() {
-        const userDetails = JSON.parse(sessionStorage.getItem('userDetails')) || {};
+        const userDetails = JSON.parse(localStorage.getItem('userDetails')) || {};
         if (!userDetails.token) {
             this.router.navigate(['/login']);
         } else {

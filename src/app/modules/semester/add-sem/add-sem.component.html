@@ -2,17 +2,18 @@
 
   <mat-card class="header_card">
     <p style="line-height: 30px;">
-      <span style="float: left;">Add Department</span> <span style="float: right;"><a>Home</a> > Add Department </span>
+      <span style="float: left;">Add Semester</span> <span style="float: right;"><a routerLink="/dashboard">Home</a> >
+        Add Semester </span>
     </p>
   </mat-card>
 
 
   <mat-card class="content_box">
     <form action="" [formGroup]="objectForm">
-      <div class="row">
+      <div class="row m-0">
         <div class="col-md-3 mr-2 ml-3">
           <div class="row" style="display: flex;">
-            <label for="cars">SELECT SCHOOL:</label>
+            <label class="mb-0" for="cars">SELECT SCHOOL:</label>
             <select size="1" formControlName="schoolName" (ngModelChange)='selectSchool($event)'>
               <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}</option>
             </select>
@@ -21,16 +22,17 @@
 
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
-            <label for="cars">SELECT DEPARTMENT:</label>
+            <label class="mb-0" for="cars">SELECT DEPARTMENT:</label>
             <select size="1" formControlName="departmentName" (ngModelChange)='selectDepartment($event)'>
-              <option *ngFor=' let department of departmentList' [value]="department.id">{{department.departmentName}}</option>
+              <option *ngFor=' let department of departmentList' [value]="department.id">{{department.departmentName}}
+              </option>
             </select>
           </div>
         </div>
 
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
-            <label for="cars">SELECT PROGRAMME:</label>
+            <label class="mb-0" for="cars">SELECT PROGRAMME:</label>
             <select size="1" formControlName="programmeName" (ngModelChange)='selectProgramme($event)'>
               <option *ngFor=' let programme of programmeList' [value]="programme.id">{{programme.programName}}</option>
             </select>
@@ -39,13 +41,12 @@
 
       </div>
 
-      <div class="row ml-1">
+      <div class="row m-0">
         <div class="col-md-3 mr-2" formArrayName="semester">
-          <div class="row" *ngFor='let semester of semesterList;index as i'>
-            <p style="line-height: 20px;"> PROGRAMME * </p>
+          <div class="row m-0 mt-3" *ngFor="let semester of semesterList;index as i">
+            <p class="p-0 m-0 mb-2" style="line-height: 10px;"> SEMESTER * </p>
             <input type="text" formControlName="{{i}}">
           </div>
-
         </div>
         <div class="col-md-2" style="margin-top: 30px;">
           <button mat-mini-fab color="accent" (click)='addSemester()'>
@@ -55,9 +56,9 @@
       </div>
 
 
-      <div class="row" style="margin-top: 10px;">
-        <button mat-raised-button color="accent" style="margin: 4px;" (click)="onSubmit()">Save</button>
-        <button mat-raised-button color="accent" style="margin: 4px;">Reset</button>
+      <div class="row m-0 p-2" style="margin-top: 10px;">
+        <button mat-raised-button color="primary" class="ml-2" (click)="onSubmit()">Save</button>
+        <button mat-stroked-button [color]="'warn'" class="ml-2" routerLink="/semester/view">Cancel</button>
       </div>
     </form>
   </mat-card>

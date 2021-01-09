@@ -52,7 +52,7 @@ export class ViewschoolComponent implements OnInit {
     // this._localCommunication.schoolFlag.next(true);
     console.log(element)
     // this._localCommunication.schoolData.next(element);
-    localStorage.setItem('school',JSON.stringify(element));
+    sessionStorage.setItem('school',JSON.stringify(element));
     setTimeout(() => {
       this.router.navigate(['school/edit'])
     }, 1000);

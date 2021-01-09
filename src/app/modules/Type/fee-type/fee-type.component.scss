@@ -25,14 +25,8 @@ input{
 .mat-icon-button .mat-button-base .cdk-focussed .cdk-mouse-focussed{
     border-color: transparent !important;
 }
+
 .mat-icon-button :focus{
     border-color: transparent !important;
     border: none;
-}
-button{
-    border: none;
-}
-.mat-button-focus-overlay{
-    border: none;
-
 }

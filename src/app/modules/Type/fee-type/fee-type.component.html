@@ -8,24 +8,25 @@
   
     <mat-card class="content_box">
       <form action="" [formGroup]="objectForm">
-        <div class="row">
+        <div class="row m-0">
           <div class="col-md-4" formArrayName="feeTypes">
-            <div class="row" *ngFor='let feeType of feeTypeList;index as i'>
-              <p style="line-height: 20px;"> Fee Type * </p>
+            <div class="row mt-3" *ngFor="let feeType of feeTypeList;index as i">
+              <p class="m-0" > Fee Type * </p>
               <input type="text" formControlName="{{i}}">
             </div>
   
           </div>
-          <div class="col-md-2" style="margin-top: 30px;">
+          <div class="col-md-2" *ngIf="!isEdit" style="margin-top: 30px;">
             <button mat-mini-fab color="accent" (click)='addFeeType()'>
               <mat-icon>plus_one</mat-icon>
             </button>
           </div>
         </div>
   
-        <div class="row" style="margin-top: 10px;">
-          <button mat-raised-button color="accent" style="margin: 4px;" (click)="onSubmit()">Save</button>
-          <button mat-raised-button color="accent" style="margin: 4px;">Reset</button>
+        <div class="row m-0 mt-3">
+          <button mat-raised-button color="primary" class="mr-2" *ngIf="!isEdit" (click)="onSubmit()">Save</button>
+          <button mat-raised-button color="primary" class="mr-2" *ngIf="isEdit" (click)="onUpdate()">Update</button>
+          <button mat-stroked-button color="warn" class="mr-2" >Reset</button>
         </div>
       </form>
     </mat-card>

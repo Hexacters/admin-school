@@ -2,8 +2,8 @@
     <div class="row">
         <mat-card class="header_card">
             <p style="line-height: 30px;">
-                <span style="float: left;">View School</span> <span style="float: right;"><a>Home</a> > View School
-                </span>
+                <span style="float: left;">Add Programme</span> <span style="float: right;"><a
+                        routerLink="/dashboard">Home</a> > Add Programme </span>
             </p>
         </mat-card>
     </div>
@@ -40,7 +40,7 @@
                     <ng-container matColumnDef="update">
                         <th mat-header-cell *matHeaderCellDef> Update </th>
                         <td mat-cell *matCellDef="let element">
-                            <mat-icon color="primary" (click)='updateDepartment(element)'>edit</mat-icon>  
+                            <mat-icon color="primary" (click)='updateDepartment(element)'>edit</mat-icon>
                         </td>
                     </ng-container>
 
@@ -48,7 +48,7 @@
                     <ng-container matColumnDef="delete">
                         <th mat-header-cell *matHeaderCellDef> delete </th>
                         <td mat-cell *matCellDef="let element">
-                            <mat-icon color="primary" (click)='deleteDepartment(element.id)'>delete</mat-icon>  
+                            <mat-icon color="primary" (click)='deleteDepartment(element.id)'>delete</mat-icon>
                         </td>
                     </ng-container>
 
