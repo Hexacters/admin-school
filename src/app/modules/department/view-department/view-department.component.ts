@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
 import { UtilityServiceService } from 'src/app/utility-service.service';
 
 
@@ -16,7 +18,11 @@ export class ViewDepartmentComponent implements OnInit {
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-    constructor(private _dataService: UtilityServiceService, private router: Router) { }
+    constructor(
+        private _dataService: UtilityServiceService,
+        private router: Router,
+        public dialog: MatDialog
+    ) { }
 
     ngOnInit() {
 
@@ -31,9 +37,19 @@ export class ViewDepartmentComponent implements OnInit {
     }
 
     deleteDepartment(id) {
-        this._dataService.deleteDepartment(id).subscribe(res => {
-            this.ngOnInit();
-        });
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            width: '300px',
+            data: {}
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this._dataService.deleteDepartment(id).subscribe(res => {
+                    this.ngOnInit();
+                });
+            }
+          });
+        
     }
 
     updateDepartment(element) {

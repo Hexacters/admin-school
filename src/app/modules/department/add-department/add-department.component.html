@@ -2,18 +2,20 @@
 
   <mat-card class="header_card">
     <p style="line-height: 30px;">
-      <span style="float: left;">Add Department</span> <span style="float: right;"><a>Home</a> > Add Department </span>
+      <span style="float: left;">Add Department</span> <span style="float: right;"><a routerLink="/dashboard">Home</a> >
+        Add Department </span>
     </p>
   </mat-card>
 
 
   <mat-card class="content_box">
-    <form action="" [formGroup]="objectForm">
+    <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
       <div class="row m-0">
         <div class="col-md-4 ml-1">
           <div class="row" style="display: flex;">
-            <label class="m-0" for="cars">SELECT SCHOOL:</label>
-            <select size="1" formControlName="schoolName" (ngModelChange)='selectSchool($event)'>
+            <label class="m-0" for="cars">School *</label>
+            <select size="1" formControlName="schoolName" (ngModelChange)='selectSchool($event)' required>
+              <option value="" selected>Select School</option>
               <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}</option>
             </select>
           </div>
@@ -21,12 +23,12 @@
 
         <div class="col-md-4 ml-3" formArrayName="departments">
           <div class="row" *ngFor="let department of departmentList;index as i">
-            <p class="m-0 mb-1"> School * </p>
-            <input type="text" formControlName="{{i}}">
+            <p class="m-0 mb-1"> Department * </p>
+            <input type="text" placeholder="Department name" formControlName="{{i}}" required>
           </div>
 
         </div>
-        <div class="col-md-2" style="margin-top: 20px;">
+        <div class="col-md-2" style="margin-top: 20px;"  *ngIf="editFlag">
           <button mat-mini-fab color="accent" (click)='addDepartment()'>
             <mat-icon>plus_one</mat-icon>
           </button>
@@ -35,10 +37,10 @@
       </div>
 
 
-      <div class="row m-0 mt-3" >
-        <button mat-raised-button color="primary" class="mr-2" (click)="onSubmit()"  *ngIf ='editFlag'>Save</button>
-        <button mat-raised-button color="primary" class="mr-2" (click)="update()" *ngIf = '!editFlag'>Update</button>
-        <button mat-stroked-button color="warn" class="mr-2" >Reset</button>
+      <div class="row m-0 mt-3">
+        <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf='editFlag'>Save</button>
+        <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf='!editFlag'>Update</button>
+        <button mat-stroked-button color="warn" class="mr-2" routerLink="/department">Cancel</button>
       </div>
     </form>
   </mat-card>

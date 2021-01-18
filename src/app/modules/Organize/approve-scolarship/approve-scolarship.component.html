@@ -1,1 +1,133 @@
-<p>approve-scolarship works!</p>
+<!-- <app-comming-soon></app-comming-soon> -->
+
+<div class="container">
+
+    <mat-card class="header_card">
+        <p style="line-height: 30px;">
+            <span style="float: left;">Assign Scholarship</span> <span style="float: right;"><a
+                    routerLink="/dashboard">Home</a> >
+                Assign Scholarship </span>
+        </p>
+    </mat-card>
+
+
+    <mat-card class="content_box">
+        <h5>School Details</h5>
+        <form action="" [formGroup]="studentForm" (submit)="onSubmit()" >
+            <div class="row m-0">
+                <div class="col-md-12 p-0">
+                    <div class="row m-0">
+                        <div class="col-md-3 pl-0 mr-2 ml-3">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">School</label>
+                                <select size="1" formControlName="schoolId" (ngModelChange)='selectSchool($event)'>
+                                <option value="" selected>Select School</option>
+                                <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">Department</label>
+                                <select size="1" formControlName="departmentId"
+                                    (ngModelChange)='selectDepartment($event)'>
+                                <option value="" selected>Select Department</option>
+                                <option *ngFor=' let department of departmentList' [value]="department.id">
+                                        {{department.departmentName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">Programme</label>
+                                <select size="1" formControlName="programId" (ngModelChange)='selectProgramme($event)'>
+                                <option value="" selected>Select Programme</option>
+                                <option *ngFor=' let programme of programmeList' [value]="programme.id">
+                                        {{programme.programName}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-12 p-0   ">
+                    <div class="row m-0 mt-3">
+                        <div class="col-md-3 pl-0 mr-2 ml-3">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">Semester</label>
+                                <select size="1" formControlName="semesterId" (ngModelChange)='selectSemester($event)'>
+                                <option value="" selected>Select Semester</option>
+                                <option *ngFor=' let semester of semesterList' [value]="semester.id">
+                                        {{semester.semesterName}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" class="m-0" for="cars">Division</label>
+                                <select size="1" formControlName="divisionId" (ngModelChange)='selectDivision($event)'>
+                                <option value="" selected>Select Division</option>
+                                <option *ngFor='let division of divisionList' [value]="division.id">
+                                        {{division.divisionName}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <hr />
+            <h5>Assign Scholarship</h5>
+            <p>you can assign a scholarship to the multiple students</p>
+            <div formArrayName="scholarsips">
+                <div class="row m-0" *ngFor="let data of assignScholorList; let i = index;" [formGroupName]="i">
+                    <div class="col-md-3 mr-2 ml-1">
+                        <div class="row" style="display: flex;">
+                            <label class="m-0" class="m-0" for="cars">Select Student</label>
+                            <select size="1" formControlName="studentId" (ngModelChange)='selectStudent($event)'>
+                                <option value="" selected>Select Student</option>
+                                <option *ngFor='let scholarship of studentsList' [value]="scholarship.id">
+                                    {{scholarship.firstName}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 p-0 pt-1 mr-2 ml-1 form-scholarship">
+                        <label class="m-0" class="m-0" for="cars">Select Scholarship</label>
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-select formControlName="scholarshipIds" multiple
+                            (selectionChange)="selectScholarship($event.value, i)">
+                                <mat-select-trigger >
+                                    {{getSelectedName(i)}}
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let scholarship of scholarshipList" [value]="scholarship.id">
+                                    {{scholarship.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2" style="margin-top: 20px;" *ngIf="assignScholorList.length === (i+1) && !editFlag">
+                        <button mat-mini-fab color="accent" (click)="onAdd(data, i+1)">
+                            <mat-icon>plus_one</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-0 mt-3">
+                <button mat-raised-button color="primary" class="mr-2" type="submit"
+                    *ngIf='!editFlag'>Save</button>
+                <button mat-raised-button color="primary" class="mr-2" type="submit"
+                    *ngIf='editFlag'>Update</button>
+                <button mat-stroked-button color="warn" class="mr-2" routerLink="/assign">Cancel</button>
+            </div>
+        </form>
+    </mat-card>
+
+
+
+</div>

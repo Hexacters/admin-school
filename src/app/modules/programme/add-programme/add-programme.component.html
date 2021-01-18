@@ -8,12 +8,13 @@
 
 
   <mat-card class="content_box">
-    <form action="" [formGroup]="objectForm">
+    <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
       <div class="row m-0">
         <div class="col-md-3 mr-2 ml-3">
           <div class="row" style="display: flex;">
-            <label class="p-0 m-0" for="cars">SELECT SCHOOL:</label>
-            <select size="1" formControlName="schoolName" (ngModelChange)='selectSchool($event)'>
+            <label class="p-0 m-0" for="cars">School</label>
+            <select size="1" formControlName="schoolName" (ngModelChange)='selectSchool($event)' required>
+              <option value="" selected>Select School</option>
               <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}</option>
             </select>
           </div>
@@ -21,8 +22,9 @@
 
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
-            <label class="p-0 m-0" for="cars">SELECT DEPARTMENT:</label>
-            <select size="1" formControlName="departmentName" (ngModelChange)='selectDepartment($event)'>
+            <label class="p-0 m-0" for="cars">Department</label>
+              <select size="1" formControlName="departmentName" (ngModelChange)='selectDepartment($event)' required>
+              <option value="" selected>Select Department</option>
               <option *ngFor=' let department of departmentList' [value]="department.id">{{department.departmentName}}</option>
             </select>
           </div>
@@ -30,8 +32,8 @@
 
         <div class="col-md-3 mr-2 ml-1" formArrayName="programme">
           <div class="row" *ngFor="let programme of programmeList;index as i">
-            <label class="p-0 mb-1"> PROGRAMME * </label>
-            <input type="text" formControlName="{{i}}">
+            <label class="p-0 mb-1"> Programme * </label>
+            <input type="text" placeholder="Programme Name" required formControlName="{{i}}">
           </div>
 
         </div>
@@ -45,9 +47,9 @@
 
 
       <div class="row m-0 p-2" style="margin-top: 10px;">
-        <button mat-raised-button color="primary" class="ml-2" *ngIf="!isEdit" (click)="onSubmit()">Save</button>
-        <button mat-raised-button color="primary" class="ml-2" *ngIf="isEdit" (click)="onSubmit(true)">Update</button>
-        <button mat-stroked-button color="warn" class="ml-3">Reset</button>
+        <button mat-raised-button color="primary" class="ml-2" *ngIf="!isEdit" type="submit">Save</button>
+        <button mat-raised-button color="primary" class="ml-2" *ngIf="isEdit" type="submit">Update</button>
+        <button mat-stroked-button color="warn" class="ml-3" routerLink="/programm">Cancel</button>
       </div>
     </form>
   </mat-card>

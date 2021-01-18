@@ -1,8 +1,10 @@
+<!-- <mat-progress-bar *ngIf="loading" [color]="'primary'" [mode]="'indeterminate'"></mat-progress-bar> -->
 <div class="container">
     <div class="row">
         <mat-card class="header_card">
             <p style="line-height: 30px;">
-                <span style="float: left;">View School</span> <span style="float: right;"><a>Home</a> > View School
+                <span style="float: left;">View School</span> <span style="float: right;"><a
+                        routerLink="/dashboard">Home</a> > View School
                 </span>
             </p>
         </mat-card>
@@ -10,7 +12,8 @@
 
     <div class="row">
         <mat-card class="content_box">
-            <p style="line-height: 20px;"> Enter School Name * </p>
+            <h5  class="float-left">School</h5>
+            <button class="float-right" routerLink="/school/add" mat-raised-button color="primary"> + Add School</button>
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
 
@@ -29,7 +32,7 @@
                     <ng-container matColumnDef="update">
                         <th mat-header-cell *matHeaderCellDef> Update </th>
                         <td mat-cell *matCellDef="let element">
-                            <mat-icon color="primary" (click)='updateSchool(element)'>edit</mat-icon>  
+                            <mat-icon color="primary" (click)='updateSchool(element)'>edit</mat-icon>
                         </td>
                     </ng-container>
 
@@ -37,7 +40,7 @@
                     <ng-container matColumnDef="delete">
                         <th mat-header-cell *matHeaderCellDef> delete </th>
                         <td mat-cell *matCellDef="let element">
-                            <mat-icon color="primary" (click)='deleteSchool(element.id)'>delete</mat-icon>  
+                            <mat-icon color="warn" (click)='deleteSchool(element.id)'>delete</mat-icon>
                         </td>
                     </ng-container>
 
@@ -45,7 +48,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
 
-                <mat-paginator [length]='10' [pageSizeOptions]="[3,5]" showFirstLastButtons>
+                <mat-paginator [length]='10' [pageSizeOptions]="[10, 15, 25]" showFirstLastButtons>
                 </mat-paginator>
             </div>
         </mat-card>

@@ -10,7 +10,8 @@
 
     <div class="row">
         <mat-card class="content_box">
-            <p style="line-height: 20px;"> Enter School Name * </p>
+            <h5  class="float-left">Semester</h5>
+            <button class="float-right" routerLink="/semester/add" mat-raised-button color="primary"> + Add Semester</button>
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
 
@@ -53,7 +54,7 @@
                     <ng-container matColumnDef="delete">
                         <th mat-header-cell *matHeaderCellDef> delete </th>
                         <td mat-cell *matCellDef="let element">
-                            <mat-icon color="primary" (click)='deleteProgramme(element.id)'>delete</mat-icon>  
+                            <mat-icon color="warn" (click)='deleteProgramme(element.id)'>delete</mat-icon>  
                         </td>
                     </ng-container>
 
@@ -61,7 +62,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
 
-                <mat-paginator [length]='10' [pageSizeOptions]="[3,5]" showFirstLastButtons>
+                <mat-paginator [length]='10' [pageSizeOptions]="[10, 15, 25]" showFirstLastButtons>
                 </mat-paginator>
             </div>
         </mat-card>

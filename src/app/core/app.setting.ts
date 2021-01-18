@@ -6,6 +6,5 @@ import { Injectable } from "@angular/core";
 export class AppSetting {
   public production = false;
   public localApiUrl = "http://schoolivs-env.eba-qhze7dp2.us-east-2.elasticbeanstalk.com/ivs/";
-  public routeApiUrl = 'http://schoolivs-env.eba-qhze7dp2.us-east-2.elasticbeanstalk.com';
-  
+  public routeApiUrl = 'http://localhost:8080';
 }

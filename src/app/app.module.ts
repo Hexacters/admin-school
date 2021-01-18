@@ -8,8 +8,6 @@ import { MainCompComponent } from './main-comp/main-comp.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { FooterComponent } from './shared/footer/footer.component';
-import { CategoryComponent } from './modules/category/category.component';
-import { SubcategoryComponent } from './modules/subcategory/subcategory.component';
 import { DailogComponent } from './modules/dailog/dailog.component';
 
 import { MatButtonModule} from '@angular/material/button';
@@ -30,7 +28,6 @@ import { MatInputModule} from '@angular/material/input';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatDialogModule} from '@angular/material/dialog';
 import { MatSelectModule} from '@angular/material/select';
-import { SubsubCategoryComponent } from './modules/subsub-category/subsub-category.component';
 import { AddDepartmentComponent } from './modules/department/add-department/add-department.component';
 import { ViewDepartmentComponent } from './modules/department/view-department/view-department.component';
 import { AddDivisionComponent } from './modules/division/add-division/add-division.component';
@@ -53,14 +50,31 @@ import { FeeTypeComponent } from './modules/Type/fee-type/fee-type.component';
 import { FeeTypeviewComponent } from './modules/Type/fee-typeview/fee-typeview.component';
 import { UtilityServiceService } from './utility-service.service';
 import { LocalcommunicationService } from './core/localcommunication.service';
-import { ActivateFeeComponent } from './modules/Organize/activate-fee/activate-fee.component';
 import { AddScolarshipComponent } from './modules/Organize/add-scolarship/add-scolarship.component';
 import { ApproveScolarshipComponent } from './modules/Organize/approve-scolarship/approve-scolarship.component';
-import { PenaltyComponent } from './modules/Organize/penalty/penalty.component';
+import { PenaltyComponent } from './modules/penalty/penalty.component';
 import { OnlineFeeComponent } from './modules/Organize/online-fee/online-fee.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-
+import { AvatarModule } from 'ngx-avatar';
+import { ToastrModule } from 'ngx-toastr';
+import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component';
+import {MatTreeModule} from '@angular/material/tree';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { ScholarshipComponent } from './modules/Organize/scholarship/scholarship.component';
+import { StudentsComponent } from './modules/students/students.component';
+import { AddStudentComponent } from './modules/students/add-student/add-student.component';
+import { CommingSoonComponent } from './shared/comming-soon/comming-soon.component';
+import { AdminComponent } from './modules/admin/admin.component';
+import { AssignScholarshipComponent } from './modules/Organize/assign/scholarship/scholarship.component';
+import { AddPenaltyComponent } from './modules/penalty/add-penalty/add-penalty.component';
+import { OnlineComponent } from './modules/payment/online/online.component';
+import { OfflineComponent } from './modules/payment/offline/offline.component';
+import { AddAdminComponent } from './modules/admin/add-admin/add-admin.component';
+import { FeeCalculationComponent } from './modules/payment/fee-calculation/fee-calculation.component';
+import { ActiveFeeComponent } from './modules/active-fee/active-fee.component';
+import { AddActiveFeeComponent } from './modules/active-fee/add-active-fee/add-active-fee.component';
+import { UpdateFeeCalcComponent } from './modules/payment/fee-calculation/update-fee-calc/update-fee-calc.component';
 
 @NgModule({
   declarations: [
@@ -69,10 +83,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    CategoryComponent,
-    SubcategoryComponent,
     DailogComponent,
-    SubsubCategoryComponent,
     SchoolComponent,
     ViewschoolComponent,
     AddDepartmentComponent,
@@ -90,18 +101,38 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     LoginComponent,
     FeeTypeComponent,
     FeeTypeviewComponent,
-    ActivateFeeComponent,
     AddScolarshipComponent,
     ApproveScolarshipComponent,
     PenaltyComponent,
-    OnlineFeeComponent
+    OnlineFeeComponent,
+    ConfirmationDialogComponent,
+    ScholarshipComponent,
+    StudentsComponent,
+    AddStudentComponent,
+    CommingSoonComponent,
+    AdminComponent,
+    AssignScholarshipComponent,
+    AddPenaltyComponent,
+    OnlineComponent,
+    OfflineComponent,
+    AddAdminComponent,
+    FeeCalculationComponent,
+    ActiveFeeComponent,
+    AddActiveFeeComponent,
+    UpdateFeeCalcComponent
   ],
-  entryComponents:[DailogComponent],
+  entryComponents:[DailogComponent, ConfirmationDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
     FormsModule,
+    MatProgressBarModule,
+    MatTreeModule,
     ReactiveFormsModule,
     MatCardModule,
     MatButtonModule,
@@ -123,7 +154,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    AvatarModule
   ],
   providers: [
     AppSetting,

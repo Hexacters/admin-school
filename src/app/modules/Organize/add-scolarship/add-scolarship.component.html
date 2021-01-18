@@ -1,1 +1,71 @@
-<p>add-scolarship works!</p>
+<div class="container">
+
+  <mat-card class="header_card">
+    <p style="line-height: 30px;">
+      <span style="float: left;">Add Scholarship</span> <span style="float: right;"><a routerLink="/dashboard">Home</a> >
+        Add Scholarship </span>
+    </p>
+  </mat-card>
+
+
+  <mat-card class="content_box">
+    <h5>Scholarship</h5>
+    <form action="" [formGroup]="scholarshipForm" (submit)="onSubmit()">
+      <div class="row m-0">
+        <div class="col-md-4 ml-1">
+          <div class="row" style="display: flex;">
+            <label class="m-0" for="cars">Fee Type</label>
+            <select size="1" formControlName="typeId" (ngModelChange)='selectType($event)'>
+              <option [value]="''" selected>Select Fee Type</option>
+              <option *ngFor='let type of typeList' [value]="type.id">{{type.typeName}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <h6>Scholarship Details</h6>
+      <div formArrayName="scholorsip">
+      <div class="row mt-3" *ngFor="let data of scholorsipList; let i = index;"
+        [formGroupName]="i">
+        <div class="col-md-3 ml-3" >
+          <div class="row">
+            <p class="m-0 mb-1"> Scholarship Type* </p>
+            <!-- <input type="text" placeholder="scholorsip Type" formControlName="scholarshipType" > -->
+            <select disabled formControlName="scholarshipType">
+              <option [value]="''" selected>Select scholorsip Type</option>
+              <option [value]="'amount'" selected>Amount</option>
+              <option [value]="'percentage'" selected>Percentage (%)</option>
+             
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3 ml-3" >
+          <div class="row">
+            <p class="m-0 mb-1"> Scholarship Name * </p>
+            <input type="text" required placeholder="scholorsip name" formControlName="name" >
+          </div>
+        </div>
+        <div class="col-md-3 ml-3" >
+          <div class="row">
+            <p class="m-0 mb-1"> Scholarship Amount * </p>
+            <input type="number" required placeholder="Ex: 10,000" formControlName="value" >
+          </div>
+        </div>
+        <div class="col-md-2" style="margin-top: 20px;" *ngIf="!i && editFlag">
+          <button mat-mini-fab color="accent" (click)='addMore()'>
+            <mat-icon>plus_one</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+      <div class="row m-0 mt-3">
+        <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf='editFlag'>Save</button>
+        <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf='!editFlag'>Update</button>
+        <button mat-stroked-button color="warn" class="mr-2" routerLink="/scholarship">Cancel</button>
+      </div>
+    </form>
+  </mat-card>
+
+
+
+</div>

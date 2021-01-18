@@ -1,4 +1,4 @@
-<div class="container">
+<div class="side-menu">
   <mat-card class="example-card">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
@@ -6,12 +6,36 @@
       <mat-card-subtitle>Welcome {{userDetails['userName']}}</mat-card-subtitle>
     </mat-card-header>
 
-    <mat-list role="list">
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      <!-- This is the tree node template for leaf nodes -->
+      <mat-tree-node *matTreeNodeDef="let node" matRipple [routerLinkActiveOptions]="node.options || {}"
+        matTreeNodePadding matTreeNodePaddingIndent="20" routerLinkActive="active" [routerLink]="node.link">
+        <!-- use a disabled button to provide padding for tree leaf -->
+        <button mat-icon-button>
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{node.icon}}
+          </mat-icon>
+        </button>
+        {{node.name}}
+      </mat-tree-node>
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matRipple matTreeNodePadding
+        matTreeNodePaddingIndent="20" matTreeNodeToggle>
+        <button mat-icon-button [attr.aria-label]="'toggle ' + node.name">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        {{node.name}}
+      </mat-tree-node>
+    </mat-tree>
+
+    <!-- <mat-list role="list">
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
-              SCHOOL
+              School
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-divider></mat-divider>
@@ -94,7 +118,7 @@
           <a mat-list-item matRipple routerLinkActive="list-item-active" routerLink="/fee/view">View Fee</a>
         </mat-expansion-panel>
 
-        <!-- <mat-expansion-panel>
+        <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Organize
@@ -111,10 +135,10 @@
           <a mat-list-item matRipple routerLinkActive="list-item-active" routerLink="/organize/Penalty">Penalty</a>
 
           <a mat-list-item matRipple routerLinkActive="list-item-active" routerLink="/organize/OfflineFee">Offline Fee</a>
-        </mat-expansion-panel> -->
+        </mat-expansion-panel> 
       </mat-accordion>
 
-    </mat-list>
+    </mat-list> -->
 
   </mat-card>
 </div>

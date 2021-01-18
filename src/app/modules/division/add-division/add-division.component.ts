@@ -1,115 +1,157 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { UtilityServiceService } from 'src/app/utility-service.service';
 
 @Component({
-  selector: 'app-add-division',
-  templateUrl: './add-division.component.html',
-  styleUrls: ['./add-division.component.scss']
+    selector: 'app-add-division',
+    templateUrl: './add-division.component.html',
+    styleUrls: ['./add-division.component.scss']
 })
 export class AddDivisionComponent implements OnInit {
-  objectForm: FormGroup;
-  schoolList:Array<any> = [];
-  departmentList:Array<any> = [];
-  programmeList:Array<any> = [];
-  semesterList =[];
-  divisionList=[{}];
-  schoolId:number = 0;
-  departmentId:number = 0;
-  programmeId:number = 0;
-  semesterId:number = 0;
-  constructor(private _dataService:UtilityServiceService) { }
+    objectForm: FormGroup;
+    schoolList: Array<any> = [];
+    departmentList: Array<any> = [];
+    programmeList: Array<any> = [];
+    semesterList = [];
+    divisionList = [{}];
+    schoolId: number = 0;
+    departmentId: number = 0;
+    programmeId: number = 0;
+    semesterId: number = 0;
+    public isEdit: boolean = false;
+    public editData: object = {};
 
-  ngOnInit() {
-    this.getSchoolList();
-    this.getdepartmentList();
-    this.getprogrammeList();
-    this.getSemesterList();
-    this.objectForm = new FormGroup({
-      'schoolName': new FormControl(null,Validators.required),
-      'departmentName': new FormControl(null,Validators.required),
-      'programmeName': new FormControl(null,Validators.required),
-      'semesterName': new FormControl(null,Validators.required),
-      'division':new FormArray([
-      ])
-    });
-    (<FormArray>this.objectForm.get('division')).push(new FormControl());
-  }
+    constructor(
+        private _dataService: UtilityServiceService,
+        private router: Router,
+        private toastr: ToastrService
+    ) { }
 
-  getSchoolList(){
-    this._dataService.getSchoolList().subscribe(res=>{
-      this.schoolList = [...res];
-      this.objectForm.get('schoolName').setValue(this.schoolList[0].id);
-      this.schoolId = this.schoolList[0].id;
-      
-    })
-  }
+    ngOnInit() {
+        this.objectForm = new FormGroup({
+            'schoolName': new FormControl('', Validators.required),
+            'departmentName': new FormControl('', Validators.required),
+            'programmeName': new FormControl('', Validators.required),
+            'semesterName': new FormControl('', Validators.required),
+            'division': new FormArray([
+            ])
+        });
+        if (this.router.url.includes('edit')) {
+            this.isEdit = true;
+            this.editData = JSON.parse(sessionStorage.getItem('division'));
+            this.schoolId = this.editData['schoolId'];
+            this.departmentId = this.editData['departmentId'];
+            this.programmeId = this.editData['programId'];
+            this.semesterId = this.editData['semesterId'];
+            this.objectForm.patchValue({
+                schoolName: this.schoolId,
+                departmentName: this.departmentId,
+                programmeName: this.programmeId,
+                semesterName: this.semesterId
+            });
+            (<FormArray>this.objectForm.get('division')).push(new FormControl(this.editData['divisionName']));
 
-  getdepartmentList(){
-    this._dataService.getDepartmentList().subscribe(res =>{
-      this.departmentList = [...res];
-      this.objectForm.get('departmentName').setValue(this.departmentList[0].id);
-      this.departmentId = this.departmentList[0].id;
-      console.log(res,'department')
-    })
-  }
-  getprogrammeList(){
-    this._dataService.getProgrammeList().subscribe(res =>{
-      this.programmeList = [...res];
-      this.objectForm.get('programmeName').setValue(this.programmeList[0].id);
-      this.programmeId = this.programmeList[0].id;
-      console.log(res,'department')
-    })
-  }
+            this.getdepartmentList(this.isEdit);
+            this.getprogrammeList(this.isEdit);
+            this.getSemesterList(this.isEdit);
+        } else {
+            (<FormArray>this.objectForm.get('division')).push(new FormControl());
+        }
+        this.getSchoolList(this.isEdit);
+    }
 
-  getSemesterList(){
-    this._dataService.getsemesterList().subscribe(res =>{
-      this.semesterList = [...res];
-      this.objectForm.get('semesterName').setValue(this.semesterList[0].id);
-      this.semesterId = this.semesterList[0].id;
-      console.log(res,'department')
-    })
-  }
+    getSchoolList(isEdit: boolean = false): void {
+        this._dataService.getSchoolList().subscribe(res => {
+            this.schoolList = [...res];
+        });
+    }
 
-  addDivision(){
+    getdepartmentList(isEdit: boolean = false, data?): void {
+        this._dataService.getDepartmentList(data).subscribe(res => {
+            this.departmentList = [...res];
+        })
+    }
+
+    getprogrammeList(isEdit: boolean = false, data?): void {
+        this._dataService.getProgrammeList(data).subscribe(res => {
+            this.programmeList = [...res];
+        })
+    }
+
+    getSemesterList(isEdit: boolean = false, data?): void {
+        this._dataService.getsemesterList(data).subscribe(res => {
+            this.semesterList = [...res];
+        })
+    }
+
+    addDivision() {
         this.divisionList.push({});
         (<FormArray>this.objectForm.get('division')).push(new FormControl(null, Validators.required));
-  }
-  selectSchool(event){
-    this.schoolId = event;
-    console.log(event)
-  }
-  selectDepartment(event){
-    this.departmentId = event;
-    console.log(event)
-  }
-  selectProgramme(event){
-    this.programmeId = event;
-    console.log(event)
-  }
-  selectSemester(event){
-    this.semesterId = event;
-    console.log(event)
-  }
-
-  onSubmit(){
-    let body = {};
-    console.log(this.objectForm)
-    if(this.objectForm.value.division[0] === null){
-      alert()
-    }else{
-       body = {
-          "schoolId": this.schoolId,
-          "departmentId":this.departmentId,
-          'programId': this.programmeId,
-          "semesterId": this.semesterId,
-          "divisionName": [...this.objectForm.value.division]
-      }
     }
-    console.log(body)
-    this._dataService.saveDivision(body).subscribe(res=>{
-      console.log(res,'res')
-    })
-  }
+
+    selectSchool(event) {
+        this.schoolId = event;
+        this.getdepartmentList(false, {
+            schoolId: this.schoolId,
+        });
+    }
+
+    selectDepartment(event) {
+        this.departmentId = event;
+        this.getprogrammeList(false, {
+            schoolId: this.schoolId,
+            departmentId: this.departmentId,
+        });
+    }
+
+    selectProgramme(event) {
+        this.programmeId = event;
+        this.getSemesterList(false, {
+            schoolId: this.schoolId,
+            departmentId: this.departmentId,
+            programId: this.programmeId,
+        });
+    }
+
+    selectSemester(event) {
+        this.semesterId = event;
+    }
+
+    onSubmit(isEdit: boolean = this.isEdit): void {
+        this.objectForm.markAllAsTouched();
+        if (this.objectForm.valid) {
+        let body = {};
+        if (this.objectForm.value.division[0] === null) {
+            alert('Please fill the required feilds')
+        } else {
+            body = {
+                "schoolId": this.schoolId,
+                "departmentId": this.departmentId,
+                'programId': this.programmeId,
+                "semesterId": this.semesterId,
+                "divisionName": [...this.objectForm.value.division]
+            }
+        }
+        if (isEdit) {
+            this._dataService.updateDivision(this.editData['id'], body).subscribe(res => {
+                this.router.navigate(['/division']);
+                this.toastr.success('Division details updated successfully', 'Info');
+            }, (res: HttpErrorResponse) => {
+                this.toastr.error(res.error.message || res.message, 'Info');
+            });
+        } else {
+            this._dataService.saveDivision(body).subscribe(res => {
+                this.router.navigate(['/division']);
+                this.toastr.success('Division details saved successfully', 'Info');
+            }, (res: HttpErrorResponse) => {
+                this.toastr.error(res.error.message || res.message, 'Info');
+            });
+        }
+    }
+        
+    }
 
 }

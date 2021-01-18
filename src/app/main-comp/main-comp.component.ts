@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class MainCompComponent implements OnInit {
 
-    sideBarToggle: boolean = false;
+    sideBarToggle: boolean = true;
     isLoggedIn: boolean = true;
     constructor(private router: Router) { }
 

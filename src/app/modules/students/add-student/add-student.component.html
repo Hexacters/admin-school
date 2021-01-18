@@ -1,0 +1,147 @@
+<div class="container">
+
+    <mat-card class="header_card">
+        <p style="line-height: 30px;">
+            <span style="float: left;">Add Students</span> <span style="float: right;"><a
+                    routerLink="/dashboard">Home</a> >
+                Add Students </span>
+        </p>
+    </mat-card>
+
+
+    <mat-card class="content_box">
+        <h6>School Details</h6>
+        <form action="" [formGroup]="studentForm" (submit)="onSubmit()">
+            <div class="row m-0">
+                <div class="col-md-12 p-0">
+                    <div class="row m-0">
+                        <div class="col-md-3 pl-0 mr-2 ml-3">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">School</label>
+                                <select size="1" required formControlName="schoolId" (ngModelChange)='selectSchool($event)'>
+                                    <option value=""  selected>Select School</option>
+                                    <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">Department</label>
+                                <select size="1" required formControlName="departmentId"
+                                    (ngModelChange)='selectDepartment($event)'>
+                                    <option value="" selected>Select Department</option>
+                                    <option *ngFor=' let department of departmentList' [value]="department.id">
+                                        {{department.departmentName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">programme</label>
+                                <select size="1" required formControlName="programId" (ngModelChange)='selectProgramme($event)'>
+                                    <option value="" selected>Select programme</option>
+                                    <option *ngFor=' let programme of programmeList' [value]="programme.id">
+                                        {{programme.programName}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-12 p-0">
+                    <div class="row m-0 mt-3">
+                        <div class="col-md-3 pl-0 mr-2 ml-3">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">Semester</label>
+                                <select size="1" required formControlName="semesterId" (ngModelChange)='selectSemester($event)'>
+                                    <option value="" selected>Select Semester</option>
+                                    <option *ngFor=' let semester of semesterList' [value]="semester.id">
+                                        {{semester.semesterName}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" class="m-0" for="cars">Division</label>
+                                <select size="1" required formControlName="divisionId" (ngModelChange)='selectDivision($event)'>
+                                    <option value="" selected>Select Division</option>
+                                    <option *ngFor='let division of divisionList' [value]="division.id">
+                                        {{division.divisionName}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <hr />
+            <h6>Students Details</h6>
+            <div formArrayName="students">
+                <div class="row mt-3" *ngFor="let data of studentsList; let i = index;" [formGroupName]="i">
+                    <div class="col-md-12 p-0">
+                        <div class="row m-0">
+                            <div class="col-md-3 ml-3">
+                                <div class="row">
+                                    <p class="m-0 mb-1"> First Name* </p>
+                                    <input type="text" required placeholder="First Name" formControlName="firstName">
+                                </div>
+                            </div>
+                            <div class="col-md-3 ml-3">
+                                <div class="row">
+                                    <p class="m-0 mb-1"> Last Name * </p>
+                                    <input type="text" required placeholder="Last Name" formControlName="lastName">
+                                </div>
+                            </div>
+                            <div class="col-md-3 ml-3">
+                                <div class="row">
+                                    <p class="m-0 mb-1"> EmailId * </p>
+                                    <input type="email" required placeholder="EmailId" formControlName="emailId">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-0 mt-3">
+                            <div class="col-md-3 ml-3">
+                                <div class="row">
+                                    <p class="m-0 mb-1"> Phone No* </p>
+                                    <input type="number" placeholder="Phone No" formControlName="phoneNo">
+                                </div>
+                            </div>
+                            <div class="col-md-3 ml-3">
+                                <div class="row">
+                                    <p class="m-0 mb-1"> Parent Phone No * </p>
+                                    <input type="number" required placeholder="Parent Phone No" formControlName="parentPhoneNo">
+                                </div>
+                            </div>
+                            <div class="col-md-3 ml-3">
+                                <div class="row">
+                                    <p class="m-0 mb-1"> Parent Email Id * </p>
+                                    <input type="email" required placeholder="Parent Email Id" formControlName="parentEmailId">
+                                </div>
+                            </div>
+                            <div class="col-md-2" style="margin-top: 20px;" *ngIf="!i && !editFlag">
+                                <button mat-mini-fab color="accent" (click)='addMore()'>
+                                    <mat-icon>plus_one</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+            <div class="row m-0 mt-3">
+                <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf='!editFlag'>Save</button>
+                <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf='editFlag'>Update</button>
+                <button mat-stroked-button color="warn" class="mr-2" routerLink="/students">Cancel</button>
+            </div>
+        </form>
+    </mat-card>
+
+
+
+</div>

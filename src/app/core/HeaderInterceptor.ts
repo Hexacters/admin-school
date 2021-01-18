@@ -38,12 +38,13 @@ export class HeaderInterceptor implements HttpInterceptor {
                     // close loader
                 }
             },
-                (err: any) => {
-
-
-
-
-                }));
+            (err: HttpErrorResponse) => {
+                if (err.status === 401) {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    this.router.navigate(['/login']);
+                }
+            }));
         } catch (error) {
             console.log(error);
             // close loader

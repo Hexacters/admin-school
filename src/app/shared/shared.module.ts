@@ -4,9 +4,8 @@ import { SmDrawerComponent } from './sm-drawer/sm-drawer.component';
 import { LoginComponent } from './login/login.component';
 
 
-
 @NgModule({
-  declarations: [SmDrawerComponent, LoginComponent],
+  declarations: [],
   imports: [
     CommonModule
   ]

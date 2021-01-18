@@ -1,6 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.min.css";
 
+// regular style toast
+@import '~ngx-toastr/toastr';
+
+.mat-elevation-z8 {
+    box-shadow: none !important;
+}
+
 *:focus {
     outline: none !important;
 }
@@ -55,4 +62,19 @@ body {
 .mat-icon-button :focus {
     border-color: transparent !important;
     border: none;
+}
+
+input {
+    border: none;
+    border-radius: 5px;
+    padding: 6px;
+    background-color: #ececec;
+}
+
+select {
+    height: auto !important;
+    padding: 6px;
+    border-radius: 5px;
+    border-color: #ececec;
+    background-color: #ececec;
 }

@@ -1,0 +1,44 @@
+<div class="container">
+    <mat-card class="content_box">
+        <h5>{{editData['studentName']}}'s Fees calculation</h5>
+        <p>You can edit the below details</p>
+        <table class="table">
+            <thead>
+                <th>Name</th>
+                <th>Amount</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Fee amount
+                        <span class="ml-3 align-middle badge badge-success">+</span>
+                    </td>
+                    <td>
+                        <span *ngIf="!isEdit" >{{this.editData['calculatedAmount']}}</span>
+                        <input *ngIf="isEdit" type="number" placeholder="Fee Amount" [(ngModel)]="this.editData['calculatedAmount']" class="form-controll">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ScholarShip amount
+                        <span class="ml-3 align-middle badge badge-danger"> - </span>
+                    </td>
+                    <td>
+                        <span *ngIf="!isEdit">{{this.editData['scholarShipAmount']}}</span>
+                        <input *ngIf="isEdit" type="number" class="form-controll" [(ngModel)]="this.editData['scholarShipAmount']" placeholder="ScholarShip Amount">
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total amount</td>
+                    <td>{{totalCalculatedAmount()}}</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="row m-0 mt-3">
+            <button mat-raised-button *ngIf="isEdit" color="primary" class="mr-2" (click)="saveData()">Update</button>
+            <button mat-stroked-button *ngIf="isEdit" color="warn" class="mr-2" routerLink="/fee-calculation">Cancel</button>
+            <button mat-raised-button *ngIf="!isEdit" color="warn" class="mr-2" routerLink="/fee-calculation">Back</button>
+        </div>
+    </mat-card>
+</div>

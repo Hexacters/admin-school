@@ -1,6 +1,30 @@
 *{
     overflow-y: hidden;
 }
+
 .mat-expansion-panel-body {
     padding: 0 ;
+}
+
+::ng-deep {
+    .mat-card:not([class*=mat-elevation-z]) {
+        box-shadow: none;
+
+        .mat-tree-node {
+            cursor: pointer;
+            color: rgb(38, 38, 38);
+            border-radius: 10px;
+
+            .mat-icon {
+                font-size: 22px;
+            }
+        }
+    
+        .mat-tree-node.active {
+            color: #fff;
+            border-radius: 10px;
+            background-color: #4680ff;
+        }
+    }
+    
 }

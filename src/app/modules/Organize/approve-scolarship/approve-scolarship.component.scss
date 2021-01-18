@@ -1,0 +1,62 @@
+.container{
+    align-items: center;
+}
+
+.header_card{
+    width: 100%;
+    height: 60px;
+    margin: 10px 0px;
+}
+
+.content_box{
+    width: 100%;
+    min-height: 300px;
+    margin: 10px 0px;
+}
+
+input{
+    width: 100%;
+}
+
+label select {
+    height: 100px;
+}
+
+select{
+    width: 100%; 
+    height: 30px;
+    margin-top: 4px;
+}
+
+.select{
+    height:100px;
+    overflow:scroll;
+}
+
+::ng-deep {
+    .form-scholarship {
+        .mat-form-field-appearance-fill .mat-form-field-flex {
+            padding: 0 0.75em 0 0.75em;
+        }
+
+        .mat-form-field-appearance-fill .mat-form-field-infix {
+            padding: 0 0 10px 0;
+        }
+
+        .mat-form-field-appearance-fill .mat-select-arrow-wrapper {
+            transform: translateY(7%);
+        }
+
+        .mat-form-field-appearance-fill .mat-form-field-flex {
+            background-color: #ececec;
+        }
+
+        .mat-form-field-underline {
+            display: none;
+        }
+
+        .mat-form-field-infix {
+            border-top: 8px solid transparent;
+        }
+    }
+}

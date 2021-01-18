@@ -9,10 +9,12 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
 
     @Output() toggleSide: EventEmitter<any> = new EventEmitter();
+    public userDetails: object = {};
 
     constructor(private router: Router) { }
 
     ngOnInit() {
+        this.userDetails = JSON.parse(localStorage.getItem('userDetails'));
     }
 
     toggleSideBar() {

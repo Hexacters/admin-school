@@ -72,11 +72,15 @@ export class UtilityServiceService {
 
 
     // Department APIs Here =======>>>>>>>>>>>>
-    getDepartmentList(): Observable<any> {
-        return this.http.get('/ivs/department')
+    getDepartmentList(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/department/byschool', {params});
+        }
+        return this.http.get('/ivs/department');
     }
+
     saveDepartment(DepartmentList): Observable<any> {
-        return this.http.post('/ivs/department?departments=', DepartmentList)
+        return this.http.post('/ivs/department', DepartmentList)
     }
 
     deleteDepartment(DepartmentId): Observable<any> {
@@ -88,7 +92,10 @@ export class UtilityServiceService {
     }
 
     // programm apis start here ===========>>>>>>>>>>>>
-    getProgrammeList(): Observable<any> {
+    getProgrammeList(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/program/bydepartment', {params})
+        }
         return this.http.get('/ivs/program')
     }
 
@@ -105,19 +112,31 @@ export class UtilityServiceService {
     }
 
     // semester apis start here ===========>>>>>>>>>>>>
-    getsemesterList(): Observable<any> {
+    getsemesterList(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/semester/byprogram', {params})
+        }
         return this.http.get('/ivs/semester')
     }
+
     savesemester(body): Observable<any> {
         return this.http.post('/ivs/semester', body)
     }
+
+    updateSemester(id, body): Observable<any> {
+        return this.http.put(`/ivs/semester/${id}`, body)
+    }
+
     deleteSemester(semesterId): Observable<any> {
         return this.http.delete('/ivs/semester/' + semesterId)
     }
 
     // division apis start here ===========>>>>>>>>>>>>
 
-    getDivisionList(): Observable<any> {
+    getDivisionList(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/division/byDivision', {params})
+        }
         return this.http.get('/ivs/division')
     }
 
@@ -127,6 +146,10 @@ export class UtilityServiceService {
 
     saveDivision(body): Observable<any> {
         return this.http.post('/ivs/division', body)
+    }
+
+    updateDivision(id, body): Observable<any> {
+        return this.http.put(`/ivs/division/${id}`, body)
     }
 
     // Type apis start here ===========>>>>>>>>>>>>
@@ -149,11 +172,26 @@ export class UtilityServiceService {
         return this.http.delete('/ivs/type/' + id)
     }
 
+    getFeeCalculation(params?): Observable<any> {
+        return this.http.get('/ivs/feetype/calculatestudentsfee', {params});
+    }
+
+    getFeeCalculationByID(params?): Observable<any> {
+        return this.http.get('/ivs/feetype/calculatefee', {params});
+    }
+
+    updateFeeCalculation(params): Observable<any> {
+        return this.http.put('/ivs/feetype/editcalculatefee', params);
+    }
 
     // Type apis start here ===========>>>>>>>>>>>>
 
     saveFee(body): Observable<any> {
         return this.http.post('/ivs/feetype', body)
+    }
+
+    updateFee(id, body): Observable<any> {
+        return this.http.put(`/ivs/feetype/${id}`, body)
     }
 
     getFee(): Observable<any> {
@@ -164,6 +202,105 @@ export class UtilityServiceService {
         return this.http.delete('/ivs/feetype/' + id)
     }
 
+
+    // Scholarship apis start here ===========>>>>>>>>>>>>
+
+    saveScholarship(body): Observable<any> {
+        return this.http.post('/ivs/scholarship/saveScholarship', body)
+    }
+
+    updateScholarship(id, body): Observable<any> {
+        return this.http.put(`/ivs/scholarship/${id}`, body)
+    }
+
+    getScholarship(): Observable<any> {
+        return this.http.get('/ivs/scholarship/getScholarship');
+    }
+
+    getScholarshipByStudent(params?): Observable<any> {
+        return this.http.get('/ivs/scholarship/bystudent', {params});
+    }
+
+    deleteScholarship(id): Observable<any> {
+        return this.http.delete('/ivs/scholarship/' + id);
+    }
+
+    // Student apis start here ===========>>>>>>>>>>>>
+
+    saveStudent(body): Observable<any> {
+        return this.http.post('/ivs/student/saveStudent', body)
+    }
+
+    updateStudent(id, body): Observable<any> {
+        return this.http.put(`/ivs/student/updateStudent/${id}`, body)
+    }
+
+    getStudent(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/student/byStudent', {params})
+        }
+        return this.http.get('/ivs/student/getStudent');
+    }
+
+    deleteStudent(id): Observable<any> {
+        return this.http.delete('/ivs/student/deleteStudent/' + id);
+    }
+
+    // Assign Scholarship apis start here ===========>>>>>>>>>>>>
+
+    saveAssignScholarship(body): Observable<any> {
+        return this.http.post('/ivs/assignScholarship/saveAssignScholarship', body)
+    }
+
+    updateAssignScholarship(id, body): Observable<any> {
+        return this.http.put(`/ivs/assignScholarship/${id}`, body)
+    }
+
+    getAssignScholarship(): Observable<any> {
+        return this.http.get('/ivs/assignScholarship/getAssignScholarship');
+    }
+
+    deleteAssignScholarship(id): Observable<any> {
+        return this.http.delete('/ivs/assignScholarship/' + id);
+    }
+
+     // Penalty apis start here ===========>>>>>>>>>>>>
+
+    savePenalty(body): Observable<any> {
+        return this.http.post('/ivs/penalty/savePenalty', body)
+    }
+
+    updatePenalty(id, body): Observable<any> {
+        return this.http.put(`/ivs/penalty/deletePenalty/${id}`, body)
+    }
+
+    getPenalty(): Observable<any> {
+        return this.http.get('/ivs/penalty/getPenalty');
+    }
+
+    deletePenalty(id): Observable<any> {
+        return this.http.delete('/ivs/penalty/updatePenalty/' + id);
+    }
+
+    // Penalty apis start here ===========>>>>>>>>>>>>
+
+    saveAdmin(body): Observable<any> {
+        return this.http.post('/ivs/admin', body)
+    }
+
+    updateAdmin(id, body): Observable<any> {
+        return this.http.put(`/ivs/admin/${id}`, body)
+    }
+
+    getAdmin(): Observable<any> {
+        return this.http.get('/ivs/admin');
+    }
+
+    deleteAdmin(id): Observable<any> {
+        return this.http.delete('/ivs/admin/' + id);
+    }
+
+    // Login API
 
     getLogin(userName, password): Observable<any> {
         return this.http.post('auth/signin?username=' + userName + '&password=' + password, {})

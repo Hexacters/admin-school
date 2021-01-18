@@ -1,17 +1,18 @@
-<mat-toolbar>
+<mat-toolbar >
     <span>
         <button mat-icon-button>
           <mat-icon (click)="toggleSideBar()">menu</mat-icon>
         </button>
         <button mat-icon-button>
-            <mat-icon style="color: aliceblue;" (click)="goToHome()">home</mat-icon>
+            <mat-icon (click)="goToHome()">home</mat-icon>
         </button>
     </span>
     
     <span>
-        <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>person_outline</mat-icon></button>
+        <ngx-avatar [bgColor]="'#ffffff'" [fgColor]="'#000000'" [name]="userDetails['userName']"></ngx-avatar>
+        <button class="ml-1 mt-2" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>keyboard_arrow_down</mat-icon></button>
         <mat-menu #menu="matMenu">
-           <button mat-menu-item (click)="logOut()">Logout</button>
+            <button mat-menu-item (click)="logOut()">Logout</button>
         </mat-menu>
     </span>
 </mat-toolbar>

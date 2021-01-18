@@ -6,7 +6,7 @@
 .mainComp{
     height: 100vh;
     min-height: 100vh;
-    background-color: rgb(213, 216, 218);
+    background-color: #f0f0f0;
 }
 .header{
     width:100%; 
@@ -22,7 +22,7 @@ mat-drawer-container{
     height: auto;
     min-height: 89.5%;
     overflow: hidden;
-    background-color: rgb(213, 216, 218);
+    background-color: #f0f0f0;
 }
 mat-drawer-content{
     overflow: hidden;

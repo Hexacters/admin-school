@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UtilityServiceService } from 'src/app/utility-service.service';
-
+import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
     selector: 'app-fee-type',
     templateUrl: './fee-type.component.html',
@@ -17,7 +18,8 @@ export class FeeTypeComponent implements OnInit {
 
     constructor(
         private _dataService: UtilityServiceService,
-        private router: Router
+        private router: Router,
+        private toastr: ToastrService
     ) { }
 
     ngOnInit() {
@@ -28,9 +30,9 @@ export class FeeTypeComponent implements OnInit {
         if (this.router.url.includes('edit')) {
             this.isEdit = true;
             this.editData = JSON.parse(sessionStorage.getItem('feeType'));
-            (<FormArray>this.objectForm.get('feeTypes')).push(new FormControl(this.editData.typeName));
+            (<FormArray>this.objectForm.get('feeTypes')).push(new FormControl(this.editData.typeName, Validators.required));
         } else {
-            (<FormArray>this.objectForm.get('feeTypes')).push(new FormControl());
+            (<FormArray>this.objectForm.get('feeTypes')).push(new FormControl(null, Validators.required));
         }
     }
 
@@ -40,16 +42,25 @@ export class FeeTypeComponent implements OnInit {
     }
 
     onSubmit() {
-        this._dataService.saveFeetype(this.objectForm.value.feeTypes).subscribe(res => {
-            this.router.navigate(['/feeType/view']);
-        })
-    }
-
-    onUpdate() {
-        const typeName = this.objectForm.value.feeTypes[0];
-        this._dataService.updateFeetype(this.editData.id, typeName).subscribe(res => {
-            this.router.navigate(['/feeType/view']);
-        })
+        this.objectForm.markAllAsTouched();
+        if (this.objectForm.valid) {
+            if (this.isEdit) {
+                const typeName = this.objectForm.value.feeTypes[0];
+                this._dataService.updateFeetype(this.editData.id, typeName).subscribe(res => {
+                    this.toastr.success('Fees Type updated successfully', 'Info');
+                    this.router.navigate(['/feeType']);
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
+                });
+            } else {
+                this._dataService.saveFeetype(this.objectForm.value.feeTypes).subscribe(res => {
+                    this.toastr.success('Fees Type Saved successfully', 'Info');
+                    this.router.navigate(['/feeType']);
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
+                });
+            }
+        }
     }
 
 }

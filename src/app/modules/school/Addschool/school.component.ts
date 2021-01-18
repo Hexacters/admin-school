@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormControlName, RequiredValidator, Validators } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { LocalcommunicationService } from 'src/app/core/localcommunication.service';
 import { UtilityServiceService } from 'src/app/utility-service.service';
 
@@ -21,14 +23,14 @@ export class SchoolComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private _dataService: UtilityServiceService,
         private _localCommunication: LocalcommunicationService,
-        private router: Router
+        private router: Router,
+        private toastr: ToastrService
     ) {
 
     }
 
     ngOnInit() {
         this.objectForm = new FormGroup({
-            'schoolName': new FormControl(null, Validators.required),
             'schools': new FormArray([
             ])
         });
@@ -37,9 +39,9 @@ export class SchoolComponent implements OnInit, AfterViewInit, OnDestroy {
             this.editFlag = false;
             this.id = JSON.parse(sessionStorage.getItem('school')).id;
             let name = JSON.parse(sessionStorage.getItem('school')).schoolName;
-            (<FormArray>this.objectForm.get('schools')).push(new FormControl(name));
+            (<FormArray>this.objectForm.get('schools')).push(new FormControl(name, Validators.required));
         } else {
-            (<FormArray>this.objectForm.get('schools')).push(new FormControl(null));
+            (<FormArray>this.objectForm.get('schools')).push(new FormControl(null, Validators.required));
         }
     }
 
@@ -55,19 +57,29 @@ export class SchoolComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     onSubmit() {
-        console.log('ng sebmit called')
-        console.log(this.objectForm.value.schools)
-        this._dataService.saveSchool(this.objectForm.value.schools).subscribe(res => {
-            console.log(res, 'res')
-        })
+        this.objectForm.markAllAsTouched();
+        if (this.objectForm.valid) {
+            if (this.editFlag) {
+                this._dataService.saveSchool(this.objectForm.value.schools).subscribe(res => {
+                    this.router.navigate(['school']);
+                    this.toastr.success('School details saved successfully', 'Info');
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
+                });
+            } else {
+                this._dataService.updateSchool(this.id, this.objectForm.value.schools).subscribe(res => {
+                    this.router.navigate(['school']);
+                    this.toastr.success('School details updated successfully', 'Info');
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
+                });
+            }
+            
+        }
     }
+
     ngOnDestroy() {
         sessionStorage.clear();
-    }
-    onUpdate() {
-        this._dataService.updateSchool(this.id, this.objectForm.value.schools).subscribe(res => {
-            this.router.navigate(['school/view'])
-        })
     }
 
 }

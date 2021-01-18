@@ -1,6 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { UtilityServiceService } from 'src/app/utility-service.service';
 
 @Component({
@@ -20,12 +22,16 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
     departmentName = '';
     dprtObj;
 
-    constructor(private _dataService: UtilityServiceService, private router: Router) { }
+    constructor(
+        private _dataService: UtilityServiceService,
+        private router: Router,
+        private toastr: ToastrService
+    ) { }
 
     ngOnInit() {
         this.getDepartment();
         this.objectForm = new FormGroup({
-            'schoolName': new FormControl(null, Validators.required),
+            'schoolName': new FormControl('', Validators.required),
             'departments': new FormArray([])
         });
         // (<FormArray>this.objectForm.get('departments')).push(new FormControl());
@@ -33,9 +39,9 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
             this.editFlag = false;
             this.dprtObj = JSON.parse(sessionStorage.getItem('dprtmnt'));
             this.id = this.dprtObj.id;
-            (<FormArray>this.objectForm.get('departments')).push(new FormControl(this.dprtObj.departmentName));
+            (<FormArray>this.objectForm.get('departments')).push(new FormControl(this.dprtObj.departmentName, Validators.required));
         } else {
-            (<FormArray>this.objectForm.get('departments')).push(new FormControl());
+            (<FormArray>this.objectForm.get('departments')).push(new FormControl(null, Validators.required));
         }
     }
 
@@ -51,9 +57,6 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
                         this.schoolId = element.id;
                     }
                 });
-            } else {
-                this.objectForm.get('schoolName').setValue(this.schoolList[1].id);
-                this.schoolId = this.schoolList[0].id;
             }
 
         })
@@ -69,32 +72,32 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
+        this.objectForm.markAllAsTouched();
         let body = {};
-        if (this.objectForm.value.departments[0] === null) {
-            alert()
-        } else {
+        if (this.objectForm.valid) {
             body = {
                 "departments": [...this.objectForm.value.departments],
                 "schoolId": this.schoolId
 
             }
-        }
-        this._dataService.saveDepartment(body).subscribe(res => {
-            console.log(res, 'res')
-        })
-    }
 
-    update() {
-        let body = {};
-        body = {
-            "departments": [...this.objectForm.value.departments],
-            "schoolId": this.schoolId
-
+            if (!this.editFlag) {
+                this._dataService.updateDepartment(this.id, body).subscribe(res => {
+                    this.router.navigate(['department']);
+                    sessionStorage.clear();
+                    this.toastr.success('Department details updated successfully', 'Info');
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
+                });
+            } else {
+                this._dataService.saveDepartment(body).subscribe(res => {
+                    this.router.navigate(['department']);
+                    this.toastr.success('Department details saved successfully', 'Info');
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
+                });
+            }
         }
-        this._dataService.updateDepartment(this.id, body).subscribe(res => {
-            this.router.navigate(['department/view']);
-            sessionStorage.clear();
-        })
     }
 
     ngOnDestroy() {
