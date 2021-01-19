@@ -27,7 +27,7 @@ export class AddFeeComponent implements OnInit {
     divisionId: number = 0;
     typeId: string = '';
     bodyArray = [];
-    frequency = [{ 'name': 'Weekly' }, { 'name': 'Monthly' }, { 'name': 'Quartly' }, { 'name': 'Half Yearly' }, { 'name': 'Yearly' }]
+    frequency = [{ 'name': 'Monthly' }, { 'name': 'Quartly' }, { 'name': 'Half Yearly' }, { 'name': 'Yearly' }]
     public isEdit: boolean = false;
     public editData: object = {};
     public selectedFeeType = {};

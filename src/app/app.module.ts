@@ -75,6 +75,7 @@ import { FeeCalculationComponent } from './modules/payment/fee-calculation/fee-c
 import { ActiveFeeComponent } from './modules/active-fee/active-fee.component';
 import { AddActiveFeeComponent } from './modules/active-fee/add-active-fee/add-active-fee.component';
 import { UpdateFeeCalcComponent } from './modules/payment/fee-calculation/update-fee-calc/update-fee-calc.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -131,6 +132,7 @@ import { UpdateFeeCalcComponent } from './modules/payment/fee-calculation/update
       preventDuplicates: true,
     }),
     FormsModule,
+    MatTooltipModule,
     MatProgressBarModule,
     MatTreeModule,
     ReactiveFormsModule,

@@ -184,6 +184,16 @@ export class UtilityServiceService {
         return this.http.put('/ivs/feetype/editcalculatefee', params);
     }
 
+    // Active Fee apis start here ===========>>>>>>>>>>>>
+
+    getActiveFee(): Observable<any> {
+        return this.http.get('/ivs/activatefee');
+    }
+
+    addActiveFee(params): Observable<any> {
+        return this.http.post('/ivs/activatefee', params);
+    }
+
     // Type apis start here ===========>>>>>>>>>>>>
 
     saveFee(body): Observable<any> {

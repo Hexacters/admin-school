@@ -12,7 +12,7 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
     styleUrls: ['./active-fee.component.scss']
 })
 export class ActiveFeeComponent implements OnInit {
-    displayedColumns: string[] = ['index', 'schoolName', 'departmentName', 'firstName', 'lastName', 'emailId', 'phoneNo', 'update', 'delete'];
+    displayedColumns: string[] = ['index', 'schoolName', 'departmentName', 'programName', 'divisionName', 'penaltyName', 'activationDate', 'activateFee'];
     dataSource: MatTableDataSource<any>;
   
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -24,7 +24,7 @@ export class ActiveFeeComponent implements OnInit {
     ) { }
   
     ngOnInit() {
-        this._dataService.getStudent().subscribe(res => {
+        this._dataService.getActiveFee().subscribe(res => {
             this.dataSource = new MatTableDataSource(res.filter(e => e.id));
             this.dataSource.paginator = this.paginator;
         })

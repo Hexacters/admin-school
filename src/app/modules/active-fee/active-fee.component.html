@@ -32,38 +32,31 @@
                         <td mat-cell *matCellDef="let element"> {{element.departmentName}} </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="firstName">
-                        <th mat-header-cell *matHeaderCellDef> First Name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+                    <ng-container matColumnDef="programName">
+                        <th mat-header-cell *matHeaderCellDef> Program Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.programName}} </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="lastName">
-                        <th mat-header-cell *matHeaderCellDef> Last Name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+                    <ng-container matColumnDef="divisionName">
+                        <th mat-header-cell *matHeaderCellDef> Division Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.divisionName}} </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="emailId">
-                        <th mat-header-cell *matHeaderCellDef> EmailId </th>
-                        <td mat-cell *matCellDef="let element"> {{element.emailId}} </td>
+                    <ng-container matColumnDef="penaltyName">
+                        <th mat-header-cell *matHeaderCellDef> Penalty Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.penaltyName}} </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="phoneNo">
-                        <th mat-header-cell *matHeaderCellDef> Phone No </th>
-                        <td mat-cell *matCellDef="let element"> {{element.phoneNo}} </td>
+                    <ng-container matColumnDef="activationDate">
+                        <th mat-header-cell *matHeaderCellDef> Due Date </th>
+                        <td mat-cell *matCellDef="let element"> {{element.activationDate  | date:'medium'}} </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="update">
-                        <th mat-header-cell *matHeaderCellDef> Update </th>
-                        <td mat-cell *matCellDef="let element">
-                            <mat-icon color="primary" (click)='updateStudent(element)'>edit</mat-icon>  
-                        </td>
-                    </ng-container>
-
-                    <!-- Weight Column -->
-                    <ng-container matColumnDef="delete">
-                        <th mat-header-cell *matHeaderCellDef> delete </th>
-                        <td mat-cell *matCellDef="let element">
-                            <mat-icon color="warn" (click)='deleteStudent(element.id)'>delete</mat-icon>  
+                    <ng-container matColumnDef="activateFee">
+                        <th mat-header-cell *matHeaderCellDef class="text-center"> Status </th>
+                        <td mat-cell *matCellDef="let element" class="text-center"> 
+                            <mat-icon class="text-success text-center" *ngIf="element.activateFee" matTooltip="Activated">check_circle_outline</mat-icon>  
+                            <mat-icon class="text-danger text-center" *ngIf="!element.activateFee" matTooltip="De-Activated">highlight_off</mat-icon>
                         </td>
                     </ng-container>
 

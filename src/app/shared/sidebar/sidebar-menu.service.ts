@@ -69,11 +69,11 @@ export class SidebarMenuService {
                     link: "/fee",
                     icon: 'list_alt'
                 },
-                // {
-                //     title: "Activie Fee",
-                //     link: "/active-fee",
-                //     icon: 'fact_check'
-                // },
+                {
+                    title: "Activie Fee",
+                    link: "/active-fee",
+                    icon: 'fact_check'
+                },
             ]
         },
         {
