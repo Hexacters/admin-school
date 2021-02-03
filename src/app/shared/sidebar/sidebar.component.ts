@@ -18,7 +18,7 @@ interface IMenuFlatNode {
 })
 export class SidebarComponent implements OnInit {
 
-  public userDetails: object;
+  public userDetails: any;
   private _transformer = (node: ISideMenu, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
@@ -38,12 +38,22 @@ export class SidebarComponent implements OnInit {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
 
-  constructor(private menuService: SidebarMenuService) {
-    this.dataSource.data = this.menuService.menus;
-  }
+  constructor(
+    private menuService: SidebarMenuService
+  ) { }
 
   ngOnInit() {
     this.userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    this.dataSource.data = this.menuService.menus.filter(e => {
+      let role = this.userDetails.role;
+      if (e.role === 'all') {
+        return true;
+      }
+      if (!role) {
+        role = 'admin';
+      }
+      return e.role == role;
+    });
   }
 
   hasChild = (_: number, node: IMenuFlatNode) => node.expandable;

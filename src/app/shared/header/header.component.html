@@ -7,12 +7,20 @@
             <mat-icon (click)="goToHome()">home</mat-icon>
         </button>
     </span>
-    
     <span>
         <ngx-avatar [bgColor]="'#ffffff'" [fgColor]="'#000000'" [name]="userDetails['userName']"></ngx-avatar>
         <button class="ml-1 mt-2" mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>keyboard_arrow_down</mat-icon></button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="logOut()">Logout</button>
+            <!-- <div mat-ripple mat-menu-item routerLink="/profile" routerLinkActive="active">
+                <mat-icon>person</mat-icon> Profile
+            </div> -->
+            <div mat-ripple mat-menu-item routerLink="/change-password" routerLinkActive="active">
+                <mat-icon>edit</mat-icon> Change Password
+            </div>
+            <mat-divider></mat-divider>
+            <div mat-ripple mat-menu-item (click)="logOut()">
+                <mat-icon>logout</mat-icon> Logout
+            </div>
         </mat-menu>
     </span>
 </mat-toolbar>

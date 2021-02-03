@@ -8,7 +8,6 @@
 }
 .content_box{
     width: 100%;
-    min-height: 300px;
     margin: 10px 0px;
 }
 
@@ -24,9 +23,6 @@ select{
 ::ng-deep {
     .form-active-fee {
         .mat-form-field-appearance-fill {
-            .mat-form-field-wrapper {
-                //margin-left: 10px;
-            }
 
             .mat-form-field-flex {
                 padding: 0 0.75em 0 0.75em;

@@ -27,8 +27,16 @@ export class ViewProgrammeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        const schoolData = JSON.parse(sessionStorage.getItem('by-department'));
+        let data;
+        if (schoolData && this.router.url.includes('byDepartment')) {
+            data = {
+                schoolId: schoolData.schoolId,
+                departmentId: schoolData.id
+            }
+        }
 
-        this._dataService.getProgrammeList().subscribe(res => {
+        this._dataService.getProgrammeList(data).subscribe(res => {
             console.log(res, 'res')
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
@@ -54,9 +62,34 @@ export class ViewProgrammeComponent implements OnInit {
 
     }
 
+    public gotoAdd() {
+        if (!this.router.url.includes('byDepartment')) {
+            sessionStorage.setItem('by-department', null);
+        }
+        this.router.navigate(['programm/add']);
+    }
+
+    goToDepartment(element) {
+        sessionStorage.setItem('by-school', JSON.stringify({id: element.schoolId}));
+        this.router.navigate(['department/bySchool']);
+    }
+
+    goToSemester(element) {
+        sessionStorage.setItem('by-program', JSON.stringify(element));
+        this.router.navigate(['semester/byProgramm']);
+    }
+
     updateDepartment(element) {
         this.router.navigate(['programm/edit']);
         sessionStorage.setItem('programm', JSON.stringify(element));
+    }
+
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        console.log(this.dataSource.filter);
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
     }
 
 

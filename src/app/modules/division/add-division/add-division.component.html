@@ -1,81 +1,98 @@
 <div class="container">
 
-  <mat-card class="header_card">
-    <p style="line-height: 30px;">
-      <span style="float: left;">Add Division</span> <span style="float: right;"><a
-        routerLink="/dashboard">Home</a> > Add Division </span>
-    </p>
-  </mat-card>
+    <mat-card class="header_card">
+        <p style="line-height: 30px;">
+            <span style="float: left;">Add Division</span> <span style="float: right;"><a
+                    routerLink="/dashboard">Home</a> >
+                Add Division </span>
+        </p>
+    </mat-card>
 
 
-  <mat-card class="content_box">
-    <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
-      <div class="row m-0">
-        <div class="col-md-3 mr-2 ml-1">
-          <div class="row" style="display: flex;">
-            <label class="m-0" for="cars">School</label>
-            <select size="1" required formControlName="schoolName" (ngModelChange)='selectSchool($event)'>
-              <option value="" selected>Select School</option>
-              <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}</option>
-            </select>
-          </div>
-        </div>
+    <mat-card class="content_box">
+        <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
+            <div class="row m-0">
+                <div class="col-md-3 mr-2 ml-1">
+                    <div class="row" style="display: flex;">
+                        <label class="m-0" for="cars">School</label>
+                        <select size="1" required formControlName="schoolName" (ngModelChange)='selectSchool($event)'>
+                            <option value="" selected>Select School</option>
+                            <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
 
-        <div class="col-md-3 mr-2 ml-1">
-          <div class="row" style="display: flex;">
-            <label class="m-0" for="cars">Department</label>
-            <select size="1" required formControlName="departmentName" (ngModelChange)='selectDepartment($event)'>
-              <option value="" selected>Select Department</option>
-              <option *ngFor=' let department of departmentList' [value]="department.id">{{department.departmentName}}</option>
-            </select>
-          </div>
-        </div>
+                <div class="col-md-3 mr-2 ml-1">
+                    <div class="row" style="display: flex;">
+                        <label class="m-0" for="cars">Department</label>
+                        <select size="1" required formControlName="departmentName"
+                            (ngModelChange)='selectDepartment($event)'>
+                            <option value="" selected>Select Department</option>
+                            <option *ngFor=' let department of departmentList' [value]="department.id">
+                                {{department.departmentName}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
 
-        <div class="col-md-3 mr-2 ml-1">
-          <div class="row" style="display: flex;">
-            <label class="m-0" for="cars">programme</label>
-            <select size="1" required formControlName="programmeName" (ngModelChange)='selectProgramme($event)'>
-              <option value="" selected>Select programme</option>
-              <option *ngFor=' let programme of programmeList' [value]="programme.id">{{programme.programName}}</option>
-            </select>
-          </div>
-        </div>
+                <div class="col-md-3 mr-2 ml-1">
+                    <div class="row" style="display: flex;">
+                        <label class="m-0" for="cars">programme</label>
+                        <select size="1" required formControlName="programmeName"
+                            (ngModelChange)='selectProgramme($event)'>
+                            <option value="" selected>Select programme</option>
+                            <option *ngFor=' let programme of programmeList' [value]="programme.id">
+                                {{programme.programName}}</option>
+                        </select>
+                    </div>
+                </div>
 
-      </div>
+            </div>
 
-      <div class="row m-0 mt-3">
-        <div class="col-md-3 mr-2 ml-1">
-          <div class="row" style="display: flex;">
-            <label class="m-0" for="cars">Semester</label>
-            <select size="1" required formControlName="semesterName" (ngModelChange)='selectSemester($event)'>
-              <option value="" selected>Select Semester</option>
-              <option *ngFor=' let semester of semesterList' [value]="semester.id">{{semester.semesterName}}</option>
-            </select>
-          </div>
-        </div>
+            <div class="row m-0 mt-3">
+                <div class="col-md-3 mr-2 ml-1">
+                    <div class="row" style="display: flex;">
+                        <label class="m-0" for="cars">Semester</label>
+                        <select size="1" required formControlName="semesterName"
+                            (ngModelChange)='selectSemester($event)'>
+                            <option value="" selected>Select Semester</option>
+                            <option *ngFor=' let semester of semesterList' [value]="semester.id">
+                                {{semester.semesterName}}</option>
+                        </select>
+                    </div>
+                </div>
 
-        <div class="col-md-3 mr-2 ml-1" formArrayName="division">
-          <div class="row" *ngFor="let division of divisionList;index as i">
-            <p class="m-0 mb-1"> Division Name * </p>
-            <input type="text" required placeholder="Division name" formControlName="{{i}}">
-          </div>
+                <div class="col-md-3 mr-2 ml-1" formArrayName="division">
+                    <div class="row" *ngFor="let division of divisionList;index as i">
+                        <div class="col-md-10 p-0 m-0">
+                            <p class="m-0 mb-1"> Division Name * </p>
+                            <input type="text" required placeholder="Division name" formControlName="{{i}}">
+                        </div>
+                        <div class="col-md-1" style="margin-top: 25px;">
+                            <button mat-mini-fab color="default" [disabled]="!i" class="shadow-none text-dark"
+                                (click)='removeDivision(i)'>
+                                <mat-icon [ngClass]="{'text-light': !i}">remove_circle</mat-icon>
+                            </button>
+                        </div>
+                    </div>
 
-        </div>
-        <div class="col-md-2" style="margin-top: 20px;" *ngIf="!isEdit">
-          <button mat-mini-fab color="accent" (click)='addDivision()'>
-            <mat-icon>plus_one</mat-icon>
-          </button>
-        </div>
-      </div>
+                </div>
+                <div class="col-md-2" style="margin-top: 23px;" *ngIf="!isEdit">
+                    <button mat-mini-fab color="default" class="shadow-none text-success" (click)='addDivision()'>
+                        <mat-icon>add_circle</mat-icon>
+                    </button>
+                </div>
+            </div>
 
 
-      <div class="row m-0 mt-3">
-        <button mat-raised-button color="primary" *ngIf="!isEdit" class="mr-3" type="submit">Save</button>
-        <button mat-raised-button color="primary" *ngIf="isEdit" class="mr-3" type="submit">Update</button>
-        <button mat-stroked-button color="warn" class="mr-3" routerLink="/division" >Cancel</button>
-      </div>
-    </form>
-  </mat-card>
+            <div class="row m-0 mt-3">
+                <button mat-raised-button color="primary" *ngIf="!isEdit" class="mr-3" type="submit">Save</button>
+                <button mat-raised-button color="primary" *ngIf="isEdit" class="mr-3" type="submit">Update</button>
+                <button mat-stroked-button color="warn" class="mr-3" routerLink="/division">Cancel</button>
+            </div>
+        </form>
+    </mat-card>
 
 
 

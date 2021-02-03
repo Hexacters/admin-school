@@ -1,45 +1,30 @@
 <body>
     <div class="container">
-        <div class="card px-3 py-5">
-            <div class="row">
-                <div class="col-md-3">
-                    <img src="../../../assets/img_avatar.png" alt="Avatar">
+        <div class="img">
+            <img src="../../../assets/bg.svg">
+        </div>
+        <div class="login-content">
+            <div class="example-form">
+                <b class="title">Login</b>
+                <br />
+                <br />
+                <mat-form-field class="example-full-width">
+                    <input type="text" matInput placeholder="Username" [(ngModel)]='userName'>
+                </mat-form-field>
+                <br />
+                <br />
+                <mat-form-field class="example-full-width">
+                    <input type="password" matInput placeholder="Password" [(ngModel)]='password'>
+                </mat-form-field>
+                <br />
+                <br />
+                <div class="link">
+                    <a routerLink="/forgot-password">Forgot Password?</a>
                 </div>
-                <div class="col-md-9" style="justify-content: center;">
-                    <div class="row mt-2">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-6">
-                            <p>USER LOGIN</p>
-                        </div>
-                        <div class="col-md-2"></div>
-                        
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-6 input-icons">
-                            <mat-icon>person</mat-icon>
-                            <input type="text" placeholder="Username" [(ngModel)]='userName'>
-                        </div>
-                        <div class="col-md-2"></div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-6 input-icons">
-                            <mat-icon>lock</mat-icon>
-                            <input type="password" placeholder="Password" [(ngModel)]='password'>
-                        </div>
-                        <div class="col-md-2"></div>
-                    </div>
-                    <div class="row mt-4 mb-5">
-                        <div class="col-md-4"></div>
-                        <div class="col-md-6">
-                            <button mat-raised-button color="accent" (click)= 'login()'>LOGIN</button>
-                        </div>
-                        <div class="col-md-2"></div>
-                    </div>
+                <div class="right">
+                    <button class="btn" mat-raised-button color="primary" (click)='login()'>Submit</button>
                 </div>
             </div>
-    
         </div>
     </div>
 </body>

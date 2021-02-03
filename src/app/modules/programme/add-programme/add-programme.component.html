@@ -2,7 +2,8 @@
 
   <mat-card class="header_card">
     <p style="line-height: 30px;">
-      <span style="float: left;">Add Programme</span> <span style="float: right;"><a routerLink="/dashboard">Home</a> > Add Programme </span>
+      <span style="float: left;">Add Programme</span> <span style="float: right;"><a routerLink="/dashboard">Home</a> >
+        Add Programme </span>
     </p>
   </mat-card>
 
@@ -23,23 +24,32 @@
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
             <label class="p-0 m-0" for="cars">Department</label>
-              <select size="1" formControlName="departmentName" (ngModelChange)='selectDepartment($event)' required>
+            <select size="1" formControlName="departmentName" (ngModelChange)='selectDepartment($event)' required>
               <option value="" selected>Select Department</option>
-              <option *ngFor=' let department of departmentList' [value]="department.id">{{department.departmentName}}</option>
+              <option *ngFor=' let department of departmentList' [value]="department.id">{{department.departmentName}}
+              </option>
             </select>
           </div>
         </div>
 
-        <div class="col-md-3 mr-2 ml-1" formArrayName="programme">
+        <div class="col-md-4" formArrayName="programme">
           <div class="row" *ngFor="let programme of programmeList;index as i">
-            <label class="p-0 mb-1"> Programme * </label>
-            <input type="text" placeholder="Programme Name" required formControlName="{{i}}">
+            <div class="col-md-10 p-0 m-0">
+              <label class="p-0 mb-1"> Programme * </label>
+              <input type="text" placeholder="Programme Name" required formControlName="{{i}}">
+            </div>
+            <div class="col-md-1" style="margin-top: 25px;" >
+              <button mat-mini-fab color="default" [disabled]="!i" class="shadow-none text-dark"
+                (click)='removeProgramme(i)'>
+                <mat-icon [ngClass]="{'text-light': !i}">remove_circle</mat-icon>
+              </button>
+            </div>
           </div>
 
         </div>
-        <div class="col-md-2" style="margin-top: 25px;" *ngIf="!isEdit">
-          <button mat-mini-fab color="accent" (click)="addprogramme()">
-            <mat-icon>plus_one</mat-icon>
+        <div class="col-md-1" style="margin-top: 25px;" *ngIf="!isEdit">
+          <button mat-mini-fab color="default" class="shadow-none text-success" (click)="addprogramme()">
+            <mat-icon>add_circle</mat-icon>
           </button>
         </div>
 

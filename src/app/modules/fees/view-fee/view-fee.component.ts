@@ -32,10 +32,13 @@ export class ViewFeeComponent implements OnInit {
         })
     }
 
-    ngAfterViewInit() {
+    updateFeeCalculation(data) {
+        this._dataService.updatePriceCalculation(data).subscribe(res => {
+            // Success
+        });
     }
 
-    deleteFee(id) {
+    deleteFee(element) {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             width: '300px',
             data: {}
@@ -43,7 +46,10 @@ export class ViewFeeComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this._dataService.deleteFee(id).subscribe(res => {
+                this._dataService.deleteFee(element.id).subscribe(res => {
+                    this.updateFeeCalculation({
+                        ...element
+                    })
                     this.ngOnInit();
                 });
             }
@@ -55,5 +61,12 @@ export class ViewFeeComponent implements OnInit {
         sessionStorage.setItem('fees', JSON.stringify(element));
     }
 
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        console.log(this.dataSource.filter);
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
+    }
 
 }

@@ -2,14 +2,15 @@
 
     <mat-card class="header_card">
         <p style="line-height: 30px;">
-            <span style="float: left;">Active Fee</span> <span style="float: right;"><a routerLink="/dashboard">Home</a> >
+            <span style="float: left;">Active Fee</span> <span style="float: right;"><a routerLink="/dashboard">Home</a>
+                >
                 Active Fee </span>
         </p>
     </mat-card>
 
 
     <mat-card class="content_box form-active-fee">
-        <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
+        <form action="" [formGroup]="objectForm">
             <div class="row m-0">
                 <div class="col-md-3 mr-2 ml-3">
                     <div class="row" style="display: flex;">
@@ -70,62 +71,50 @@
                         </select>
                     </div>
                 </div>
-
-                <div class="col-md-3 mr-2 ml-1">
-                    <div class="row" style="display: flex;">
-                        <label class="m-0" for="cars">Penalty</label>
-                        <select size="1" formControlName="penaltyId" required>
-                            <option value="" selected>Select Penalty</option>
-                            <option *ngFor='let pen of penalty' [value]="pen.id">{{pen.penaltyName}}</option>
-                        </select>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div class="row m-0 mt-3">
-                <div class="col-md-3 p-0 ml-3">
-                    <label class="m-0" for="cars">Due Date</label>
-                    <mat-form-field appearance="fill" class="w-100">
-                        <input matInput [min]="minDate" formControlName="activationDate" [matDatepicker]="picker">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-3 p-0 ml-3">
-                    <div class="m-0 mb-2" for="cars">Active Fee</div>
-                    <mat-slide-toggle formControlName="activateFee"></mat-slide-toggle>
-                </div>
-            </div>
-            <div class="row m-0 mt-3 px-3">
-                <button mat-raised-button color="primary" class="mr-3" *ngIf="!isEdit" type="submit">Save</button>
-                <button mat-raised-button color="primary" class="mr-3" *ngIf="isEdit" type="submit">Update</button>
-                <button mat-stroked-button color="warn" class="mr-3" routerLink="/fee">Cancel</button>
             </div>
         </form>
     </mat-card>
 
     <div class="row m-0">
         <mat-card class="content_box w-100" *ngIf="studentsList">
-            <h5 class="float-left">Students Details</h5>
+            <h5 class="float-left">Fee Details</h5>
             <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource">
+                <table class="w-100" mat-table [dataSource]="dataSource">
 
-                    <!-- Position Column -->
                     <ng-container matColumnDef="index">
                         <th mat-header-cell *matHeaderCellDef> No. </th>
                         <td mat-cell *matCellDef="let element;index as i"> {{i+1}} </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="studentName">
-                        <th mat-header-cell *matHeaderCellDef> Student Name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.studentName}} </td>
+                    <ng-container matColumnDef="schoolName">
+                        <th mat-header-cell *matHeaderCellDef> School Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.schoolName}} </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="netAmount">
-                        <th mat-header-cell *matHeaderCellDef> Total Net Amount </th>
-                        <td mat-cell *matCellDef="let element"> {{element.netAmount}} </td>
+                    <ng-container matColumnDef="type">
+                        <th mat-header-cell *matHeaderCellDef> Applied Type </th>
+                        <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="feeType">
+                        <th mat-header-cell *matHeaderCellDef> Frequency </th>
+                        <td mat-cell *matCellDef="let element"> {{element.feeType}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fee">
+                        <th mat-header-cell *matHeaderCellDef> Amount </th>
+                        <td mat-cell *matCellDef="let element"> {{element.fee}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let element">
+                            <button type="button" (click)="openActiveFee(element)" [ngClass]="{
+                                'btn-outline-primary': true
+                            }" class="btn">
+                                Active
+                            </button>
+                        </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

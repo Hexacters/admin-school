@@ -4,6 +4,9 @@
 
 export const environment = {
   production: false,
+  apiUrl: 'http://schoolivs-env.eba-qhze7dp2.us-east-2.elasticbeanstalk.com',
+  razKeyId: 'rzp_live_WiOJxc1xjTYpRx',
+  razSecretKey: 'hTOZsn83K6vpOA3VA62xApKt',
 };
 
 /*

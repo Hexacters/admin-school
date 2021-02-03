@@ -29,6 +29,8 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
+        this.dprtObj = JSON.parse(sessionStorage.getItem('dprtmnt'));
+        const bySchool = JSON.parse(sessionStorage.getItem('by-school'));
         this.getDepartment();
         this.objectForm = new FormGroup({
             'schoolName': new FormControl('', Validators.required),
@@ -37,10 +39,13 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
         // (<FormArray>this.objectForm.get('departments')).push(new FormControl());
         if (this.router.url.includes('edit')) {
             this.editFlag = false;
-            this.dprtObj = JSON.parse(sessionStorage.getItem('dprtmnt'));
             this.id = this.dprtObj.id;
             (<FormArray>this.objectForm.get('departments')).push(new FormControl(this.dprtObj.departmentName, Validators.required));
         } else {
+            if (bySchool) {
+                this.schoolId = bySchool.id;
+                this.objectForm.get('schoolName').setValue(bySchool.id);
+            }
             (<FormArray>this.objectForm.get('departments')).push(new FormControl(null, Validators.required));
         }
     }
@@ -65,6 +70,11 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
     addDepartment() {
         this.departmentList.push({});
         (<FormArray>this.objectForm.get('departments')).push(new FormControl(null, Validators.required));
+    }
+
+    removeDepartment(i) {
+        this.departmentList.splice(i, 1);
+        (<FormArray>this.objectForm.get('departments')).removeAt(i);
     }
 
     selectSchool(event) {

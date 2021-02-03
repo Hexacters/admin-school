@@ -60,6 +60,11 @@ export class ViewschoolComponent implements OnInit {
         });
     }
 
+    goToDepartment(element) {
+        sessionStorage.setItem('by-school', JSON.stringify(element));
+        this.router.navigate(['department/bySchool']);
+    }
+
     updateSchool(element) {
         // this._dataService.updateSchool(element.id,element.schoolName).subscribe(res=>{
         //   this.ngOnInit;
@@ -74,5 +79,12 @@ export class ViewschoolComponent implements OnInit {
 
     }
 
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        console.log(this.dataSource.filter);
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
+    }
 
 }

@@ -1,11 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UtilityServiceService } from 'src/app/utility-service.service';
+import { ActiveFeeService } from '../active-fee.service';
+import { ActiveFeeModalComponent } from '../modal/active-fee-modal/active-fee-modal.component';
 
 @Component({
     selector: 'app-add-active-fee',
@@ -32,7 +35,7 @@ export class AddActiveFeeComponent implements OnInit {
     public isEdit: boolean = false;
     public editData: object = {};
     public selectedFeeType = {};
-    displayedColumns: string[] = ['index', 'studentName', 'netAmount'];
+    displayedColumns: string[] = ['index', 'schoolName', 'type', 'feeType', 'fee', 'action'];
     dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   
     paginator: MatPaginator;
@@ -44,6 +47,8 @@ export class AddActiveFeeComponent implements OnInit {
     constructor(
         private _dataService: UtilityServiceService,
         private router: Router,
+        public dialog: MatDialog,
+        public activeFeeService: ActiveFeeService,
         private toastr: ToastrService
     ) { }
 
@@ -54,9 +59,6 @@ export class AddActiveFeeComponent implements OnInit {
             'programId': new FormControl('', Validators.required),
             'semesterId': new FormControl('', Validators.required),
             'divisionId': new FormControl('', Validators.required),
-            'penaltyId': new FormControl('', Validators.required),
-            'activationDate': new FormControl(new Date(), Validators.required),
-            'activateFee': new FormControl(true, Validators.required),
         });
         this.getSchoolList(this.isEdit);
         this.getPenality();
@@ -108,6 +110,16 @@ export class AddActiveFeeComponent implements OnInit {
         });
     }
 
+    getFeeList(data?): void {
+        this._dataService.getFeeBreakup(data).subscribe((res: any[]) => {
+            this.studentsList = this.activeFeeService.getFeeByFrequancy(res);
+            this.dataSource = new MatTableDataSource(this.studentsList);
+            this.dataSource.paginator = this.paginator;
+        }, (res: HttpErrorResponse) => {
+            this.toastr.error(res.error.message || res.message, 'Info');
+        });
+    }
+
     selectSchool(event) {
         this.schoolId = event;
         this.getdepartmentList(false, {
@@ -144,7 +156,7 @@ export class AddActiveFeeComponent implements OnInit {
 
     selectDivision(event) {
         this.divisionId = event;
-        this.getStudentList({
+        this.getFeeList({
             schoolId: this.schoolId,
             departmentId: this.departmentId,
             programId: this.programmeId,
@@ -153,17 +165,30 @@ export class AddActiveFeeComponent implements OnInit {
         })
     }
 
-    onSubmit(): void {
-        this.objectForm.markAllAsTouched();
-        if (this.objectForm.valid) {
-            const data = this.objectForm.value;
-            this._dataService.addActiveFee([data]).subscribe(res => {
-                this.router.navigate(['active-fee']);
-                this.toastr.success('Updated Sucessfully', 'Info');
-            }, (res: HttpErrorResponse) => {
-                this.toastr.error(res.error.message || res.message, 'Info');
-            });
-        }
+    openActiveFee(element) {
+        const dialogRef = this.dialog.open(ActiveFeeModalComponent, {
+            width: '800px',
+            data: {...element}
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                const data = this.objectForm.value;
+                const res = element.id.map(e => {
+                    return {
+                        feeTypeId: e,
+                        ...result,
+                        ...data,
+                    }
+                });
+                this._dataService.addActiveFee(res).subscribe(res => {
+                    this.router.navigate(['active-fee']);
+                    this.toastr.success('Updated Sucessfully', 'Info');
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
+                });
+            }
+        });
     }
 
 }

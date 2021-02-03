@@ -61,10 +61,11 @@ export class AddStudentComponent implements OnInit {
         return new FormGroup({
             'firstName': new FormControl(data['firstName'] || '', Validators.required),
             'lastName': new FormControl(data['lastName'] || '', Validators.required),
-            'emailId': new FormControl(data['emailId'] || '', Validators.required),
+            'emailId': new FormControl(data['emailId'] || '', Validators.email),
             'phoneNo': new FormControl(data['phoneNo'] || '', Validators.required),
-            'parentPhoneNo': new FormControl(data['parentPhoneNo'] || '', Validators.required),
-            'parentEmailId': new FormControl(data['parentEmailId'] || '', Validators.required),
+            'parentPhoneNo': new FormControl(data['parentPhoneNo'] || ''),
+            'parentEmailId': new FormControl(data['parentEmailId'] || '',Validators.email),
+            'password': new FormControl(data['password'] || ''),
         })
     }
 
@@ -150,6 +151,11 @@ export class AddStudentComponent implements OnInit {
         this.onAdd()
     }
 
+    public removeMore(i): void {
+        this.studentsList.splice(i, 1);
+        (<FormArray>this.studentForm.get('students')).removeAt(i);
+    }
+
     public onSubmit(): void {
         this.studentForm.markAllAsTouched();
         if (this.studentForm.valid) {
@@ -164,7 +170,9 @@ export class AddStudentComponent implements OnInit {
             };
         });
         if (this.editFlag) {
-            this._dataService.updateStudent(this.editData['id'], body[0]).subscribe(res => {
+            const reqData = body[0];
+            delete reqData.password
+            this._dataService.updateStudent(this.editData['id'], reqData).subscribe(res => {
                 this.router.navigate(['students']);
                 sessionStorage.clear();
                 this.toastr.success('student details updated successfully', 'Info');

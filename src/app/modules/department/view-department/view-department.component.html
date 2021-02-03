@@ -3,7 +3,7 @@
         <mat-card class="header_card">
             <p style="line-height: 30px;">
                 <span style="float: left;">View Departments</span> <span style="float: right;"><a
-                    routerLink="/dashboard">Home</a> > View Departments
+                        routerLink="/dashboard">Home</a> > View Departments
                 </span>
             </p>
         </mat-card>
@@ -12,7 +12,10 @@
     <div class="row">
         <mat-card class="content_box">
             <h5 class="float-left">Departments</h5>
-            <button class="float-right" routerLink="/department/add" mat-raised-button color="primary"> + Add Departments</button>
+            <button class="float-right" (click)="gotoAdd()" mat-raised-button color="primary"> + Add
+                Departments</button>
+            <input class="float-right search-filter" (keyup)="applyFilter($event.target.value)"
+                placeholder="Search.. Ex: name">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
 
@@ -31,13 +34,15 @@
 
                     <ng-container matColumnDef="departmentName">
                         <th mat-header-cell *matHeaderCellDef> Department Name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.departmentName}} </td>
+                        <td mat-cell *matCellDef="let element">
+                            <a class="link" (click)="goToProgramme(element)"> {{element.departmentName}} </a>
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="update">
                         <th mat-header-cell *matHeaderCellDef> Update </th>
                         <td mat-cell *matCellDef="let element">
-                            <mat-icon color="primary" (click)='updateDepartment(element)'>edit</mat-icon>  
+                            <mat-icon color="primary" (click)='updateDepartment(element)'>edit</mat-icon>
                         </td>
                     </ng-container>
 
@@ -45,7 +50,7 @@
                     <ng-container matColumnDef="delete">
                         <th mat-header-cell *matHeaderCellDef> delete </th>
                         <td mat-cell *matCellDef="let element">
-                            <mat-icon color="warn" (click)='deleteDepartment(element.id)'>delete</mat-icon>  
+                            <mat-icon color="warn" (click)='deleteDepartment(element.id)'>delete</mat-icon>
                         </td>
                     </ng-container>
 

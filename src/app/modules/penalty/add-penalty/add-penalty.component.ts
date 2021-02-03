@@ -55,6 +55,11 @@ export class AddPenaltyComponent implements OnInit {
         (<FormArray>this.penaltyForm.get('penalty')).push(this.getPenalty(data));
     }
 
+    public onRemove(i) {
+        this.penaltyList.splice(i, 1);
+        (<FormArray>this.penaltyForm.get('penalty')).removeAt(i);
+    }
+
     onSubmit() {
         this.penaltyForm.markAllAsTouched();
         if (this.penaltyForm.valid) {

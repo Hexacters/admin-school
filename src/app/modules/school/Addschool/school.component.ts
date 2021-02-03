@@ -55,6 +55,11 @@ export class SchoolComponent implements OnInit, AfterViewInit, OnDestroy {
         (<FormArray>this.objectForm.get('schools')).push(new FormControl(null, Validators.required));
     }
 
+    removeSchool(index) {
+        this.SchoolList.splice(index, 1);
+        (<FormArray>this.objectForm.get('schools')).removeAt(index);
+    }
+
 
     onSubmit() {
         this.objectForm.markAllAsTouched();

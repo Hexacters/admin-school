@@ -53,5 +53,12 @@ export class FeeTypeviewComponent implements OnInit {
         sessionStorage.setItem('feeType', JSON.stringify(element))
     }
 
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        console.log(this.dataSource.filter);
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
+    }
 
 }

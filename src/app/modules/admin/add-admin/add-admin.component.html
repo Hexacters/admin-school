@@ -16,7 +16,7 @@
                             <div class="col-md-3">
                                 <div class="row mt-2">
                                     <p class="p-0 m-0"> Username * </p>
-                                    <input type="text" placeholder="Username name" formControlName="username">
+                                    <input type="text" placeholder="Username name" required formControlName="name">
                                 </div>
                             </div>
                             <div class="col-md-3" *ngIf="!editFlag">
@@ -28,12 +28,17 @@
                             <div class="col-md-3">
                                 <div class="row mt-2 ml-1">
                                     <p class="p-0 m-0 "> Email Id * </p>
-                                    <input type="email" placeholder="Email Id" formControlName="emailId">
+                                    <input type="email" placeholder="Email Id" required formControlName="emailId">
                                 </div>
                             </div>
-                            <div class="col-md-2" style="margin-top: 25px;" *ngIf="!i && !editFlag">
-                                <button mat-mini-fab color="accent" (click)='onAdd()'>
-                                    <mat-icon>plus_one</mat-icon>
+                            <div class="col-md-1" style="margin-top: 25px;" *ngIf="!editFlag">
+                                <button mat-mini-fab color="default"  [disabled]="!i" class="shadow-none text-dark" (click)='onRemove(i)'>
+                                    <mat-icon [ngClass]="{'text-light': !i}">remove_circle</mat-icon>
+                                </button>
+                            </div>
+                            <div class="col-md-1" style="margin-top: 25px;" *ngIf="!i && !editFlag">
+                                <button mat-mini-fab color="default" class="shadow-none text-success" (click)='onAdd()'>
+                                    <mat-icon>add_circle</mat-icon>
                                 </button>
                             </div>
                         </div>

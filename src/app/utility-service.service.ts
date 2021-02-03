@@ -176,8 +176,20 @@ export class UtilityServiceService {
         return this.http.get('/ivs/feetype/calculatestudentsfee', {params});
     }
 
+    updatePriceCalculation(params?): Observable<any> {
+        return this.http.get('/ivs/feetype/updateFeeByDivision', {params});
+    }
+
     getFeeCalculationByID(params?): Observable<any> {
         return this.http.get('/ivs/feetype/calculatefee', {params});
+    }
+
+    getFeeBreakup(params?): Observable<any> {
+        return this.http.get('/ivs/feetype/feebreakup', {params});
+    }
+
+    updateScholarPriceCalculation(params?): Observable<any> {
+        return this.http.get('/ivs/feetype/studentscholarshipupdate', {params});
     }
 
     updateFeeCalculation(params): Observable<any> {
@@ -231,6 +243,10 @@ export class UtilityServiceService {
         return this.http.get('/ivs/scholarship/bystudent', {params});
     }
 
+    getScholarshipBreakUp(params?): Observable<any> {
+        return this.http.get('/ivs/scholarship/breakup', {params});
+    }
+
     deleteScholarship(id): Observable<any> {
         return this.http.delete('/ivs/scholarship/' + id);
     }
@@ -250,6 +266,10 @@ export class UtilityServiceService {
             return this.http.get('/ivs/student/byStudent', {params})
         }
         return this.http.get('/ivs/student/getStudent');
+    }
+
+    getStudentById(id: number): Observable<any> {
+        return this.http.get('/ivs/student/details/' + id);
     }
 
     deleteStudent(id): Observable<any> {
@@ -281,7 +301,7 @@ export class UtilityServiceService {
     }
 
     updatePenalty(id, body): Observable<any> {
-        return this.http.put(`/ivs/penalty/deletePenalty/${id}`, body)
+        return this.http.put(`/ivs/penalty/updatePenalty/${id}`, body)
     }
 
     getPenalty(): Observable<any> {
@@ -289,7 +309,7 @@ export class UtilityServiceService {
     }
 
     deletePenalty(id): Observable<any> {
-        return this.http.delete('/ivs/penalty/updatePenalty/' + id);
+        return this.http.delete('/ivs/penalty/deletePenalty/' + id);
     }
 
     // Penalty apis start here ===========>>>>>>>>>>>>
@@ -310,10 +330,41 @@ export class UtilityServiceService {
         return this.http.delete('/ivs/admin/' + id);
     }
 
+    forgotPassword(params): Observable<any> {
+        return this.http.get('/ivs/admin/forgotpassword', {params});
+    }
+
+    resetPassword(params): Observable<any> {
+        return this.http.put('/ivs/admin/resetPassword', null, {params});
+    }
+
     // Login API
 
     getLogin(userName, password): Observable<any> {
         return this.http.post('auth/signin?username=' + userName + '&password=' + password, {})
     }
+
+    // Payment API
+
+    getPaymentStatus(params): Observable<any> {
+        return this.http.get('/ivs/paymentstatus', {params})
+    }
+
+    getPaymentStatusByStudent(params): Observable<any> {
+        return this.http.get('/ivs/paymentstatus/paymentstatusbystudent', {params})
+    }
+
+    offlinePayment(params): Observable<any> {
+        return this.http.post('/ivs/offlinepayment', params);
+    }
+
+    setOnlinePaymentOrder(params): Observable<any> {
+        return this.http.get('/ivs/payment', {params, responseType: 'text'},);
+    }
+
+    onlinePayment(params): Observable<any> {
+        return this.http.post('/ivs/payment/confirmstatus', params);
+    }
+
 
 }

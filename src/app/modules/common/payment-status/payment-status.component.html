@@ -1,0 +1,166 @@
+<div class="container-fluid student-status">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <ngx-avatar [size]="60" name="{{studentData?.firstName}} {{studentData?.lastName }}">
+                        </ngx-avatar>
+                        <div>
+                            <div class="col-md-12 mb-2">
+                                <h4>{{studentData?.firstName}} {{studentData?.lastName }}</h4>
+                            </div>
+                            <div class="col-md-12">
+                                {{studentData?.emailId}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <p class="text-right pb-1 mb-0">Check Amount including Extras</p>
+                    <button type="button" (click)="showAllPayment()" class="float-right btn btn-outline-success">
+                        Check Total Amount
+                    </button>
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+    <div *ngIf="isPaymentView">
+        <h5>
+            <mat-icon *ngIf="isPaymentView" (click)="isPaymentView = !isPaymentView" class="back-payment align-middle">
+                arrow_back
+            </mat-icon>
+            <span class="align-middle"> Payment Details </span>
+        </h5>
+        <label>Please make sure the below details are correct before payment we cannot revert the payment</label>
+        <div class="row grid">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>index</th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Scholarship Amount</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let res of selectedFee; let i = index">
+                            <td>{{i + 1}}</td>
+                            <td>{{res.typeName}}</td>
+                            <td>{{res.fee}}</td>
+                            <td>{{res.scholarship?.value || 0}}</td>
+                            <td>₹ {{+res.fee - +res.scholarship?.value || 0}}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>Total</b></td>
+                            <td>₹ {{totalAmount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr />
+                <button class="float-right btn btn-outline-success" (click)="payNow()">Pay now</button>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!isPaymentView">
+        <h5>Student Details</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="lable">
+                    <div class="title">Full Name</div>
+                    <div class="value">{{studentData?.firstName}} {{studentData?.lastName }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="lable">
+                    <div class="title">Mobile Number</div>
+                    <div class="value">{{studentData?.phoneNo}}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="lable">
+                    <div class="title">Parent Number</div>
+                    <div class="value">{{studentData?.parentPhoneNo}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <h6>Active Fee list</h6>
+                <label>You can pay by particular fee</label>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>index</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="activeFee.length">
+                        <tr *ngFor="let res of feeList; let i = index">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <mat-icon class=" align-middle text-success">
+                                    check_circle
+                                </mat-icon>
+                                <span class="ml-1 align-middle">{{res.feeType}}</span>
+                            </td>
+                            <td>
+                                {{res.activationDate | date: 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                                <button type="button" (click)="updateSelectedFee(res)"
+                                    class="align-middle btn btn-outline-success">Pay Now ₹ {{res.fee}}</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-center w-100" *ngIf="!activeFee.length">
+                    No Fee Available
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h6>Payment History</h6>
+                <label>You can view the top 5 recent payments</label>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>index</th>
+                            <th>Status</th>
+                            <th>Received On</th>
+                            <th>Penalty Amount</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="paymentHistory.length">
+                        <tr *ngFor="let res of paymentHistory; let i = index">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <mat-icon class="text-success">
+                                    check_circle
+                                </mat-icon>
+                            </td>
+                            <td>
+                                {{res.paymentReceivedOn | date: 'dd-MM-yyyy'}}
+                            </td>
+                            <td>{{res.penaltyAmount}}</td>
+                            <td>
+                                {{res.amountReceived}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-center w-100" *ngIf="!paymentList.length">
+                    No Payment History found
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

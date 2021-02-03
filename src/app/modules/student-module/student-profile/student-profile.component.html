@@ -1,0 +1,110 @@
+<div class="container bg-white student-status mt-3 p-4 rounded">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row m-0">
+                <div class="col-md-8">
+                    <div class="row">
+                        <ngx-avatar [size]="60" name="{{studentData?.firstName}} {{studentData?.lastName }}">
+                        </ngx-avatar>
+                        <div>
+                            <div class="col-md-12 mb-2">
+                                <h5>{{studentData?.firstName}} {{studentData?.lastName }}</h5>
+                            </div>
+                            <div class="col-md-12">
+                                {{studentData?.emailId}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <p class="text-right pb-1 mb-0">Check Your upcomming fees details</p>
+                    <button type="button" routerLink="/students/payment" class="float-right btn btn-outline-success">
+                        Check Your Fees
+                    </button>
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+    <h5>Persnal Details</h5>
+    <p>Student persnal details (You can't edit any information)</p>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Full Name</div>
+                <div class="value">{{studentData?.firstName}} {{studentData?.lastName }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Student ID</div>
+                <div class="value">{{studentData?.lastName }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Email Id</div>
+                <div class="value">{{studentData?.emailId}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Phone Number</div>
+                <div class="value">{{studentData?.phoneNo || '-'}}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Parent Mobile Number</div>
+                <div class="value">{{studentData?.parentPhoneNo || '-'}}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Parent Email Id</div>
+                <div class="value">{{studentData?.parentEmailId || '-'}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container bg-white student-status mt-3 p-4 rounded">
+    <h5>School Information</h5>
+    <p>Student's current education details</p>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">School Name</div>
+                <div class="value">{{studentData?.schoolName}}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Department Name</div>
+                <div class="value">{{studentData?.departmentName }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Program Name</div>
+                <div class="value">{{studentData?.programName}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Division Name</div>
+                <div class="value">{{studentData?.divisionName || '-'}}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="lable">
+                <div class="title">Semester Name</div>
+                <div class="value">{{studentData?.semesterName || '-'}}</div>
+            </div>
+        </div>
+    </div>
+</div>

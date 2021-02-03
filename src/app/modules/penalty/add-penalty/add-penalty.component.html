@@ -33,10 +33,14 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="col-md-2" style="margin-top: 25px;" *ngIf="!i && !editFlag">
-                        <button mat-mini-fab color="accent" (click)='onAdd()'>
-                            <mat-icon>plus_one</mat-icon>
+                    <div class="col-md-1" style="margin-top: 25px;" *ngIf="!editFlag">
+                        <button mat-mini-fab color="default"  [disabled]="!i" class="shadow-none text-dark" (click)='onRemove(i)'>
+                            <mat-icon [ngClass]="{'text-light': !i}">remove_circle</mat-icon>
+                        </button>
+                    </div>
+                    <div class="col-md-1" style="margin-top: 25px;" *ngIf="!i && !editFlag">
+                        <button mat-mini-fab color="default" class="shadow-none text-success" (click)='onAdd()'>
+                            <mat-icon>add_circle</mat-icon>
                         </button>
                     </div>
                 </div>

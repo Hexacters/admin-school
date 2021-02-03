@@ -36,30 +36,41 @@ import { FeeCalculationComponent } from './modules/payment/fee-calculation/fee-c
 import { ActiveFeeComponent } from './modules/active-fee/active-fee.component';
 import { AddActiveFeeComponent } from './modules/active-fee/add-active-fee/add-active-fee.component';
 import { UpdateFeeCalcComponent } from './modules/payment/fee-calculation/update-fee-calc/update-fee-calc.component';
-
+import { ChangePasswordComponent } from './modules/common/change-password/change-password.component';
+import { StudentProfileComponent } from './modules/student-module/student-profile/student-profile.component';
+import { StudentPaymentComponent } from './modules/student-module/student-payment/student-payment.component';
+import { ForgotPasswordComponent } from './shared/forgot-password/forgot-password.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
+  { path: "forgot-password", component: ForgotPasswordComponent },
   {
     path: "", component: MainCompComponent,
     // canActivate: [AuthGuard],
     children: [
+      { path: "profile", component: StudentProfileComponent },
+      { path: "change-password", component: ChangePasswordComponent },
+
       { path: "dashboard", component: DashboardComponent },
       { path: "school/add", component: SchoolComponent },
       { path: "school/edit", component: SchoolComponent },
       { path: "school", component: ViewschoolComponent },
       { path: "department/add", component: AddDepartmentComponent },
       { path: "department/edit", component: AddDepartmentComponent },
+      { path: "department/bySchool", component: ViewDepartmentComponent },
       { path: "department", component: ViewDepartmentComponent },
       { path: "programm/add", component: AddProgrammeComponent },
       { path: "programm/edit", component: AddProgrammeComponent },
       { path: "programm", component: ViewProgrammeComponent },
+      { path: "programm/byDepartment", component: ViewProgrammeComponent },
       { path: "semester/add", component: AddSemComponent },
       { path: "semester/edit", component: AddSemComponent },
       { path: "semester", component: ViewSemComponent },
+      { path: "semester/byProgramm", component: ViewSemComponent },
       { path: "division/add", component: AddDivisionComponent },
       { path: "division/edit", component: AddDivisionComponent },
       { path: "division", component: ViewDivisionComponent },
+      { path: "division/bySemester", component: ViewDivisionComponent },
       { path: "feeType/add", component: FeeTypeComponent },
       { path: "feeType/edit", component: FeeTypeComponent },
       { path: "feeType", component: FeeTypeviewComponent },
@@ -82,6 +93,9 @@ const routes: Routes = [
       { path: "students/edit", component: AddStudentComponent },
       { path: "students/add", component: AddStudentComponent },
       { path: "students", component: StudentsComponent },
+      { path: "students/byDivision", component: StudentsComponent },
+
+      { path: "students/payment", component: StudentPaymentComponent },
 
       { path: "penalty", component: PenaltyComponent },
       { path: "penalty/add", component: AddPenaltyComponent },

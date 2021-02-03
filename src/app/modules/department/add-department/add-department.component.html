@@ -21,16 +21,24 @@
           </div>
         </div>
 
-        <div class="col-md-4 ml-3" formArrayName="departments">
+        <div class="col-md-5 ml-3" formArrayName="departments">
           <div class="row" *ngFor="let department of departmentList;index as i">
-            <p class="m-0 mb-1"> Department * </p>
-            <input type="text" placeholder="Department name" formControlName="{{i}}" required>
+            <div class="col-md-11">
+              <p class="m-0 mb-1"> Department * </p>
+              <input type="text" placeholder="Department name" formControlName="{{i}}" required>
+            </div>
+            <div class="col-md-1 mt-1 pt-3">
+              <button mat-mini-fab color="default" [disabled]="!i" class="shadow-none text-dark"
+                (click)='removeDepartment(i)'>
+                <mat-icon [ngClass]="{'text-light': !i}">remove_circle</mat-icon>
+              </button>
+            </div>
           </div>
 
         </div>
-        <div class="col-md-2" style="margin-top: 20px;"  *ngIf="editFlag">
-          <button mat-mini-fab color="accent" (click)='addDepartment()'>
-            <mat-icon>plus_one</mat-icon>
+        <div class="col-md-2 ml-4 pr-2" style="margin-top: 20px;" *ngIf="editFlag">
+          <button mat-mini-fab color="default" class="shadow-none text-success" (click)='addDepartment()'>
+            <mat-icon>add_circle</mat-icon>
           </button>
         </div>
 

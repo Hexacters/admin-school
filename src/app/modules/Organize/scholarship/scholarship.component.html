@@ -13,6 +13,7 @@
         <mat-card class="content_box">
             <h5  class="float-left">Scholarship</h5>
             <button class="float-right" routerLink="/scholarship/add" mat-raised-button color="primary"> + Add Scholarship</button>
+            <input class="float-right search-filter" (keyup)="applyFilter($event.target.value)" placeholder="Search.. Ex: name">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
 

@@ -1,6 +1,6 @@
 <div class="container">
     <mat-card class="content_box">
-        <h5>Student Filters</h5>
+        <h5>Fee Calculation</h5>
         <p>Please select all the fileds to get the student list</p>
         <form action="" [formGroup]="studentForm">
             <div class="row m-0">
@@ -79,6 +79,7 @@
         <app-comming-soon class="w-100" *ngIf="!(studentsList && studentsList.length)" [isNoRecord]="true"></app-comming-soon>
         <mat-card class="content_box w-100" *ngIf="studentsList">
             <h5 class="float-left">Students Details</h5>
+            <input class="float-right search-filter" (keyup)="applyFilter($event.target.value)" placeholder="Search.. Ex: name">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
 

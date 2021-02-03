@@ -31,6 +31,9 @@ export class AddDivisionComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.editData = JSON.parse(sessionStorage.getItem('division'));
+        const reqData = JSON.parse(sessionStorage.getItem('by-semester'));
+
         this.objectForm = new FormGroup({
             'schoolName': new FormControl('', Validators.required),
             'departmentName': new FormControl('', Validators.required),
@@ -41,7 +44,6 @@ export class AddDivisionComponent implements OnInit {
         });
         if (this.router.url.includes('edit')) {
             this.isEdit = true;
-            this.editData = JSON.parse(sessionStorage.getItem('division'));
             this.schoolId = this.editData['schoolId'];
             this.departmentId = this.editData['departmentId'];
             this.programmeId = this.editData['programId'];
@@ -58,6 +60,21 @@ export class AddDivisionComponent implements OnInit {
             this.getprogrammeList(this.isEdit);
             this.getSemesterList(this.isEdit);
         } else {
+            if (reqData) {
+                this.schoolId = reqData['schoolId'];
+                this.departmentId = reqData['departmentId'];
+                this.programmeId = reqData['programId'];
+                this.semesterId = reqData['id'];
+                this.objectForm.patchValue({
+                    schoolName: this.schoolId,
+                    departmentName: this.departmentId,
+                    programmeName: this.programmeId,
+                    semesterName: this.semesterId
+                });
+                this.getdepartmentList(this.isEdit);
+                this.getprogrammeList(this.isEdit);
+                this.getSemesterList(this.isEdit);
+            }
             (<FormArray>this.objectForm.get('division')).push(new FormControl());
         }
         this.getSchoolList(this.isEdit);
@@ -92,6 +109,11 @@ export class AddDivisionComponent implements OnInit {
         (<FormArray>this.objectForm.get('division')).push(new FormControl(null, Validators.required));
     }
 
+    removeDivision(i) {
+        this.divisionList.splice(i, 1);
+        (<FormArray>this.objectForm.get('division')).removeAt(i);
+    }
+
     selectSchool(event) {
         this.schoolId = event;
         this.getdepartmentList(false, {
@@ -123,35 +145,35 @@ export class AddDivisionComponent implements OnInit {
     onSubmit(isEdit: boolean = this.isEdit): void {
         this.objectForm.markAllAsTouched();
         if (this.objectForm.valid) {
-        let body = {};
-        if (this.objectForm.value.division[0] === null) {
-            alert('Please fill the required feilds')
-        } else {
-            body = {
-                "schoolId": this.schoolId,
-                "departmentId": this.departmentId,
-                'programId': this.programmeId,
-                "semesterId": this.semesterId,
-                "divisionName": [...this.objectForm.value.division]
+            let body = {};
+            if (this.objectForm.value.division[0] === null) {
+                alert('Please fill the required feilds')
+            } else {
+                body = {
+                    "schoolId": this.schoolId,
+                    "departmentId": this.departmentId,
+                    'programId': this.programmeId,
+                    "semesterId": this.semesterId,
+                    "divisionName": [...this.objectForm.value.division]
+                }
+            }
+            if (isEdit) {
+                this._dataService.updateDivision(this.editData['id'], body).subscribe(res => {
+                    this.router.navigate(['/division']);
+                    this.toastr.success('Division details updated successfully', 'Info');
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
+                });
+            } else {
+                this._dataService.saveDivision(body).subscribe(res => {
+                    this.router.navigate(['/division']);
+                    this.toastr.success('Division details saved successfully', 'Info');
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
+                });
             }
         }
-        if (isEdit) {
-            this._dataService.updateDivision(this.editData['id'], body).subscribe(res => {
-                this.router.navigate(['/division']);
-                this.toastr.success('Division details updated successfully', 'Info');
-            }, (res: HttpErrorResponse) => {
-                this.toastr.error(res.error.message || res.message, 'Info');
-            });
-        } else {
-            this._dataService.saveDivision(body).subscribe(res => {
-                this.router.navigate(['/division']);
-                this.toastr.success('Division details saved successfully', 'Info');
-            }, (res: HttpErrorResponse) => {
-                this.toastr.error(res.error.message || res.message, 'Info');
-            });
-        }
-    }
-        
+
     }
 
 }

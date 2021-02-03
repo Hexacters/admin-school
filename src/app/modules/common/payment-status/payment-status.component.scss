@@ -1,0 +1,20 @@
+::ng-deep {
+    .back-payment {
+        cursor: pointer;
+    }
+    .grid {
+        height: 300px;
+        overflow: auto;
+    }
+    .student-status {
+        .lable {
+            .title {
+                margin-top: 10px;
+            }
+            .value {
+                font-size: 14px;
+                font-weight: bold;
+            }
+        }
+    }
+}

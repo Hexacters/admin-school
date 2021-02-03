@@ -124,6 +124,13 @@ export class AddFeeComponent implements OnInit {
         (<FormArray>this.objectForm.get('fee')).push(new FormControl(null, Validators.required));
     }
 
+    removeFee(i) {
+        this.feeList.splice(i, 1);
+        (<FormArray>this.objectForm.get('feeType')).removeAt(i);
+        this.feeTypeList.splice(i, 1);
+        (<FormArray>this.objectForm.get('fee')).removeAt(i);
+    }
+
     selectSchool(event) {
         this.schoolId = event;
         this.getdepartmentList(false, {
@@ -167,7 +174,7 @@ export class AddFeeComponent implements OnInit {
         data[index] = '';
         const selectedValues = Object.values(data);
         return list.filter((e, i) => {
-            return !selectedValues.includes(e.id+'');
+            return !selectedValues.includes(e.id + '');
         })
     }
 
@@ -179,7 +186,14 @@ export class AddFeeComponent implements OnInit {
         this.typeId = event;
     }
 
+    updateFeeCalculation(data) {
+        this._dataService.updatePriceCalculation(data).subscribe(res => {
+            // Success
+        });
+    }
+
     onSubmit(isEdit: boolean = false): void {
+        this.bodyArray = [];
         this.objectForm.markAllAsTouched();
         if (this.objectForm.valid) {
             for (let i = 0; i < this.objectForm.value.feeType.length; i++) {
@@ -197,29 +211,43 @@ export class AddFeeComponent implements OnInit {
             }
             if (this.isEdit) {
                 this._dataService.updateFee(this.editData['id'], this.bodyArray[0]).subscribe(res => {
+                    this.updateFeeCalculation({
+                        schoolId: this.schoolId,
+                        departmentId: this.departmentId,
+                        programId: this.programmeId,
+                        semesterId: this.semesterId,
+                        divisionId: this.divisionId
+                    });
                     this.router.navigate(['/fee']);
                     this.objectForm.reset();
                     this.bodyArray = [];
                     this.feeList = [{}];
                     this.feeTypeList = [{}];
-                    this.toastr.success('Programm details updated successfully', 'Info');
+                    this.toastr.success('Fee details updated successfully', 'Info');
                 }, (res: HttpErrorResponse) => {
                     this.toastr.error(res.error.message || res.message, 'Info');
                 });
             } else {
                 this._dataService.saveFee(this.bodyArray).subscribe(res => {
+                    this.updateFeeCalculation({
+                        schoolId: this.schoolId,
+                        departmentId: this.departmentId,
+                        programId: this.programmeId,
+                        semesterId: this.semesterId,
+                        divisionId: this.divisionId
+                    });
                     this.router.navigate(['/fee']);
                     this.objectForm.reset();
                     this.bodyArray = [];
                     this.feeList = [{}];
                     this.feeTypeList = [{}];
-                    this.toastr.success('Programm details updated successfully', 'Info');
+                    this.toastr.success('Fee details updated successfully', 'Info');
                 }, (res: HttpErrorResponse) => {
                     this.toastr.error(res.error.message || res.message, 'Info');
                 });
             }
         }
-        
+
     }
 
 }

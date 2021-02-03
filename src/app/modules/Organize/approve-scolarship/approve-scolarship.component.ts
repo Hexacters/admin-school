@@ -197,9 +197,20 @@ export class ApproveScolarshipComponent implements OnInit {
         (<FormArray>this.studentForm.get('scholarsips')).push(this.getScholarsip(data, i));
     }
 
+    public onRemove(i = 0) {
+        this.assignScholorList.splice(i, 1);
+        (<FormArray>this.studentForm.get('scholarsips')).removeAt(i);
+    }
 
     public selectType(value, index: number = 0): void {
         this.selectedFeeType[index] = value;
+    }
+
+    public updatePriceCalculation(params) {
+        this._dataService.updateScholarPriceCalculation(params).subscribe(res => {
+        }, (res: HttpErrorResponse) => {
+            this.toastr.error(res.error.message || res.message, 'Info');
+        });
     }
 
     public onSubmit(): void {
@@ -215,7 +226,8 @@ export class ApproveScolarshipComponent implements OnInit {
                         studentId: e.studentId,
                         scholarshipId: id,
                         ...data,
-                    })
+                    });
+
                 });
             });
             if (this.editFlag) {
@@ -223,6 +235,10 @@ export class ApproveScolarshipComponent implements OnInit {
                     this.router.navigate(['assign']);
                     sessionStorage.clear();
                     this.toastr.success('Scholarship details updated successfully', 'Info');
+                    this.updatePriceCalculation({
+                        studentId: body[0].studentId,
+                        divisionId: body[0].divisionId
+                    });
                 }, (res: HttpErrorResponse) => {
                     this.toastr.error(res.error.message || res.message, 'Info');
                 });
@@ -231,6 +247,10 @@ export class ApproveScolarshipComponent implements OnInit {
             this._dataService.saveAssignScholarship(body).subscribe(res => {
                 this.router.navigate(['assign']);
                 this.toastr.success('Scholarship Assigned successfully', 'Info');
+                this.updatePriceCalculation({
+                    studentId: body[0].studentId,
+                    divisionId: body[0].divisionId
+                });
             }, (res: HttpErrorResponse) => {
                 this.toastr.error(res.error.message || res.message, 'Info');
             });

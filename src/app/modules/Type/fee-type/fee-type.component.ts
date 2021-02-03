@@ -41,6 +41,11 @@ export class FeeTypeComponent implements OnInit {
         (<FormArray>this.objectForm.get('feeTypes')).push(new FormControl(null, Validators.required));
     }
 
+    removeFeeType(i) {
+        this.feeTypeList.splice(i, 1);
+        (<FormArray>this.objectForm.get('feeTypes')).removeAt(i);
+    }
+
     onSubmit() {
         this.objectForm.markAllAsTouched();
         if (this.objectForm.valid) {

@@ -1,0 +1,61 @@
+.container{
+    align-items: center;
+}
+.header_card{
+    width: 100%;
+    height: 60px;
+    margin: 10px 0px;
+}
+.content_box{
+    width: 100%;
+    min-height: 300px;
+    margin: 10px 0px;
+}
+
+input{
+    width: 100%;
+}
+select{
+    width: 100%; 
+    height: 30px;
+    margin-top: 4px;
+}
+
+::ng-deep {
+    .form-active-fee {
+        .mat-form-field-appearance-fill {
+
+            .mat-form-field-flex {
+                padding: 0 0.75em 0 0.75em;
+            }
+
+            .mat-form-field-infix {
+                padding: 0 0 10px 0;
+            }
+
+            .mat-select-arrow-wrapper {
+                transform: translateY(7%);
+            }
+
+            .mat-form-field-flex {
+                background-color: #ececec;
+            }
+
+            .mat-form-field-suffix {
+                .mat-icon-button {
+                    bottom: -5px;
+                    font-size: 15px;
+                }
+            }
+        }
+
+        .mat-form-field-underline {
+            display: none;
+        }
+
+        .mat-form-field-infix {
+            border-top: 8px solid transparent;
+        }
+    }
+}
+

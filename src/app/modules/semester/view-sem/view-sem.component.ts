@@ -25,7 +25,16 @@ export class ViewSemComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this._dataService.getsemesterList().subscribe(res => {
+        const reqData = JSON.parse(sessionStorage.getItem('by-program'));
+        let data;
+        if (reqData && this.router.url.includes('byProgramm')) {
+            data = {
+                schoolId: reqData.schoolId,
+                departmentId: reqData.departmentId,
+                programId: reqData.id
+            }
+        }
+        this._dataService.getsemesterList(data).subscribe(res => {
             console.log(res, 'res')
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
@@ -48,7 +57,31 @@ export class ViewSemComponent implements OnInit {
                 });
             }
         });
-       
+    }
+
+    public gotoAdd() {
+        debugger
+        if (!this.router.url.includes('byProgramm')) {
+            sessionStorage.setItem('by-program', null);
+        }
+        this.router.navigate(['semester/add']);
+    }
+
+    goToDepartment(element) {
+        sessionStorage.setItem('by-school', JSON.stringify({id: element.schoolId}));
+        this.router.navigate(['department/bySchool']);
+    }
+
+    goToProgramName(element) {
+        const data = element;
+        data.id = element.departmentId;
+        sessionStorage.setItem('by-department', JSON.stringify(data));
+        this.router.navigate(['programm/byDepartment']);
+    }
+
+    goToDivision(element) {
+        sessionStorage.setItem('by-semester', JSON.stringify(element));
+        this.router.navigate(['division/bySemester']);
     }
 
     updateDepartment(element) {
@@ -56,5 +89,12 @@ export class ViewSemComponent implements OnInit {
         sessionStorage.setItem('semester', JSON.stringify(element));
     }
 
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        console.log(this.dataSource.filter);
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
+    }
 
 }

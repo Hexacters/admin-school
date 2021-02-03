@@ -13,6 +13,7 @@
         <mat-card class="content_box">
             <h5  class="float-left">Fees</h5>
             <button class="float-right" routerLink="/fee/add" mat-raised-button color="primary"> + Add Fees</button>
+            <input class="float-right search-filter" (keyup)="applyFilter($event.target.value)" placeholder="Search.. Ex: name">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
 
@@ -70,7 +71,7 @@
                     <ng-container matColumnDef="delete">
                         <th mat-header-cell *matHeaderCellDef> delete </th>
                         <td mat-cell *matCellDef="let element">
-                            <mat-icon color="warn" (click)='deleteFee(element.id)'>delete</mat-icon>  
+                            <mat-icon color="warn" (click)='deleteFee(element)'>delete</mat-icon>  
                         </td>
                     </ng-container>
 

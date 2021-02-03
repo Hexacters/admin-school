@@ -69,6 +69,11 @@ export class AddScolarshipComponent implements OnInit {
         this.onAdd()
     }
 
+    public removeMore(i): void {
+        this.scholorsipList.splice(i, 1);
+        (<FormArray>this.scholarshipForm.get('scholorsip')).removeAt(i);
+    }
+
     public onSubmit(): void {
         this.scholarshipForm.markAllAsTouched();
         if (this.scholarshipForm.valid) {
@@ -79,7 +84,7 @@ export class AddScolarshipComponent implements OnInit {
                 e.typeId = data.typeId;
                 return e;
             });
-            if (this.isEdit) {
+            if (!this.editFlag) {
                 this._dataService.updateScholarship(this.editData['id'], body[0]).subscribe(res => {
                     this.router.navigate(['scholarship']);
                     sessionStorage.clear();

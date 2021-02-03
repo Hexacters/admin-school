@@ -25,12 +25,17 @@ export class ViewDepartmentComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-
-        this._dataService.getDepartmentList().subscribe(res => {
-            console.log(res, 'res')
+        const schoolData = JSON.parse(sessionStorage.getItem('by-school'));
+        let data;
+        if (schoolData && this.router.url.includes('bySchool')) {
+            data = {
+                schoolId: schoolData.id
+            }
+        }
+        this._dataService.getDepartmentList(data).subscribe(res => {
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
-        })
+        });
     }
 
     ngAfterViewInit() {
@@ -40,21 +45,40 @@ export class ViewDepartmentComponent implements OnInit {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             width: '300px',
             data: {}
-          });
-      
-          dialogRef.afterClosed().subscribe(result => {
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 this._dataService.deleteDepartment(id).subscribe(res => {
                     this.ngOnInit();
                 });
             }
-          });
-        
+        });
+    }
+
+    public gotoAdd() {
+        if (!this.router.url.includes('bySchool')) {
+            sessionStorage.setItem('by-school', null);
+        }
+        this.router.navigate(['department/add']);
+    }
+
+    goToProgramme(element) {
+        sessionStorage.setItem('by-department', JSON.stringify(element));
+        this.router.navigate(['programm/byDepartment']);
     }
 
     updateDepartment(element) {
         this.router.navigate(['department/edit'])
         sessionStorage.setItem('dprtmnt', JSON.stringify(element))
+    }
+
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        console.log(this.dataSource.filter);
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
     }
 
 

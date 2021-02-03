@@ -146,13 +146,23 @@ export class FeeCalculationComponent implements OnInit {
     }
 
     updateFee(data) {
+        data.divisionId = this.divisionId;
         sessionStorage.setItem('feeCalculation', JSON.stringify(data));
         this.router.navigate(['fee-calculation/update']);
     }
 
     viewFee(data) {
+        data.divisionId = this.divisionId;
         sessionStorage.setItem('feeCalculation', JSON.stringify(data));
         this.router.navigate(['fee-calculation/view']);
+    }
+
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        console.log(this.dataSource.filter);
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
     }
 
 }

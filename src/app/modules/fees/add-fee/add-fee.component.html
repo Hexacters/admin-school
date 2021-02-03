@@ -2,8 +2,8 @@
 
   <mat-card class="header_card">
     <p style="line-height: 30px;">
-      <span style="float: left;">Add Fees</span> <span style="float: right;"><a
-        routerLink="/dashboard">Home</a> > Add Fees </span>
+      <span style="float: left;">Add Fees</span> <span style="float: right;"><a routerLink="/dashboard">Home</a> > Add
+        Fees </span>
     </p>
   </mat-card>
 
@@ -67,7 +67,7 @@
 
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
-            <label class="m-0" for="cars">SELECT FREQUENCY:</label>
+            <label class="m-0" for="cars">Select Frequency</label>
             <select size="1" formControlName="frequencyName" required (ngModelChange)='selectFrequency($event)'>
               <option *ngFor='let type of frequency' [value]="type.name">{{type.name}}</option>
             </select>
@@ -86,16 +86,24 @@
           </div>
         </div>
 
-        <div class="col-md-3 mr-2 ml-1" formArrayName="fee">
+        <div class="col-md-4 mr-2 ml-1" formArrayName="fee">
           <div class="row" *ngFor="let fee of feeList;index as i">
-            <p class="m-0 mb-1"> Amount * </p>
-            <input type="text" placeholder="Ex: 10,000" formControlName="{{i}}" required>
+            <div class="col-md-10 p-0 m-0">
+              <p class="m-0 mb-1"> Amount * </p>
+              <input type="text" placeholder="Ex: 10,000" formControlName="{{i}}" required>
+            </div>
+            <div class="col-md-1" style="margin-top: 25px;">
+              <button mat-mini-fab color="default" [disabled]="!i" class="shadow-none text-dark"
+                (click)='removeFee(i)'>
+                <mat-icon [ngClass]="{'text-light': !i}">remove_circle</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="col-md-2" style="margin-top: 20px;" *ngIf="!isEdit" >
-          <button mat-mini-fab color="accent" (click)='addFee()'>
-            <mat-icon>plus_one</mat-icon>
+        <div class="col-md-2" style="margin-top: 25px;" *ngIf="!isEdit">
+          <button mat-mini-fab color="default" class="shadow-none text-success" (click)='addFee()'>
+            <mat-icon>add_circle</mat-icon>
           </button>
         </div>
       </div>

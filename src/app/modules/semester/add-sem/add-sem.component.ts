@@ -30,6 +30,8 @@ export class AddSemComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.editData = JSON.parse(sessionStorage.getItem('semester'));
+        const reqData = JSON.parse(sessionStorage.getItem('by-program'));
 
         this.objectForm = new FormGroup({
             'schoolName': new FormControl('', Validators.required),
@@ -41,7 +43,6 @@ export class AddSemComponent implements OnInit {
 
         if (this.router.url.includes('edit')) {
             this.isEdit = true;
-            this.editData = JSON.parse(sessionStorage.getItem('semester'));
             this.schoolId = this.editData['schoolId'];
             this.departmentId = this.editData['departmentId'];
             this.programmeId = this.editData['programId'];
@@ -56,6 +57,19 @@ export class AddSemComponent implements OnInit {
             this.getdepartmentList(this.isEdit);
             this.getprogrammeList(this.isEdit);
         } else {
+            if (reqData) {
+                this.schoolId = reqData['schoolId'];
+                this.departmentId = reqData['departmentId'];
+                this.programmeId = reqData['id'];
+                this.objectForm.patchValue({
+                    schoolName: this.schoolId,
+                    departmentName: this.departmentId,
+                    programmeName: this.programmeId
+                });
+                this.getdepartmentList(this.isEdit);
+                this.getprogrammeList(this.isEdit);
+            }
+            
             (<FormArray>this.objectForm.get('semester')).push(new FormControl());
         }
         this.getSchoolList(this.isEdit);
@@ -83,6 +97,12 @@ export class AddSemComponent implements OnInit {
         this.semesterList.push({});
         (<FormArray>this.objectForm.get('semester')).push(new FormControl(null, Validators.required));
     }
+
+    removeSemester(i) {
+        this.semesterList.splice(i, 1);
+        (<FormArray>this.objectForm.get('semester')).removeAt(i);
+    }
+
 
     selectSchool(event) {
         this.schoolId = event;

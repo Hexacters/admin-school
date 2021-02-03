@@ -1,34 +1,42 @@
 <div class="container">
 
-    <mat-card class="header_card">
-      <p style="line-height: 30px;">
-        <span style="float: left;">Add Fee Type</span> <span style="float: right;"><a>Home</a> > Add Fee Type </span>
-      </p>
-    </mat-card>
-  
-    <mat-card class="content_box">
-      <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
-        <div class="row m-0">
-          <div class="col-md-4" formArrayName="feeTypes">
-            <div class="row mt-3" *ngFor="let feeType of feeTypeList;index as i">
-              <p class="m-0" > Fee Type * </p>
+  <mat-card class="header_card">
+    <p style="line-height: 30px;">
+      <span style="float: left;">Add Fee Type</span> <span style="float: right;"><a>Home</a> > Add Fee Type </span>
+    </p>
+  </mat-card>
+
+  <mat-card class="content_box">
+    <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
+      <div class="row m-0">
+        <div class="col-md-5" formArrayName="feeTypes">
+          <div class="row mt-3" *ngFor="let feeType of feeTypeList;index as i">
+            <div class="col-md-10 p-0 m-0">
+              <p class="m-0"> Fee Type * </p>
               <input type="text" placeholder="Fee Type" formControlName="{{i}}" required>
             </div>
-  
+            <div class="col-md-1 mt-1 pt-3">
+              <button mat-mini-fab color="default" [disabled]="!i" class="shadow-none text-dark"
+                (click)='removeFeeType(i)'>
+                <mat-icon [ngClass]="{'text-light': !i}" >remove_circle</mat-icon>
+              </button>
+            </div>
           </div>
-          <div class="col-md-2" *ngIf="!isEdit" style="margin-top: 30px;">
-            <button mat-mini-fab color="accent" (click)='addFeeType()'>
-              <mat-icon>plus_one</mat-icon>
-            </button>
-          </div>
+
         </div>
-  
-        <div class="row m-0 mt-3">
-          <button mat-raised-button color="primary" class="mr-2" *ngIf="!isEdit" type="submit">Save</button>
-          <button mat-raised-button color="primary" class="mr-2" *ngIf="isEdit" type="submit">Update</button>
-          <button mat-stroked-button color="warn" class="mr-2"  routerLink="/feeType" >Cancel</button>
+        <div class="col-md-2" *ngIf="!isEdit" style="margin-top: 33px;">
+          <button mat-mini-fab color="default" class="shadow-none text-success" (click)='addFeeType()'>
+            <mat-icon>add_circle</mat-icon>
+          </button>
         </div>
-      </form>
-    </mat-card>
-  
-  </div>
+      </div>
+
+      <div class="row m-0 mt-3">
+        <button mat-raised-button color="primary" class="mr-2" *ngIf="!isEdit" type="submit">Save</button>
+        <button mat-raised-button color="primary" class="mr-2" *ngIf="isEdit" type="submit">Update</button>
+        <button mat-stroked-button color="warn" class="mr-2" routerLink="/feeType">Cancel</button>
+      </div>
+    </form>
+  </mat-card>
+
+</div>

@@ -11,6 +11,22 @@
 }
 
 ::ng-deep {
+    .remove-data {
+        position: relative !important;
+        top: -41px;
+        left: 363px;
+
+    }
+    a.link {
+        color: rgb(0, 99, 248);
+        cursor: pointer;
+    }
+
+    input.search-filter {
+        width: 250px !important;
+        margin-right: 10px;
+    }
+
     input,
     select {
         border: 1px solid rgba(255, 255, 255, 0);

@@ -1,0 +1,45 @@
+<div mat-dialog-content>
+    <mat-card class="p-0 content_box w-100">
+        <h5>Fees Details</h5>
+        <p>Fees Structure for this perticular student</p>
+        <div class="mat-elevation-z8">
+            <table class="w-100" mat-table [dataSource]="dataSource">
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element;index as i">
+                        <span *ngIf="!element.isTotal">{{i+1}}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef> Type </th>
+                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="feeType">
+                    <th mat-header-cell *matHeaderCellDef> Fee Type </th>
+                    <td mat-cell *matCellDef="let element">
+                        <b *ngIf="element.isTotal">{{element.feeType}}</b>
+                        <span *ngIf="!element.isTotal">{{element.feeType}}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fee">
+                    <th mat-header-cell *matHeaderCellDef> Amount </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fee}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+        </div>
+    </mat-card>
+</div>
+
+<div mat-dialog-actions>
+    <hr />
+    <button mat-raised-button class="float-right" color="primary" [mat-dialog-close]="false">Close</button>
+</div>

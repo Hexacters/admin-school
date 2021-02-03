@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>
+    <span class="align-middle">Student Status</span>
+</h2>
+<mat-dialog-content class="student-status">
+    <app-payment-status (sendData)="submitData($event)" [data]="data"></app-payment-status>
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <hr />
+    <button mat-stroked-button color="warn" [mat-dialog-close]="false">close</button>
+</div>

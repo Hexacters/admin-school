@@ -18,8 +18,9 @@
                         <div class="col-md-3 pl-0 mr-2 ml-3">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" for="cars">School</label>
-                                <select size="1" required formControlName="schoolId" (ngModelChange)='selectSchool($event)'>
-                                    <option value=""  selected>Select School</option>
+                                <select size="1" required formControlName="schoolId"
+                                    (ngModelChange)='selectSchool($event)'>
+                                    <option value="" selected>Select School</option>
                                     <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}
                                     </option>
                                 </select>
@@ -42,7 +43,8 @@
                         <div class="col-md-3 mr-2 ml-1">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" for="cars">programme</label>
-                                <select size="1" required formControlName="programId" (ngModelChange)='selectProgramme($event)'>
+                                <select size="1" required formControlName="programId"
+                                    (ngModelChange)='selectProgramme($event)'>
                                     <option value="" selected>Select programme</option>
                                     <option *ngFor=' let programme of programmeList' [value]="programme.id">
                                         {{programme.programName}}</option>
@@ -57,7 +59,8 @@
                         <div class="col-md-3 pl-0 mr-2 ml-3">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" for="cars">Semester</label>
-                                <select size="1" required formControlName="semesterId" (ngModelChange)='selectSemester($event)'>
+                                <select size="1" required formControlName="semesterId"
+                                    (ngModelChange)='selectSemester($event)'>
                                     <option value="" selected>Select Semester</option>
                                     <option *ngFor=' let semester of semesterList' [value]="semester.id">
                                         {{semester.semesterName}}</option>
@@ -68,7 +71,8 @@
                         <div class="col-md-3 mr-2 ml-1">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" class="m-0" for="cars">Division</label>
-                                <select size="1" required formControlName="divisionId" (ngModelChange)='selectDivision($event)'>
+                                <select size="1" required formControlName="divisionId"
+                                    (ngModelChange)='selectDivision($event)'>
                                     <option value="" selected>Select Division</option>
                                     <option *ngFor='let division of divisionList' [value]="division.id">
                                         {{division.divisionName}}</option>
@@ -104,6 +108,18 @@
                                     <input type="email" required placeholder="EmailId" formControlName="emailId">
                                 </div>
                             </div>
+                            <div class="col-md-1" style="margin-top: 25px;" *ngIf="!editFlag">
+                                <button mat-mini-fab color="default" [disabled]="!i" class="shadow-none text-dark"
+                                    (click)='removeMore(i)'>
+                                    <mat-icon [ngClass]="{'text-light': !i}">remove_circle</mat-icon>
+                                </button>
+                            </div>
+                            <div class="col-md-1" style="margin-top: 25px;" *ngIf="!i && !editFlag">
+                                <button mat-mini-fab color="default" class="shadow-none text-success"
+                                    (click)='addMore()'>
+                                    <mat-icon>add_circle</mat-icon>
+                                </button>
+                            </div>
                         </div>
                         <div class="row m-0 mt-3">
                             <div class="col-md-3 ml-3">
@@ -114,20 +130,23 @@
                             </div>
                             <div class="col-md-3 ml-3">
                                 <div class="row">
-                                    <p class="m-0 mb-1"> Parent Phone No * </p>
-                                    <input type="number" required placeholder="Parent Phone No" formControlName="parentPhoneNo">
+                                    <p class="m-0 mb-1"> Parent Phone No </p>
+                                    <input type="number" placeholder="Parent Phone No" formControlName="parentPhoneNo">
                                 </div>
                             </div>
                             <div class="col-md-3 ml-3">
                                 <div class="row">
-                                    <p class="m-0 mb-1"> Parent Email Id * </p>
-                                    <input type="email" required placeholder="Parent Email Id" formControlName="parentEmailId">
+                                    <p class="m-0 mb-1"> Parent Email Id </p>
+                                    <input type="email" placeholder="Parent Email Id" formControlName="parentEmailId">
                                 </div>
                             </div>
-                            <div class="col-md-2" style="margin-top: 20px;" *ngIf="!i && !editFlag">
-                                <button mat-mini-fab color="accent" (click)='addMore()'>
-                                    <mat-icon>plus_one</mat-icon>
-                                </button>
+                        </div>
+                        <div class="row m-0 mt-3" *ngIf="!editFlag">
+                            <div class="col-md-3 ml-3">
+                                <div class="row">
+                                    <p class="m-0 mb-1"> Password </p>
+                                    <input type="password" placeholder="Student Password" formControlName="password">
+                                </div>
                             </div>
                         </div>
                         <hr />

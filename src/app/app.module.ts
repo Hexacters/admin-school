@@ -10,24 +10,24 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { DailogComponent } from './modules/dailog/dailog.component';
 
-import { MatButtonModule} from '@angular/material/button';
-import { MatListModule} from '@angular/material/list';
-import { MatCardModule} from '@angular/material/card';
-import { MatExpansionModule} from '@angular/material/expansion';
-import { MatDividerModule} from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
-import { MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatSidenavModule} from '@angular/material/sidenav';
-import { MatPaginatorModule} from '@angular/material/paginator';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MatInputModule} from '@angular/material/input';
-import { MatFormFieldModule} from '@angular/material/form-field';
-import { MatDialogModule} from '@angular/material/dialog';
-import { MatSelectModule} from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 import { AddDepartmentComponent } from './modules/department/add-department/add-department.component';
 import { ViewDepartmentComponent } from './modules/department/view-department/view-department.component';
 import { AddDivisionComponent } from './modules/division/add-division/add-division.component';
@@ -54,13 +54,13 @@ import { AddScolarshipComponent } from './modules/Organize/add-scolarship/add-sc
 import { ApproveScolarshipComponent } from './modules/Organize/approve-scolarship/approve-scolarship.component';
 import { PenaltyComponent } from './modules/penalty/penalty.component';
 import { OnlineFeeComponent } from './modules/Organize/online-fee/online-fee.component';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AvatarModule } from 'ngx-avatar';
 import { ToastrModule } from 'ngx-toastr';
 import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component';
-import {MatTreeModule} from '@angular/material/tree';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ScholarshipComponent } from './modules/Organize/scholarship/scholarship.component';
 import { StudentsComponent } from './modules/students/students.component';
 import { AddStudentComponent } from './modules/students/add-student/add-student.component';
@@ -75,94 +75,119 @@ import { FeeCalculationComponent } from './modules/payment/fee-calculation/fee-c
 import { ActiveFeeComponent } from './modules/active-fee/active-fee.component';
 import { AddActiveFeeComponent } from './modules/active-fee/add-active-fee/add-active-fee.component';
 import { UpdateFeeCalcComponent } from './modules/payment/fee-calculation/update-fee-calc/update-fee-calc.component';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FeeStatusComponent } from './modules/payment/fee-calculation/modal/fee-status/fee-status.component';
+import { ScholarshipStatusComponent } from './modules/payment/fee-calculation/modal/scholarship-status/scholarship-status.component';
+import { ActiveFeeModalComponent } from './modules/active-fee/modal/active-fee-modal/active-fee-modal.component';
+import { StudentStatusComponent } from './modules/dailog/student-status/student-status.component';
+import { StudentProfileComponent } from './modules/student-module/student-profile/student-profile.component';
+import { ChangePasswordComponent } from './modules/common/change-password/change-password.component';
+import { PaymentStatusComponent } from './modules/common/payment-status/payment-status.component';
+import { StudentPaymentComponent } from './modules/student-module/student-payment/student-payment.component';
+import { ForgotPasswordComponent } from './shared/forgot-password/forgot-password.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MainCompComponent,
-    HeaderComponent,
-    SidebarComponent,
-    FooterComponent,
-    DailogComponent,
-    SchoolComponent,
-    ViewschoolComponent,
-    AddDepartmentComponent,
-    ViewDepartmentComponent,
-    AddProgrammeComponent,
-    ViewProgrammeComponent,
-    AddSemComponent,
-    ViewSemComponent,
-    AddDivisionComponent,
-    ViewDivisionComponent,
-    AddFeeComponent,
-    ViewFeeComponent,
-    SmDrawerComponent,
-    DashboardComponent,
-    LoginComponent,
-    FeeTypeComponent,
-    FeeTypeviewComponent,
-    AddScolarshipComponent,
-    ApproveScolarshipComponent,
-    PenaltyComponent,
-    OnlineFeeComponent,
-    ConfirmationDialogComponent,
-    ScholarshipComponent,
-    StudentsComponent,
-    AddStudentComponent,
-    CommingSoonComponent,
-    AdminComponent,
-    AssignScholarshipComponent,
-    AddPenaltyComponent,
-    OnlineComponent,
-    OfflineComponent,
-    AddAdminComponent,
-    FeeCalculationComponent,
-    ActiveFeeComponent,
-    AddActiveFeeComponent,
-    UpdateFeeCalcComponent
-  ],
-  entryComponents:[DailogComponent, ConfirmationDialogComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right',
-      preventDuplicates: true,
-    }),
-    FormsModule,
-    MatTooltipModule,
-    MatProgressBarModule,
-    MatTreeModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatListModule,
-    MatDividerModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MatIconModule,
-    ReactiveFormsModule,
-    MatRippleModule,
-    MatExpansionModule,
-    MatTableModule,
-    MatSidenavModule,
-    MatPaginatorModule,
-    HttpClientModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSlideToggleModule,
-    AvatarModule
-  ],
-  providers: [
-    AppSetting,
-    UtilityServiceService,
-    LocalcommunicationService,
+    declarations: [
+        AppComponent,
+        MainCompComponent,
+        HeaderComponent,
+        SidebarComponent,
+        FooterComponent,
+        DailogComponent,
+        ForgotPasswordComponent,
+        SchoolComponent,
+        ViewschoolComponent,
+        AddDepartmentComponent,
+        ViewDepartmentComponent,
+        AddProgrammeComponent,
+        ViewProgrammeComponent,
+        AddSemComponent,
+        ViewSemComponent,
+        AddDivisionComponent,
+        ViewDivisionComponent,
+        AddFeeComponent,
+        ViewFeeComponent,
+        SmDrawerComponent,
+        DashboardComponent,
+        LoginComponent,
+        FeeTypeComponent,
+        FeeTypeviewComponent,
+        AddScolarshipComponent,
+        ApproveScolarshipComponent,
+        PenaltyComponent,
+        OnlineFeeComponent,
+        ConfirmationDialogComponent,
+        ScholarshipComponent,
+        StudentsComponent,
+        AddStudentComponent,
+        CommingSoonComponent,
+        AdminComponent,
+        AssignScholarshipComponent,
+        AddPenaltyComponent,
+        OnlineComponent,
+        OfflineComponent,
+        AddAdminComponent,
+        FeeCalculationComponent,
+        ActiveFeeComponent,
+        AddActiveFeeComponent,
+        UpdateFeeCalcComponent,
+        FeeStatusComponent,
+        ScholarshipStatusComponent,
+        ActiveFeeModalComponent,
+        StudentStatusComponent,
+        StudentProfileComponent,
+        ChangePasswordComponent,
+        PaymentStatusComponent,
+        StudentPaymentComponent
+    ],
+    entryComponents: [
+        DailogComponent,
+        ConfirmationDialogComponent,
+        FeeStatusComponent,
+        ScholarshipStatusComponent,
+        ActiveFeeModalComponent,
+        StudentStatusComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot({
+            positionClass: 'toast-bottom-right',
+            preventDuplicates: true,
+        }),
+        FormsModule,
+        MatTooltipModule,
+        MatProgressBarModule,
+        MatTreeModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatButtonModule,
+        MatListModule,
+        MatDividerModule,
+        MatMenuModule,
+        MatToolbarModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatRippleModule,
+        MatExpansionModule,
+        MatTableModule,
+        MatSidenavModule,
+        MatPaginatorModule,
+        HttpClientModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatDialogModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSlideToggleModule,
+        AvatarModule
+    ],
+    providers: [
+        AppSetting,
+        UtilityServiceService,
+        LocalcommunicationService,
         AuthGuard,
         // DatePipe,
         {
@@ -178,7 +203,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         //     provide: MAT_DATE_FORMATS,
         //     useValue: APP_DATE_FORMATS
         // }
-  ],
-  bootstrap: [AppComponent]
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -27,8 +27,17 @@ export class ViewDivisionComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-
-        this._dataService.getDivisionList().subscribe(res => {
+        const reqData = JSON.parse(sessionStorage.getItem('by-semester'));
+        let data;
+        if (reqData && this.router.url.includes('bySemester')) {
+            data = {
+                schoolId: reqData.schoolId,
+                departmentId: reqData.departmentId,
+                programId: reqData.programId,
+                semesterId: reqData.id
+            }
+        }
+        this._dataService.getDivisionList(data).subscribe(res => {
             console.log(res, 'res')
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
@@ -54,10 +63,48 @@ export class ViewDivisionComponent implements OnInit {
 
     }
 
+    public gotoAdd() {
+        if (!this.router.url.includes('bySemester')) {
+            sessionStorage.setItem('by-semester', null);
+        }
+        this.router.navigate(['division/add']);
+    }
+
+    goToDepartment(element) {
+        sessionStorage.setItem('by-school', JSON.stringify({id: element.schoolId}));
+        this.router.navigate(['department/bySchool']);
+    }
+
+    goToProgramName(element) {
+        const data = element;
+        data.id = element.departmentId;
+        sessionStorage.setItem('by-department', JSON.stringify(data));
+        this.router.navigate(['programm/byDepartment']);
+    }
+
+    goToSemester(element) {
+        const data = element;
+        data.id = element.programId;
+        sessionStorage.setItem('by-program', JSON.stringify(data));
+        this.router.navigate(['semester/byProgramm']);
+    }
+
+    goToStudent(element) {
+        sessionStorage.setItem('by-division', JSON.stringify(element));
+        this.router.navigate(['students/byDivision']);
+    }
+
     updateDivision(element) {
         this.router.navigate(['division/edit']);
         sessionStorage.setItem('division', JSON.stringify(element));
     }
 
+    applyFilter(filterValue: string) {
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        console.log(this.dataSource.filter);
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
+    }
 
 }

@@ -9,36 +9,69 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Fee amount
+                    <td>
+                        <mat-icon class="align-middle" (click)="openFeeStatus()" matTooltip="Fee Details"
+                            color="primary">info</mat-icon>
+                        Fee amount
                         <span class="ml-3 align-middle badge badge-success">+</span>
                     </td>
                     <td>
-                        <span *ngIf="!isEdit" >{{this.editData['calculatedAmount']}}</span>
-                        <input *ngIf="isEdit" type="number" placeholder="Fee Amount" [(ngModel)]="this.editData['calculatedAmount']" class="form-controll">
+                        <span *ngIf="!isEdit">{{this.editData['calculatedAmount']}}</span>
+                        <input *ngIf="isEdit" type="number" placeholder="Fee Amount"
+                            [(ngModel)]="this.editData['calculatedAmount']" class="form-controll" disabled>
                     </td>
                 </tr>
                 <tr>
                     <td>
+                        <mat-icon class="align-middle" (click)="openScholarStatus()" matTooltip="ScholarShip Details"
+                            color="primary">info</mat-icon>
                         ScholarShip amount
                         <span class="ml-3 align-middle badge badge-danger"> - </span>
                     </td>
                     <td>
                         <span *ngIf="!isEdit">{{this.editData['scholarShipAmount']}}</span>
-                        <input *ngIf="isEdit" type="number" class="form-controll" [(ngModel)]="this.editData['scholarShipAmount']" placeholder="ScholarShip Amount">
+                        <input *ngIf="isEdit" type="number" class="form-controll"
+                            [(ngModel)]="this.editData['scholarShipAmount']" placeholder="ScholarShip Amount" disabled>
+                        <button *ngIf="isEdit" (click)="updateValues()"
+                            [ngClass]="{'btn-primary': !addMore, 'btn-danger': addMore}" class="ml-5 btn">{{addMore ?
+                            'Remove' : 'Add More' }}</button>
+                    </td>
+                </tr>
+                <tr *ngIf="addMore">
+                    <td>
+                        <span *ngIf="!isEdit">{{this.editData['reason']}}</span>
+                        <input *ngIf="isEdit" type="text" placeholder="Reason" [(ngModel)]="this.editData['reason']"
+                            class="form-controll">
+                            <span *ngIf="!isAdd" class="ml-3 align-middle badge badge-danger"> - </span>
+                            <span *ngIf="isAdd" class="ml-3 align-middle badge badge-success">+</span>
+                    </td>
+                    <td>
+                        <span *ngIf="!isEdit">{{this.editData['reasonAmount']}}</span>
+                        <input *ngIf="isEdit" type="number" placeholder="Amount"
+                            [(ngModel)]="this.editData['reasonAmount']" class="form-controll">
+                        <button *ngIf="isEdit" type="button" matTooltip="Add From Total Amount"
+                            [ngClass]="{'active': isAdd}" (click)="isAdd = true"
+                            class="ml-5 btn btn-outline-primary mr-3"> +
+                        </button>
+                        <button *ngIf="isEdit" type="button" matTooltip="Subract From Total Amount"
+                            [ngClass]="{'active': !isAdd}" (click)="isAdd = false" class="btn btn-outline-danger"> -
+                        </button>
                     </td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td>Total amount</td>
-                    <td>{{totalCalculatedAmount()}}</td>
+                    <td><b>Total amount</b></td>
+                    <td><b>{{totalCalculatedAmount()}}</b></td>
                 </tr>
             </tfoot>
         </table>
         <div class="row m-0 mt-3">
             <button mat-raised-button *ngIf="isEdit" color="primary" class="mr-2" (click)="saveData()">Update</button>
-            <button mat-stroked-button *ngIf="isEdit" color="warn" class="mr-2" routerLink="/fee-calculation">Cancel</button>
-            <button mat-raised-button *ngIf="!isEdit" color="warn" class="mr-2" routerLink="/fee-calculation">Back</button>
+            <button mat-stroked-button *ngIf="isEdit" color="warn" class="mr-2"
+                routerLink="/fee-calculation">Cancel</button>
+            <button mat-raised-button *ngIf="!isEdit" color="warn" class="mr-2"
+                routerLink="/fee-calculation">Back</button>
         </div>
     </mat-card>
 </div>

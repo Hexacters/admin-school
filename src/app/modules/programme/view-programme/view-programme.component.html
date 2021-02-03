@@ -11,7 +11,9 @@
     <div class="row">
         <mat-card class="content_box">
             <h5 class="float-left">Programme</h5>
-            <button class="float-right" routerLink="/programm/add" mat-raised-button color="primary"> + Add Programme</button>
+            <button class="float-right" (click)="gotoAdd()" mat-raised-button color="primary"> + Add Programme</button>
+            <input class="float-right search-filter" (keyup)="applyFilter($event.target.value)"
+                placeholder="Search.. Ex: name">
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource">
 
@@ -24,18 +26,24 @@
                     <!-- Name Column -->
                     <ng-container matColumnDef="schoolName">
                         <th mat-header-cell *matHeaderCellDef> School Name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.schoolName}} </td>
+                        <td mat-cell *matCellDef="let element">
+                            <a class="link" (click)="goToDepartment(element)"> {{element.schoolName}} </a>
+                        </td>
                     </ng-container>
                     <!--  -->
 
                     <ng-container matColumnDef="departmentName">
                         <th mat-header-cell *matHeaderCellDef> Department Name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.departmentName}} </td>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.departmentName}}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="programName">
                         <th mat-header-cell *matHeaderCellDef> Programme Name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.programName}} </td>
+                        <td mat-cell *matCellDef="let element">
+                            <a class="link" (click)="goToSemester(element)">{{element.programName}} </a>
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="update">

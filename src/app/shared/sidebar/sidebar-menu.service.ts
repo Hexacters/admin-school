@@ -8,6 +8,7 @@ export interface ISideMenu {
     icon?: string;
     options?: object;
     children?: ISideMenu[];
+    role?: string;
 }
 
 @Injectable({
@@ -19,10 +20,12 @@ export class SidebarMenuService {
         {
             title: 'dashboard',
             link: '/dashboard',
-            icon: 'dashboard'
+            icon: 'dashboard',
+            role: 'admin'
         },
         {
             title: "Organization",
+            role: 'admin',
             children: [
                 {
                     title: "School",
@@ -58,6 +61,7 @@ export class SidebarMenuService {
         },
         {
             title: "Fees",
+            role: 'admin',
             children: [
                 {
                     title: "Fee Type",
@@ -70,7 +74,7 @@ export class SidebarMenuService {
                     icon: 'list_alt'
                 },
                 {
-                    title: "Activie Fee",
+                    title: "Activate Fee",
                     link: "/active-fee",
                     icon: 'fact_check'
                 },
@@ -78,6 +82,7 @@ export class SidebarMenuService {
         },
         {
             title: "Scholarship",
+            role: 'admin',
             children: [
                 {
                     icon: 'school',
@@ -93,6 +98,7 @@ export class SidebarMenuService {
         },
         {
             title: "Payment",
+            role: 'admin',
             children: [
                 {
                     title: "Fee Calculation",
@@ -114,12 +120,26 @@ export class SidebarMenuService {
         {
             title: "Penalty",
             link: "/penalty",
+            role: 'admin',
             icon: "account_balance_wallet",
         },
         {
             title: "Admin",
             link: "/admin",
+            role: 'admin',
             icon: "admin_panel_settings",
+        },
+        {
+            title: "Profile",
+            link: "/profile",
+            role: 'student',
+            icon: "person",
+        },
+        {
+            title: "Fee Details",
+            link: "/students/payment",
+            role: 'student',
+            icon: "money",
         }
     ]
 

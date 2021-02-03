@@ -5,6 +5,14 @@ mat-toolbar{
     color: white;
 }
 
+.mat-menu-item.mat-ripple.active {
+    background-color: #4680ff;
+    color: #ffffff;
+    .mat-icon {
+        color: inherit;
+    }
+}
+
 mat-menu{
     padding: 0;
 }

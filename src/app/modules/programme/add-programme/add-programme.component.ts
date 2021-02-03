@@ -31,6 +31,8 @@ export class AddProgrammeComponent implements OnInit {
 
     ngOnInit() {
         this.getSchoolList();
+        this.editData = JSON.parse(sessionStorage.getItem('programm'));
+        const byDepartment = JSON.parse(sessionStorage.getItem('by-department'));
 
         this.objectForm = new FormGroup({
             'schoolName': new FormControl('', Validators.required),
@@ -40,7 +42,6 @@ export class AddProgrammeComponent implements OnInit {
 
         if (this.router.url.includes('edit')) {
             this.isEdit = true;
-            this.editData = JSON.parse(sessionStorage.getItem('programm'));
             this.departmentId = this.editData['departmentId'];
             this.schoolId = this.editData['schoolId'];
             this.objectForm.patchValue({
@@ -51,6 +52,15 @@ export class AddProgrammeComponent implements OnInit {
             (<FormArray>this.objectForm.get('programme')).push(new FormControl(this.editData['programName']));
             this.getDepartmentList();
         } else {
+            if (byDepartment) {
+                this.objectForm.patchValue({
+                    schoolName: byDepartment.schoolId,
+                    departmentName: byDepartment.id,
+                });
+                this.schoolId = byDepartment.schoolId;
+                this.departmentId = byDepartment.id;
+                this.getDepartmentList();
+            }
             (<FormArray>this.objectForm.get('programme')).push(new FormControl(null));
         }
 
@@ -73,6 +83,11 @@ export class AddProgrammeComponent implements OnInit {
     addprogramme() {
         this.programmeList.push({});
         (<FormArray>this.objectForm.get('programme')).push(new FormControl(null, Validators.required));
+    }
+
+    removeProgramme(i) {
+        this.programmeList.splice(i, 1);
+        (<FormArray>this.objectForm.get('programme')).removeAt(i);
     }
 
     selectSchool(event) {
