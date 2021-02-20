@@ -13,7 +13,7 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
     styleUrls: ['./scholarship.component.scss']
 })
 export class AssignScholarshipComponent implements OnInit {
-    displayedColumns: string[] = ['index', 'schoolName', 'departmentName', 'scholarshipName', 'studentName', 'update', 'delete'];
+    displayedColumns: string[] = ['index', 'schoolName', 'departmentName', 'scholarshipName', 'studentName', 'rollNo', 'update', 'delete'];
     dataSource: MatTableDataSource<any>;
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -25,7 +25,14 @@ export class AssignScholarshipComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this._dataService.getAssignScholarship().subscribe(res => {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
+        this._dataService.getAssignScholarship(req).subscribe(res => {
             this.dataSource = new MatTableDataSource(res.filter(e => e.id));
             this.dataSource.paginator = this.paginator;
         });

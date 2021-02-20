@@ -25,6 +25,13 @@ export class ViewSemComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
         const reqData = JSON.parse(sessionStorage.getItem('by-program'));
         let data;
         if (reqData && this.router.url.includes('byProgramm')) {
@@ -34,7 +41,7 @@ export class ViewSemComponent implements OnInit {
                 programId: reqData.id
             }
         }
-        this._dataService.getsemesterList(data).subscribe(res => {
+        this._dataService.getsemesterList(data, req).subscribe(res => {
             console.log(res, 'res')
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;

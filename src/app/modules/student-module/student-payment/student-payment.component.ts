@@ -83,6 +83,7 @@ export class StudentPaymentComponent implements OnInit {
                 studentId: this.paymentData.studentId,
                 feeTypeId: this.paymentData.activateFeeId,
                 amountReceived: this.paymentData.amountReceived,
+                paymentMode: this.paymentData.paymentMode,
                 paymentReceivedBy: this.paymentData.paymentReceivedBy,
             }
             this.confirmPaymentStatus(this.paymentData);

@@ -12,6 +12,7 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
 })
 export class AddFeeComponent implements OnInit {
     objectForm: FormGroup;
+    universityList: Array<any> = [];
     schoolList: Array<any> = [];
     departmentList: Array<any> = [];
     programmeList: Array<any> = [];
@@ -29,6 +30,8 @@ export class AddFeeComponent implements OnInit {
     bodyArray = [];
     frequency = [{ 'name': 'Monthly' }, { 'name': 'Quartly' }, { 'name': 'Half Yearly' }, { 'name': 'Yearly' }]
     public isEdit: boolean = false;
+    public isSUadmin: boolean = false;
+    public isNodivision: boolean = false;
     public editData: object = {};
     public selectedFeeType = {};
 
@@ -39,7 +42,20 @@ export class AddFeeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '';
+        let req;
+        if (this.isSUadmin) {
+            this.getUniversity();
+        } else {
+            req = {
+                universityId: id
+            }
+            this.getSchoolList(req);
+        }
         this.objectForm = new FormGroup({
+            'universityId': new FormControl(id, Validators.required),
+            'frequencyStop': new FormControl('', Validators.required),
             'schoolName': new FormControl('', Validators.required),
             'departmentName': new FormControl('', Validators.required),
             'programmeName': new FormControl('', Validators.required),
@@ -60,15 +76,18 @@ export class AddFeeComponent implements OnInit {
             this.divisionId = this.editData['divisionId'];
             this.typeId = this.editData['feeType'];
             this.objectForm.patchValue({
+                universityId: this.editData['universityId'],
                 schoolName: this.schoolId,
                 departmentName: this.departmentId,
                 programmeName: this.programmeId,
                 semesterName: this.semesterId,
                 divisionName: this.divisionId,
-                frequencyName: this.editData['feeType']
+                frequencyName: this.editData['feeType'],
+                frequencyStop: this.editData['frequencyStop']
             });
             (<FormArray>this.objectForm.get('fee')).push(new FormControl(this.editData['fee']));
             (<FormArray>this.objectForm.get('feeType')).push(new FormControl(this.editData['typeId']));
+            this.getSchoolList(req);
             this.getdepartmentList(this.isEdit);
             this.getprogrammeList(this.isEdit);
             this.getSemesterList(this.isEdit);
@@ -77,12 +96,17 @@ export class AddFeeComponent implements OnInit {
             (<FormArray>this.objectForm.get('fee')).push(new FormControl());
             (<FormArray>this.objectForm.get('feeType')).push(new FormControl());
         }
-        this.getSchoolList(this.isEdit);
         this.getType(this.isEdit);
     }
 
-    getSchoolList(isEdit: boolean = false): void {
-        this._dataService.getSchoolList().subscribe(res => {
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
+    }
+
+    getSchoolList(data?): void {
+        this._dataService.getSchoolList(data).subscribe(res => {
             this.schoolList = [...res];
         });
     }
@@ -102,17 +126,32 @@ export class AddFeeComponent implements OnInit {
     getSemesterList(isEdit: boolean = false, data?): void {
         this._dataService.getsemesterList(data).subscribe(res => {
             this.semesterList = [...res];
+            this.isNodivision = this._dataService.isNodivisionSem(this.semesterList, this.editData['semesterId']);
         });
     }
 
     getDivisionList(isEdit: boolean = false, data?): void {
         this._dataService.getDivisionList(data).subscribe(res => {
             this.divisionList = [...res];
+            if (this.isNodivision && !this.editData['semesterId']) {
+                const id =  res[0].id
+                this.objectForm.patchValue({
+                    divisionName: id
+                });
+                this.selectDivision(id);
+            }
         });
     }
 
     getType(isEdit: boolean = false): void {
-        this._dataService.getFeetypeList().subscribe(res => {
+        const id = this._dataService.currentUniversity() || '';
+        let req;
+        if (id) {
+            req = {
+                universityId: id
+            }
+        }
+        this._dataService.getFeetypeList(req).subscribe(res => {
             this.typeList = [...res];
         });
     }
@@ -157,6 +196,7 @@ export class AddFeeComponent implements OnInit {
 
     selectSemester(event) {
         this.semesterId = event;
+        this.isNodivision = this._dataService.isNodivisionSem(this.semesterList, event);
         this.getDivisionList(false, {
             schoolId: this.schoolId,
             departmentId: this.departmentId,
@@ -186,6 +226,15 @@ export class AddFeeComponent implements OnInit {
         this.typeId = event;
     }
 
+    selectUniversity(event) {
+        this.getSchoolList({
+            universityId: event || 0,
+        });
+        this.objectForm.patchValue({
+            schoolName: ''
+        })
+    }
+
     updateFeeCalculation(data) {
         this._dataService.updatePriceCalculation(data).subscribe(res => {
             // Success
@@ -206,6 +255,7 @@ export class AddFeeComponent implements OnInit {
                     "divisionId": this.divisionId + '',
                     "typeId": element,
                     "feeType": this.typeId,
+                    "frequencyStop": this.objectForm.value.frequencyStop,
                     "fee": this.objectForm.value.fee[i]
                 })
             }

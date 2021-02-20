@@ -1,0 +1,44 @@
+<div class="container">
+
+    <mat-card class="header_card">
+        <p style="line-height: 30px;">
+            <span style="float: left;">Add University</span> <span class="float-right"><a
+                    routerLink="/dashboard">Home</a> > Add
+                University </span>
+        </p>
+    </mat-card>
+
+    <mat-card class="content_box">
+        <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
+            <div class="row m-0">
+                <div class="col-md-5" formArrayName="universitys">
+                    <div class="row d-flex" *ngFor="let university of universityList;index as i">
+                        <div class="col-md-11 p-0 m-0">
+                            <p class="p-0 m-0"> University * </p>
+                            <input type="text" placeholder="University name" [formControlName]="i" required>
+                        </div>
+                        <div class="col-md-1 mt-1 pt-3">
+                            <button mat-mini-fab color="default" [disabled]="!i" class="shadow-none text-dark"
+                                (click)='removeuniversity(i)'>
+                                <mat-icon [ngClass]="{'text-light': !i}">remove_circle</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 ml-4 pr-2" style="margin-top: 20px;" *ngIf="editFlag">
+                    <button mat-mini-fab color="default" class="shadow-none text-success" (click)='adduniversity()'>
+                        <mat-icon>add_circle</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="row m-0 mt-2">
+                <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf='editFlag'>Save</button>
+                <button mat-raised-button color="primary" class="mr-2" type="submit" *ngIf='!editFlag'>Update</button>
+                <button mat-stroked-button color="warn" class="mr-2" routerLink="/university">Cancel</button>
+            </div>
+        </form>
+    </mat-card>
+
+</div>

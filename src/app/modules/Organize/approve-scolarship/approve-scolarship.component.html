@@ -16,7 +16,18 @@
             <div class="row m-0">
                 <div class="col-md-12 p-0">
                     <div class="row m-0">
-                        <div class="col-md-3 pl-0 mr-2 ml-3">
+                        <div class="col-md-3 pl-0 mr-2 ml-3" *ngIf="isSUadmin">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">University</label>
+                                <select size="1" formControlName="universityId" (ngModelChange)='selectUniversity($event)'>
+                                    <option value="" selected>Select University</option>
+                                    <option *ngFor="let university of universityList" [value]="university.id">{{university.universityName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mr-2 ml-1">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" for="cars">School</label>
                                 <select size="1" formControlName="schoolId" (ngModelChange)='selectSchool($event)'>
@@ -39,8 +50,11 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="col-md-3 mr-2 ml-1">
+                    </div>
+                </div>
+                <div class="col-md-12 p-0">
+                    <div class="row m-0 mt-3">
+                        <div class="col-md-3  pl-0 mr-2 ml-3">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" for="cars">Programme</label>
                                 <select size="1" formControlName="programId" (ngModelChange)='selectProgramme($event)'>
@@ -51,11 +65,7 @@
                             </div>
                         </div>
 
-                    </div>
-                </div>
-                <div class="col-md-12 p-0   ">
-                    <div class="row m-0 mt-3">
-                        <div class="col-md-3 pl-0 mr-2 ml-3">
+                        <div class="col-md-3 mr-2 ml-1">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" for="cars">Semester</label>
                                 <select size="1" formControlName="semesterId" (ngModelChange)='selectSemester($event)'>
@@ -66,7 +76,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3 mr-2 ml-1">
+                        <div class="col-md-3 mr-2 ml-1" *ngIf="!isNodivision">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" class="m-0" for="cars">Division</label>
                                 <select size="1" formControlName="divisionId" (ngModelChange)='selectDivision($event)'>

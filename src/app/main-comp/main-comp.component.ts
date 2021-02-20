@@ -13,7 +13,8 @@ export class MainCompComponent implements AfterViewInit {
     constructor(private router: Router) { }
 
     ngAfterViewInit() {
-        const userDetails = JSON.parse(localStorage.getItem('userDetails')) || {};
+        const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}') || {};
+        console.log(userDetails)
         if (!userDetails.token) {
             this.router.navigate(['/login']);
         } else {
@@ -23,6 +24,7 @@ export class MainCompComponent implements AfterViewInit {
                         this.router.navigate(['/profile']);
                         return;
                     case 'admin':
+                    case 'superAdmin':
                         this.router.navigate(['/dashboard']);
                         return;
                 }

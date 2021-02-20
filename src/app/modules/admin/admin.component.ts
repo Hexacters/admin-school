@@ -12,8 +12,9 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
     styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-    displayedColumns: string[] = ['index', 'username', 'emailId', 'phoneNo', 'update', 'delete'];
+    displayedColumns: string[] = ['index', 'name', 'emailId', 'phoneNo', 'update', 'delete'];
     dataSource: MatTableDataSource<any>;
+    isSuperAdmin: boolean = false;
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
@@ -24,10 +25,18 @@ export class AdminComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this._dataService.getAdmin().subscribe(res => {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
+        this.isSuperAdmin = this._dataService.isSuperAdmin();
+        this._dataService.getAdmin(req).subscribe(res => {
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
-        })
+        });
     }
 
     deleteAdmin(id) {

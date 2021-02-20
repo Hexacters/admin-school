@@ -11,7 +11,16 @@
   <mat-card class="content_box">
     <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
       <div class="row m-0">
-        <div class="col-md-4 ml-1">
+        <div class="col-md-3 ml-0 mr-4" *ngIf="isSUadmin">
+          <div class="row" style="display: flex;">
+            <label class="m-0" for="cars">University *</label>
+            <select size="1" formControlName="universityId" (ngModelChange)='selectUniversity($event)' required>
+              <option value="" selected>Select university</option>
+              <option *ngFor=' let university of universityList' [value]="university.id">{{university.universityName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3 ml-1">
           <div class="row" style="display: flex;">
             <label class="m-0" for="cars">School *</label>
             <select size="1" formControlName="schoolName" (ngModelChange)='selectSchool($event)' required>
@@ -21,9 +30,9 @@
           </div>
         </div>
 
-        <div class="col-md-5 ml-3" formArrayName="departments">
+        <div class="col-md-4 ml-2" formArrayName="departments">
           <div class="row" *ngFor="let department of departmentList;index as i">
-            <div class="col-md-11">
+            <div class="col-md-9">
               <p class="m-0 mb-1"> Department * </p>
               <input type="text" placeholder="Department name" formControlName="{{i}}" required>
             </div>
@@ -36,7 +45,7 @@
           </div>
 
         </div>
-        <div class="col-md-2 ml-4 pr-2" style="margin-top: 20px;" *ngIf="editFlag">
+        <div class="col-md-1 ml-4 pr-2" style="margin-top: 20px;" *ngIf="editFlag">
           <button mat-mini-fab color="default" class="shadow-none text-success" (click)='addDepartment()'>
             <mat-icon>add_circle</mat-icon>
           </button>

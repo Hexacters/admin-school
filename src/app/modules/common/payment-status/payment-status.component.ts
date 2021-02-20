@@ -22,11 +22,13 @@ export class PaymentStatusComponent implements OnInit {
     public isPaymentView: boolean = false;
     public selectedFee = [];
     public user: any = {};
-    public paymentMode: string = '';
 
     @Output() sendData = new EventEmitter<any>();
 
     @Input() public data;
+    @Input() public isOffline = false;
+    public paymentMode: string = '';
+    public refNumber: string = '';
 
     constructor(
         private toastr: ToastrService,
@@ -34,6 +36,7 @@ export class PaymentStatusComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.paymentMode = this.isOffline ? 'cash' : 'online'
         this.user = JSON.parse(localStorage.getItem('userDetails'));
         console.log(this.data)
         this.studentData = this.data.student;
@@ -119,6 +122,8 @@ export class PaymentStatusComponent implements OnInit {
                 fee: this.price.reasonAmount || 0,
             });
         }
+
+        console.log(this.selectedFee)
     }
 
     updateSelectedFee(data) {
@@ -137,6 +142,7 @@ export class PaymentStatusComponent implements OnInit {
         activeFee.scholarship = this.schBreakup.find(e => {
             return e.typeId == activeFee.type
         });
+        console.log(activeFee)
         this.selectedFee.push(activeFee);
 
         if (activeFee.penaltyAmount) {
@@ -146,6 +152,7 @@ export class PaymentStatusComponent implements OnInit {
             }
             this.selectedFee.push({
                 isPenalty: true,
+                term: activeFee.term,
                 typeName: `${activeFee.typeName} Penalty (Per ${activeFee.frequency} = ${activeFee.penaltyAmount})`,
                 fee: calc * (activeFee.penaltyAmount || 0),
             });
@@ -188,6 +195,7 @@ export class PaymentStatusComponent implements OnInit {
             studentData: this.studentData,
             studentId: this.studentData.id,
             paymentMode: this.paymentMode,
+            referenceNo: this.refNumber,
             paymentReceivedBy: this.user.userName,
             paymentReceivedOn: moment().toDate(),
             transactionId: moment().valueOf(),

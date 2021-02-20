@@ -2,9 +2,10 @@
     .back-payment {
         cursor: pointer;
     }
-    .grid {
-        height: 300px;
+    .payment-status-grid {
+        height: auto;
         overflow: auto;
+        margin-bottom: 20px;
     }
     .student-status {
         .lable {

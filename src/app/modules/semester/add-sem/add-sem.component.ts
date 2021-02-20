@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UtilityServiceService } from 'src/app/utility-service.service';
-
+import * as moment from 'moment';
 @Component({
     selector: 'app-add-sem',
     templateUrl: './add-sem.component.html',
@@ -13,6 +13,7 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
 export class AddSemComponent implements OnInit {
 
     objectForm: FormGroup;
+    universityList: Array<any> = [];
     schoolList: Array<any> = [];
     departmentList: Array<any> = [];
     programmeList: Array<any> = [];
@@ -21,6 +22,7 @@ export class AddSemComponent implements OnInit {
     departmentId: number = 0;
     programmeId: number = 0;
     public isEdit: boolean = false;
+    public isSUadmin: boolean = false;
     public editData: object = {};
 
     constructor(
@@ -30,15 +32,27 @@ export class AddSemComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '';
+        let req;
+        if (this.isSUadmin) {
+            this.getUniversity();
+        } else {
+            req = {
+                universityId: id
+            }
+            this.getSchoolList(req);
+        }
         this.editData = JSON.parse(sessionStorage.getItem('semester'));
         const reqData = JSON.parse(sessionStorage.getItem('by-program'));
 
         this.objectForm = new FormGroup({
+            'universityId': new FormControl(id, Validators.required),
             'schoolName': new FormControl('', Validators.required),
             'departmentName': new FormControl('', Validators.required),
             'programmeName': new FormControl('', Validators.required),
-            'semester': new FormArray([
-            ])
+            'semester': new FormArray([]),
+            'divisionAddition': new FormArray([])
         });
 
         if (this.router.url.includes('edit')) {
@@ -48,12 +62,15 @@ export class AddSemComponent implements OnInit {
             this.programmeId = this.editData['programId'];
 
             this.objectForm.patchValue({
+                universityId: this.editData['universityId'],
                 schoolName: this.schoolId,
                 departmentName: this.departmentId,
                 programmeName: this.programmeId
             });
             (<FormArray>this.objectForm.get('semester')).push(new FormControl(this.editData['semesterName']));
+            (<FormArray>this.objectForm.get('divisionAddition')).push(new FormControl(this.editData['divisionAddition']));
 
+            this.getSchoolList(req);
             this.getdepartmentList(this.isEdit);
             this.getprogrammeList(this.isEdit);
         } else {
@@ -64,19 +81,29 @@ export class AddSemComponent implements OnInit {
                 this.objectForm.patchValue({
                     schoolName: this.schoolId,
                     departmentName: this.departmentId,
-                    programmeName: this.programmeId
+                    programmeName: this.programmeId,
+                    universityId: reqData['universityId']
                 });
+
+                this.getSchoolList(req);
                 this.getdepartmentList(this.isEdit);
                 this.getprogrammeList(this.isEdit);
             }
-            
+
             (<FormArray>this.objectForm.get('semester')).push(new FormControl());
+            (<FormArray>this.objectForm.get('divisionAddition')).push(new FormControl());
         }
-        this.getSchoolList(this.isEdit);
+        this.getUniversity();
     }
 
-    getSchoolList(isEdit: boolean = false): void {
-        this._dataService.getSchoolList().subscribe(res => {
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
+    }
+
+    getSchoolList(data?): void {
+        this._dataService.getSchoolList(data).subscribe(res => {
             this.schoolList = [...res];
         });
     }
@@ -96,13 +123,20 @@ export class AddSemComponent implements OnInit {
     addSemester() {
         this.semesterList.push({});
         (<FormArray>this.objectForm.get('semester')).push(new FormControl(null, Validators.required));
+        (<FormArray>this.objectForm.get('divisionAddition')).push(new FormControl(false, Validators.required));
     }
 
     removeSemester(i) {
         this.semesterList.splice(i, 1);
         (<FormArray>this.objectForm.get('semester')).removeAt(i);
+        (<FormArray>this.objectForm.get('divisionAddition')).removeAt(i);
     }
 
+    selectUniversity(event) {
+        this.getSchoolList({
+            universityId: event || 0,
+        });
+    }
 
     selectSchool(event) {
         this.schoolId = event;
@@ -126,20 +160,23 @@ export class AddSemComponent implements OnInit {
     onSubmit(isUpdate: boolean = this.isEdit): void {
         this.objectForm.markAllAsTouched();
         if (this.objectForm.valid) {
-            let body = {};
+            let body = [];
             if (this.objectForm.value.semester[0] === null) {
                 alert()
             } else {
-                body = {
-                    "schoolId": this.schoolId,
-                    "departmentId": this.departmentId,
-                    'programId': this.programmeId,
-                    "semesterName": [...this.objectForm.value.semester]
-                }
+                this.objectForm.value.semester.map((e, i) => {
+                    body.push({
+                        "schoolId": this.schoolId,
+                        "departmentId": this.departmentId,
+                        'programId': this.programmeId,
+                        "semesterName": e,
+                        "divisionAddition": !!this.objectForm.value.divisionAddition[i],
+                    });
+                });
             }
 
             if (isUpdate) {
-                this._dataService.updateSemester(this.editData['id'], body).subscribe(res => {
+                this._dataService.updateSemester(this.editData['id'], body[0]).subscribe(res => {
                     this.router.navigate(['/semester']);
                     this.toastr.success('Semester details Saved successfully', 'Info');
                 }, (res: HttpErrorResponse) => {
@@ -147,14 +184,41 @@ export class AddSemComponent implements OnInit {
                 });
             } else {
                 this._dataService.savesemester(body).subscribe(res => {
+                    this.addDivision(body, res);
                     this.router.navigate(['/semester']);
                     this.toastr.success('Semester details updated successfully', 'Info');
+
                 }, (res: HttpErrorResponse) => {
                     this.toastr.error(res.error.message || res.message, 'Info');
                 });
             }
         }
+    }
 
+    public addDivision(data: any[], res: any[]) {
+        
+        const body: any[] = [];
+        res.forEach((e, i) => {
+            let req = {
+                "schoolId": 0,
+                "departmentId": 0,
+                "programId": 0,
+                "semesterId": 0,
+                "divisionName": ''
+            }
+            const name = +moment().format('x') + i + 1;
+            console.log(name)
+            if (e.isDivisionAddition) {
+                req.departmentId = data[i].departmentId;
+                req.programId = data[i].programId;
+                req.schoolId = data[i].schoolId;
+                req.semesterId = e.id;
+                req.divisionName = name + '';
+                body.push(req);
+            }
+        });
+        console.log(body)
+        this._dataService.saveDivision(body).subscribe();
     }
 
 }

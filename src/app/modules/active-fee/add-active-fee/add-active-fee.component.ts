@@ -17,6 +17,7 @@ import { ActiveFeeModalComponent } from '../modal/active-fee-modal/active-fee-mo
 })
 export class AddActiveFeeComponent implements OnInit {
     objectForm: FormGroup;
+    universityList: Array<any> = [];
     schoolList: Array<any> = [];
     departmentList: Array<any> = [];
     programmeList: Array<any> = [];
@@ -33,9 +34,12 @@ export class AddActiveFeeComponent implements OnInit {
     minDate: Date = new Date();
 
     public isEdit: boolean = false;
+    public isSUadmin: boolean = false;
+    public isNodivision: boolean = false;
     public editData: object = {};
     public selectedFeeType = {};
-    displayedColumns: string[] = ['index', 'schoolName', 'type', 'feeType', 'fee', 'action'];
+    public prevObject: any = {};
+    displayedColumns: string[] = ['index', 'schoolName', 'type', 'feeType', 'frequencyStop', 'fee', 'action'];
     dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   
     paginator: MatPaginator;
@@ -53,19 +57,60 @@ export class AddActiveFeeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '';
+        let req;
+        if (this.isSUadmin) {
+            this.getUniversity();
+        } else {
+            req = {
+                universityId: id
+            }
+            this.getSchoolList(req);
+        }
         this.objectForm = new FormGroup({
             'schoolId': new FormControl('', Validators.required),
+            'universityId': new FormControl(id, Validators.required),
             'departmentId': new FormControl('', Validators.required),
             'programId': new FormControl('', Validators.required),
             'semesterId': new FormControl('', Validators.required),
             'divisionId': new FormControl('', Validators.required),
         });
-        this.getSchoolList(this.isEdit);
         this.getPenality();
+        const tempData = JSON.parse(sessionStorage.getItem('tempData'));
+        if (tempData) {
+            if (tempData.universityId) {
+                this.selectUniversity(tempData.universityId);
+            }
+            if (tempData.schoolId) {
+                this.selectSchool(tempData.schoolId);
+            }
+            if (tempData.departmentId) {
+                this.selectDepartment(tempData.departmentId);
+            }
+            if (tempData.programId) {
+                this.selectProgramme(tempData.programId);
+            }
+            if (tempData.semesterId) {
+                this.selectSemester(tempData.semesterId);
+            }
+            if (tempData.divisionId) {
+                this.selectDivision(tempData.divisionId);
+            }
+            this.objectForm.patchValue({
+                ...tempData
+            });
+        }
     }
 
-    getSchoolList(isEdit: boolean = false): void {
-        this._dataService.getSchoolList().subscribe(res => {
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
+    }
+
+    getSchoolList(data?): void {
+        this._dataService.getSchoolList(data).subscribe(res => {
             this.schoolList = [...res];
         });
     }
@@ -85,17 +130,42 @@ export class AddActiveFeeComponent implements OnInit {
     getSemesterList(isEdit: boolean = false, data?): void {
         this._dataService.getsemesterList(data).subscribe(res => {
             this.semesterList = [...res];
+            const tempData = JSON.parse(sessionStorage.getItem('tempData'));
+            if (tempData && tempData.semesterId) {
+                this.isNodivision = this._dataService.isNodivisionSem(this.semesterList, tempData.semesterId);
+            }
         });
     }
 
     getDivisionList(isEdit: boolean = false, data?): void {
         this._dataService.getDivisionList(data).subscribe(res => {
             this.divisionList = [...res];
+            if (this.isNodivision) {
+                const id =  res[0].id
+                this.objectForm.patchValue({
+                    divisionId: id
+                });
+                this.selectDivision(id);
+            } else {
+                const tempData = JSON.parse(sessionStorage.getItem('tempData'));
+                if (tempData && isEdit) {
+                    this.selectDivision(tempData.divisionId);
+                } else {
+                    this.selectDivision(0);
+                }
+            }
         });
     }
 
     getPenality(): void {
-        this._dataService.getPenalty().subscribe(res => {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
+        this._dataService.getPenalty(req).subscribe(res => {
             this.penalty = [...res];
         });
     }
@@ -120,7 +190,17 @@ export class AddActiveFeeComponent implements OnInit {
         });
     }
 
+    selectUniversity(event) {
+        this.prevObject.universityId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
+        this.getSchoolList({
+            universityId: event || 0,
+        });
+    }
+
     selectSchool(event) {
+        this.prevObject.schoolId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
         this.schoolId = event;
         this.getdepartmentList(false, {
             schoolId: this.schoolId,
@@ -128,6 +208,8 @@ export class AddActiveFeeComponent implements OnInit {
     }
 
     selectDepartment(event) {
+        this.prevObject.departmentId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
         this.departmentId = event;
         this.getprogrammeList(false, {
             schoolId: this.schoolId,
@@ -136,6 +218,8 @@ export class AddActiveFeeComponent implements OnInit {
     }
 
     selectProgramme(event) {
+        this.prevObject.programId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
         this.programmeId = event;
         this.getSemesterList(false, {
             schoolId: this.schoolId,
@@ -145,6 +229,11 @@ export class AddActiveFeeComponent implements OnInit {
     }
 
     selectSemester(event) {
+        this.prevObject.semesterId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
+        if (this.semesterList.length) {
+            this.isNodivision = this._dataService.isNodivisionSem(this.semesterList, event);
+        }
         this.semesterId = event;
         this.getDivisionList(false, {
             schoolId: this.schoolId,
@@ -155,6 +244,8 @@ export class AddActiveFeeComponent implements OnInit {
     }
 
     selectDivision(event) {
+        this.prevObject.divisionId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
         this.divisionId = event;
         this.getFeeList({
             schoolId: this.schoolId,
@@ -170,12 +261,13 @@ export class AddActiveFeeComponent implements OnInit {
             width: '800px',
             data: {...element}
         });
-
+        const userDetails = JSON.parse(localStorage.getItem('userDetails')) || {};
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 const data = this.objectForm.value;
                 const res = element.id.map(e => {
                     return {
+                        userName: userDetails.userName,
                         feeTypeId: e,
                         ...result,
                         ...data,

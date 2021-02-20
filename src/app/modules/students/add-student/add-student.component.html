@@ -15,7 +15,19 @@
             <div class="row m-0">
                 <div class="col-md-12 p-0">
                     <div class="row m-0">
-                        <div class="col-md-3 pl-0 mr-2 ml-3">
+                        <div class="col-md-3 pl-0 mr-2 ml-3" *ngIf="isSUadmin">
+                            <div class="row" style="display: flex;">
+                                <label class="m-0" for="cars">University</label>
+                                <select size="1" required formControlName="universityId"
+                                    (ngModelChange)='selectUniversity($event)'>
+                                    <option value="" selected>Select University</option>
+                                    <option *ngFor=' let university of universityList' [value]="university.id">{{university.universityName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mr-2 ml-1">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" for="cars">School</label>
                                 <select size="1" required formControlName="schoolId"
@@ -40,7 +52,11 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3 mr-2 ml-1">
+                    </div>
+                </div>
+                <div class="col-md-12 p-0">
+                    <div class="row m-0 mt-3">
+                        <div class="col-md-3 pl-0 mr-2 ml-3">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" for="cars">programme</label>
                                 <select size="1" required formControlName="programId"
@@ -52,11 +68,7 @@
                             </div>
                         </div>
 
-                    </div>
-                </div>
-                <div class="col-md-12 p-0">
-                    <div class="row m-0 mt-3">
-                        <div class="col-md-3 pl-0 mr-2 ml-3">
+                        <div class="col-md-3 mr-2 ml-1">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" for="cars">Semester</label>
                                 <select size="1" required formControlName="semesterId"
@@ -68,7 +80,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3 mr-2 ml-1">
+                        <div class="col-md-3 mr-2 ml-1" *ngIf="!isNodivision">
                             <div class="row" style="display: flex;">
                                 <label class="m-0" class="m-0" for="cars">Division</label>
                                 <select size="1" required formControlName="divisionId"
@@ -92,14 +104,14 @@
                         <div class="row m-0">
                             <div class="col-md-3 ml-3">
                                 <div class="row">
-                                    <p class="m-0 mb-1"> First Name* </p>
+                                    <p class="m-0 mb-1"> Full Name* </p>
                                     <input type="text" required placeholder="First Name" formControlName="firstName">
                                 </div>
                             </div>
                             <div class="col-md-3 ml-3">
                                 <div class="row">
-                                    <p class="m-0 mb-1"> Last Name * </p>
-                                    <input type="text" required placeholder="Last Name" formControlName="lastName">
+                                    <p class="m-0 mb-1"> Roll Number * </p>
+                                    <input type="text" required placeholder="Roll No" formControlName="rollNo">
                                 </div>
                             </div>
                             <div class="col-md-3 ml-3">

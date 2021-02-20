@@ -15,6 +15,7 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
 export class FeeCalculationComponent implements OnInit {
     studentForm: FormGroup;
     public selectedFeeType = {};
+    public universityList: Array<any>;
     public studentsList: Array<any>;
     public schoolList: Array<any> = [];
     public departmentList: Array<any> = [];
@@ -27,6 +28,9 @@ export class FeeCalculationComponent implements OnInit {
     public programmeId: number = 0;
     public semesterId: number = 0;
     public divisionId: number = 0;
+    public isSUadmin: boolean = false;
+    public prevObject: any = {};
+    public isNodivision: boolean = false;
 
     displayedColumns: string[] = ['index', 'studentName', 'netAmount', 'update', 'view'];
     dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
@@ -45,21 +49,60 @@ export class FeeCalculationComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '0';
+        let req;
+        if (this.isSUadmin) {
+            this.getUniversity();
+        } else {
+            req = {
+                universityId: id
+            }
+            this.getSchoolList(req);
+        }
         this.studentForm = new FormGroup({
             'schoolId': new FormControl('0', Validators.required),
+            'universityId': new FormControl(id, Validators.required),
             'departmentId': new FormControl('0', Validators.required),
             'programId': new FormControl('0', Validators.required),
             'semesterId': new FormControl('0', Validators.required),
             'divisionId': new FormControl('0', Validators.required),
             'students': new FormArray([])
         });
-
-        this.getSchoolList();
+        const tempData = JSON.parse(sessionStorage.getItem('tempData'));
+        if (tempData) {
+            if (tempData.universityId) {
+                this.selectUniversity(tempData.universityId);
+            }
+            if (tempData.schoolId) {
+                this.selectSchool(tempData.schoolId);
+            }
+            if (tempData.departmentId) {
+                this.selectDepartment(tempData.departmentId);
+            }
+            if (tempData.programId) {
+                this.selectProgramme(tempData.programId);
+            }
+            if (tempData.semesterId) {
+                this.selectSemester(tempData.semesterId, true);
+            }
+            if (tempData.divisionId) {
+                this.selectDivision(tempData.divisionId);
+            }
+            this.studentForm.patchValue({
+                ...tempData
+            });
+        }
     }
 
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
+    }
 
-    getSchoolList(isEdit: boolean = false): void {
-        this._dataService.getSchoolList().subscribe(res => {
+    getSchoolList(data?): void {
+        this._dataService.getSchoolList(data).subscribe(res => {
             this.schoolList = [...res];
         });
     }
@@ -79,12 +122,30 @@ export class FeeCalculationComponent implements OnInit {
     getSemesterList(isEdit: boolean = false, data?): void {
         this._dataService.getsemesterList(data).subscribe(res => {
             this.semesterList = [...res];
+            const tempData = JSON.parse(sessionStorage.getItem('tempData'));
+            if (tempData && tempData.semesterId) {
+                this.isNodivision = this._dataService.isNodivisionSem(this.semesterList, tempData.semesterId);
+            }
         })
     }
 
-    getDivisionList(isEdit: boolean = false, data?): void {
+    getDivisionList(isEdit: boolean = true, data?): void {
         this._dataService.getDivisionList(data).subscribe(res => {
             this.divisionList = [...res];
+            if (this.isNodivision) {
+                const id =  res[0].id
+                this.studentForm.patchValue({
+                    divisionId: id
+                });
+                this.selectDivision(id);
+            } else {
+                const tempData = JSON.parse(sessionStorage.getItem('tempData'));
+                if (tempData && isEdit) {
+                    this.selectDivision(tempData.divisionId);
+                } else {
+                    this.selectDivision(0);
+                }
+            }
         });
     }
 
@@ -96,7 +157,17 @@ export class FeeCalculationComponent implements OnInit {
         });
     }
 
+    selectUniversity(event) {
+        this.prevObject.universityId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
+        this.getSchoolList({
+            universityId: event || 0,
+        });
+    }
+
     selectSchool(event) {
+        this.prevObject.schoolId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
         this.schoolId = event;
         this.getdepartmentList(false, {
             schoolId: this.schoolId,
@@ -104,6 +175,8 @@ export class FeeCalculationComponent implements OnInit {
     }
 
     selectDepartment(event) {
+        this.prevObject.departmentId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
         this.departmentId = event;
         this.getprogrammeList(false, {
             schoolId: this.schoolId,
@@ -112,6 +185,8 @@ export class FeeCalculationComponent implements OnInit {
     }
 
     selectProgramme(event) {
+        this.prevObject.programId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
         this.programmeId = event;
         this.getSemesterList(false, {
             schoolId: this.schoolId,
@@ -120,9 +195,14 @@ export class FeeCalculationComponent implements OnInit {
         });
     }
 
-    selectSemester(event) {
+    selectSemester(event, isDefault: boolean = false) {
+        this.prevObject.semesterId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
+        if (this.semesterList.length) {
+            this.isNodivision = this._dataService.isNodivisionSem(this.semesterList, event);
+        }
         this.semesterId = event;
-        this.getDivisionList(false, {
+        this.getDivisionList(isDefault, {
             schoolId: this.schoolId,
             departmentId: this.departmentId,
             programId: this.programmeId,
@@ -131,6 +211,8 @@ export class FeeCalculationComponent implements OnInit {
     }
 
     selectDivision(event) {
+        this.prevObject.divisionId = event;
+        sessionStorage.setItem('tempData', JSON.stringify(this.prevObject));
         this.divisionId = event;
         this.getStudentList(false, {
             schoolId: this.schoolId,

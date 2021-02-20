@@ -1,8 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
 import { UtilityServiceService } from 'src/app/utility-service.service';
 
@@ -21,11 +23,19 @@ export class ScholarshipComponent implements OnInit {
     constructor(
         private _dataService: UtilityServiceService,
         private router: Router,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private toastr: ToastrService
     ) { }
 
     ngOnInit() {
-        this._dataService.getScholarship().subscribe(res => {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
+        this._dataService.getScholarship(req).subscribe(res => {
             this.dataSource = new MatTableDataSource(res.filter(e => e.id !== 1));
             this.dataSource.paginator = this.paginator;
         })
@@ -44,6 +54,8 @@ export class ScholarshipComponent implements OnInit {
             if (result) {
                 this._dataService.deleteScholarship(id).subscribe(res => {
                     this.ngOnInit();
+                }, (res: HttpErrorResponse) => {
+                    this.toastr.error(res.error.message || res.message, 'Info');
                 });
             }
         });

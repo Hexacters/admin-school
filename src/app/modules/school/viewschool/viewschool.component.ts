@@ -19,6 +19,7 @@ export class ViewschoolComponent implements OnInit {
     displayedColumns: string[] = ['index', 'name', 'update', 'delete'];
     dataSource: MatTableDataSource<any>;
     public loading: boolean = false;
+    public isSUadmin: boolean = false;
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
@@ -33,9 +34,24 @@ export class ViewschoolComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '';
+
+        const schoolData = JSON.parse(sessionStorage.getItem('by-university'));
+        let data;
+        if (!this.isSUadmin) {
+            data = {
+                universityId: id
+            }
+        }
+        if (schoolData && this.router.url.includes('byuniversity')) {
+            data = {
+                universityId: schoolData.id
+            }
+        }
         // this._localCommunication.schoolFlag.ne
         this.loading = true;
-        this._dataService.getSchoolList().subscribe(res => {
+        this._dataService.getSchoolList(data).subscribe(res => {
             this.loading = false;
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
@@ -85,6 +101,13 @@ export class ViewschoolComponent implements OnInit {
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
+    }
+
+    public gotoAdd() {
+        if (!this.router.url.includes('byuniversity')) {
+            sessionStorage.setItem('by-university', null);
+        }
+        this.router.navigate(['school/add']);
     }
 
 }

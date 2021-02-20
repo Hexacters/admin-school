@@ -4,14 +4,15 @@ import * as moment from 'moment';
     providedIn: 'root'
 })
 export class ActiveFeeService {
-    public getFeeByFrequancy(data: any[]): any[] {
+    public getFeeByFrequancy(data: any[], uniKey?): any[] {
         const result = [];
         const monthWise = {};
         data.forEach(e => {
-            if (!monthWise[e.feeType]) {
-                monthWise[e.feeType] = [];
+            const key = e.feeType + e.frequencyStop + e[uniKey];
+            if (!monthWise[key]) {
+                monthWise[key] = [];
             }
-            monthWise[e.feeType].push(e);
+            monthWise[key].push(e);
         });
         for (let key in monthWise) {
             const obj = {
@@ -22,18 +23,22 @@ export class ActiveFeeService {
                 schoolName: '',
                 fee: 0,
                 feeType: '',
+                frequencyStop: 0,
                 type: '',
                 typeList: [],
+                others: {},
             }
             monthWise[key].forEach(e => {
-                obj.id.push(e.id);
+                obj.id.push(e.id || e.feeTypeId);
                 obj.frequency = e.frequency,
                 obj.penaltyAmount = e.penaltyAmount || 0,
                 obj.activationDate = e.activationDate,
                 obj.schoolName = e.schoolName;
                 obj.fee += +e.fee;
                 obj.feeType = e.feeType;
+                obj.frequencyStop = e.frequencyStop;
                 obj.typeList.push(e.type);
+                obj.others = e;
             });
             obj.type = obj.typeList.join(', ');
             result.push(obj);

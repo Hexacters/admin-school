@@ -27,14 +27,33 @@
         </div>
     </div>
     <div *ngIf="isPaymentView">
-        <h5>
-            <mat-icon *ngIf="isPaymentView" (click)="isPaymentView = !isPaymentView" class="back-payment align-middle">
-                arrow_back
-            </mat-icon>
-            <span class="align-middle"> Payment Details </span>
-        </h5>
-        <label>Please make sure the below details are correct before payment we cannot revert the payment</label>
-        <div class="row grid">
+        <div class="d-flex justify-content-between">
+            <div class="float-left">
+                <h5>
+                    <mat-icon *ngIf="isPaymentView" (click)="isPaymentView = !isPaymentView"
+                        class="back-payment align-middle">
+                        arrow_back
+                    </mat-icon>
+                    <span class="align-middle"> Payment Details </span>
+                </h5>
+                <label>Please make sure the below details are correct before payment we cannot revert the
+                    payment</label>
+            </div>
+            <div class="float-right mr-2" *ngIf="isOffline">
+                <p class="m-0 p-0">Referance Number</p>
+                <input type="text" [(ngModel)]="refNumber" placeholder="Referance Number" />
+            </div>
+            <div class="float-right" *ngIf="isOffline">
+                <p class="m-0 p-0">Payment method</p>
+                <select [(ngModel)]="paymentMode">
+                    <option value="">Select payment Method</option>
+                    <option value="cash">Cash</option>
+                    <option value="DD">DD</option>
+                    <option value="cheque">Cheque</option>
+                </select>
+            </div>
+        </div>
+        <div class="row payment-status-grid">
             <div class="col-md-12">
                 <table class="table">
                     <thead class="thead-light">
@@ -43,6 +62,7 @@
                             <th>Name</th>
                             <th>Amount</th>
                             <th>Scholarship Amount</th>
+                            <th>Term</th>
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -52,9 +72,11 @@
                             <td>{{res.typeName}}</td>
                             <td>{{res.fee}}</td>
                             <td>{{res.scholarship?.value || 0}}</td>
+                            <td>{{res.term || '-'}}</td>
                             <td>₹ {{+res.fee - +res.scholarship?.value || 0}}</td>
                         </tr>
                         <tr>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -92,7 +114,7 @@
         </div>
         <div class="row mt-5">
             <div class="col-md-6">
-                <h6>Active Fee list</h6>
+                <h6>Activate Fee list</h6>
                 <label>You can pay by particular fee</label>
                 <table class="table">
                     <thead class="thead-light">

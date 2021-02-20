@@ -4,6 +4,7 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
+      - npx npm-force-resolutions
       - npm install
   build:
     commands:

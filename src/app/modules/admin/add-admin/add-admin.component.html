@@ -13,8 +13,17 @@
                 <div class="row m-0" *ngFor="let data of adminList; let i = index;" [formGroupName]="i">
                     <div class="col-md-12 p-0">
                         <div class="row m-0">
-                            <div class="col-md-3">
+                            <div class="col-md-3" *ngIf="!isSUAdmin">
                                 <div class="row mt-2">
+                                    <p class="p-0 m-0"> University * </p>
+                                    <select formControlName="universityId" required>
+                                        <option value="" selected>Select university</option>
+                                        <option *ngFor=' let university of universityList' [value]="university.id">{{university.universityName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row mt-2" [ngClass]="{'ml-1':!isSUAdmin}">
                                     <p class="p-0 m-0"> Username * </p>
                                     <input type="text" placeholder="Username name" required formControlName="name">
                                 </div>
@@ -25,7 +34,7 @@
                                     <input type="password" placeholder="Password" formControlName="password">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3" *ngIf="isSUAdmin">
                                 <div class="row mt-2 ml-1">
                                     <p class="p-0 m-0 "> Email Id * </p>
                                     <input type="email" placeholder="Email Id" required formControlName="emailId">
@@ -43,6 +52,12 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-md-3" *ngIf="!isSUAdmin">
+                                <div class="row mt-2 ml-1">
+                                    <p class="p-0 m-0 "> Email Id * </p>
+                                    <input type="email" placeholder="Email Id" required formControlName="emailId">
+                                </div>
+                            </div>
                             <div class="col-md-3">
                                 <div class="row mt-2 ml-1">
                                     <p class="p-0 m-0 "> Phone No * </p>

@@ -1,8 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
 import { UtilityServiceService } from 'src/app/utility-service.service';
 
@@ -14,7 +16,7 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
 export class ViewFeeComponent implements OnInit {
 
 
-    displayedColumns: string[] = ['index', 'schoolName', 'departmentName', 'programName', 'semesterName', 'divisionName', 'type', 'fee', 'update', 'delete'];
+    displayedColumns: string[] = ['index', 'schoolName', 'departmentName', 'programName', 'feeType', 'frequencyStop', 'type', 'fee', 'update', 'delete'];
     dataSource: MatTableDataSource<any>;
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -22,11 +24,19 @@ export class ViewFeeComponent implements OnInit {
     constructor(
         private _dataService: UtilityServiceService,
         private router: Router,
+        private toastr: ToastrService,
         public dialog: MatDialog
     ) { }
 
     ngOnInit() {
-        this._dataService.getFee().subscribe(res => {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
+        this._dataService.getFee(req).subscribe(res => {
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
         })
@@ -51,6 +61,9 @@ export class ViewFeeComponent implements OnInit {
                         ...element
                     })
                     this.ngOnInit();
+                }, (res: HttpErrorResponse) => {
+                    console.log(res)
+                    this.toastr.error(res.error.message || res.message, 'Info');
                 });
             }
         });

@@ -13,14 +13,16 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
 })
 export class AddProgrammeComponent implements OnInit {
 
-
+    
     objectForm: FormGroup;
     schoolList: Array<any> = [];
+    universityList: Array<any> = [];
     departmentList: Array<any> = [];
     programmeList: Array<any> = [{}];
     schoolId: number = 0;
     departmentId: number = 0;
     isEdit: boolean = false;
+    isSUadmin: boolean = false;
     public editData: object = {};
 
     constructor(
@@ -30,11 +32,22 @@ export class AddProgrammeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.getSchoolList();
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '';
+        let req;
+        if (this.isSUadmin) {
+            this.getUniversity();
+        } else {
+            req = {
+                universityId: id
+            }
+            this.getSchoolList(req);
+        }
         this.editData = JSON.parse(sessionStorage.getItem('programm'));
         const byDepartment = JSON.parse(sessionStorage.getItem('by-department'));
 
         this.objectForm = new FormGroup({
+            'universityId': new FormControl(id, Validators.required),
             'schoolName': new FormControl('', Validators.required),
             'departmentName': new FormControl('', Validators.required),
             'programme': new FormArray([])
@@ -47,29 +60,38 @@ export class AddProgrammeComponent implements OnInit {
             this.objectForm.patchValue({
                 schoolName: this.schoolId,
                 departmentName: this.departmentId,
+                universityId: this.editData['universityId'],
                 programme: []
             });
             (<FormArray>this.objectForm.get('programme')).push(new FormControl(this.editData['programName']));
             this.getDepartmentList();
+            this.getSchoolList(req);
         } else {
             if (byDepartment) {
                 this.objectForm.patchValue({
                     schoolName: byDepartment.schoolId,
                     departmentName: byDepartment.id,
+                    universityId: byDepartment.universityId,
                 });
                 this.schoolId = byDepartment.schoolId;
                 this.departmentId = byDepartment.id;
                 this.getDepartmentList();
+                this.getSchoolList(req);
             }
             (<FormArray>this.objectForm.get('programme')).push(new FormControl(null));
         }
-
-
         this.objectForm.patchValue({})
     }
 
-    public getSchoolList(): void {
-        this._dataService.getSchoolList().subscribe(res => {
+
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
+    }
+
+    getSchoolList(data?): void {
+        this._dataService.getSchoolList(data).subscribe(res => {
             this.schoolList = [...res];
         });
     }
@@ -88,6 +110,12 @@ export class AddProgrammeComponent implements OnInit {
     removeProgramme(i) {
         this.programmeList.splice(i, 1);
         (<FormArray>this.objectForm.get('programme')).removeAt(i);
+    }
+
+    selectUniversity(event) {
+        this.getSchoolList({
+            universityId: event || 0,
+        });
     }
 
     selectSchool(event) {

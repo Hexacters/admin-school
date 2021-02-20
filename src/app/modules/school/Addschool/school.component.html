@@ -10,6 +10,15 @@
   <mat-card class="content_box">
     <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
       <div class="row m-0">
+        <div class="col-md-4 ml-0 mr-4" *ngIf="isSUadmin">
+          <div class="row" style="display: flex;">
+            <label class="m-0" for="cars">University *</label>
+            <select size="1" formControlName="universityId" (ngModelChange)='selectUniversity($event)' required>
+              <option value="" selected>Select university</option>
+              <option *ngFor=' let university of universityList' [value]="university.id">{{university.universityName}}</option>
+            </select>
+          </div>
+        </div>
         <div class="col-md-5" formArrayName="schools">
           <div class="row d-flex" *ngFor="let School of SchoolList;index as i">
             <div class="col-md-11 p-0 m-0">

@@ -12,6 +12,7 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
 })
 export class AddDivisionComponent implements OnInit {
     objectForm: FormGroup;
+    universityList: Array<any> = [];
     schoolList: Array<any> = [];
     departmentList: Array<any> = [];
     programmeList: Array<any> = [];
@@ -22,7 +23,9 @@ export class AddDivisionComponent implements OnInit {
     programmeId: number = 0;
     semesterId: number = 0;
     public isEdit: boolean = false;
+    public isSUadmin: boolean = false;
     public editData: object = {};
+    public isNodivision: boolean = false;
 
     constructor(
         private _dataService: UtilityServiceService,
@@ -31,10 +34,22 @@ export class AddDivisionComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '';
+        let req;
+        if (this.isSUadmin) {
+            this.getUniversity();
+        } else {
+            req = {
+                universityId: id
+            }
+            this.getSchoolList(req);
+        }
         this.editData = JSON.parse(sessionStorage.getItem('division'));
         const reqData = JSON.parse(sessionStorage.getItem('by-semester'));
 
         this.objectForm = new FormGroup({
+            'universityId': new FormControl(id, Validators.required),
             'schoolName': new FormControl('', Validators.required),
             'departmentName': new FormControl('', Validators.required),
             'programmeName': new FormControl('', Validators.required),
@@ -52,10 +67,12 @@ export class AddDivisionComponent implements OnInit {
                 schoolName: this.schoolId,
                 departmentName: this.departmentId,
                 programmeName: this.programmeId,
-                semesterName: this.semesterId
+                semesterName: this.semesterId,
+                universityId: this.editData['universityId']
             });
             (<FormArray>this.objectForm.get('division')).push(new FormControl(this.editData['divisionName']));
 
+            this.getSchoolList(req);
             this.getdepartmentList(this.isEdit);
             this.getprogrammeList(this.isEdit);
             this.getSemesterList(this.isEdit);
@@ -69,19 +86,26 @@ export class AddDivisionComponent implements OnInit {
                     schoolName: this.schoolId,
                     departmentName: this.departmentId,
                     programmeName: this.programmeId,
-                    semesterName: this.semesterId
+                    semesterName: this.semesterId,
+                    universityId: reqData['universityId']
                 });
+                this.getSchoolList(req);
                 this.getdepartmentList(this.isEdit);
                 this.getprogrammeList(this.isEdit);
                 this.getSemesterList(this.isEdit);
             }
             (<FormArray>this.objectForm.get('division')).push(new FormControl());
         }
-        this.getSchoolList(this.isEdit);
     }
 
-    getSchoolList(isEdit: boolean = false): void {
-        this._dataService.getSchoolList().subscribe(res => {
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
+    }
+
+    getSchoolList(data?): void {
+        this._dataService.getSchoolList(data).subscribe(res => {
             this.schoolList = [...res];
         });
     }
@@ -114,6 +138,15 @@ export class AddDivisionComponent implements OnInit {
         (<FormArray>this.objectForm.get('division')).removeAt(i);
     }
 
+    selectUniversity(event) {
+        this.getSchoolList({
+            universityId: event || 0,
+        });
+        this.objectForm.patchValue({
+            schoolName: ''
+        })
+    }
+
     selectSchool(event) {
         this.schoolId = event;
         this.getdepartmentList(false, {
@@ -139,26 +172,32 @@ export class AddDivisionComponent implements OnInit {
     }
 
     selectSemester(event) {
+        if (this.semesterList.length) {
+            this.isNodivision = this._dataService.isNodivisionSem(this.semesterList, event);
+        }
         this.semesterId = event;
     }
 
     onSubmit(isEdit: boolean = this.isEdit): void {
         this.objectForm.markAllAsTouched();
         if (this.objectForm.valid) {
-            let body = {};
+            let body = [];
             if (this.objectForm.value.division[0] === null) {
                 alert('Please fill the required feilds')
             } else {
-                body = {
-                    "schoolId": this.schoolId,
-                    "departmentId": this.departmentId,
-                    'programId': this.programmeId,
-                    "semesterId": this.semesterId,
-                    "divisionName": [...this.objectForm.value.division]
-                }
+                this.objectForm.value.division.forEach(e => {
+                    body.push({
+                        "schoolId": this.schoolId,
+                        "departmentId": this.departmentId,
+                        'programId': this.programmeId,
+                        "semesterId": this.semesterId,
+                        "divisionName": e
+                    });
+                })
+               
             }
             if (isEdit) {
-                this._dataService.updateDivision(this.editData['id'], body).subscribe(res => {
+                this._dataService.updateDivision(this.editData['id'], body[0]).subscribe(res => {
                     this.router.navigate(['/division']);
                     this.toastr.success('Division details updated successfully', 'Info');
                 }, (res: HttpErrorResponse) => {

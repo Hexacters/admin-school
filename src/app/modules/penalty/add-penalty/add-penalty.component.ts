@@ -15,6 +15,8 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
 export class AddPenaltyComponent implements OnInit {
 
     penaltyForm: FormGroup;
+    isSUAdmin: boolean = false;
+    universityList: Array<any> = [];
     penaltyList: Array<any> = [];
     editFlag: boolean = false;
     editData: object = {};
@@ -32,6 +34,10 @@ export class AddPenaltyComponent implements OnInit {
         this.penaltyForm = new FormGroup({
             'penalty': new FormArray([])
         });
+        if (this._dataService.isSuperAdmin) {
+            this.isSUAdmin = this._dataService.isSuperAdmin();
+            this.getUniversity();
+        }
 
         if (this.router.url.includes('edit')) {
             this.editFlag = true;
@@ -43,10 +49,12 @@ export class AddPenaltyComponent implements OnInit {
     }
 
     public getPenalty(data) {
+        const id = this._dataService.currentUniversity() || '';
         return new FormGroup({
             'penaltyName': new FormControl(data['penaltyName'] || '', Validators.required),
             'penaltyAmount': new FormControl(data['penaltyAmount'] || '', Validators.required),
             'frequency': new FormControl(data['frequency'] || '', Validators.required),
+            'universityId': new FormControl(data['universityId'] || id, Validators.required),
         })
     }
 
@@ -58,6 +66,12 @@ export class AddPenaltyComponent implements OnInit {
     public onRemove(i) {
         this.penaltyList.splice(i, 1);
         (<FormArray>this.penaltyForm.get('penalty')).removeAt(i);
+    }
+
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
     }
 
     onSubmit() {

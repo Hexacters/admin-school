@@ -4,31 +4,40 @@
             Dashboard
         </mat-card>
     </div>
-    <div class="row mt-4">
+    <div class="row">
         <div class="col-md-3">
             <mat-card class="card1">
                 <div class="row">
                     <div class="col-md-4">
-                        <mat-icon style="font-size: 50px;" aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+                        <mat-icon style="font-size: 50px;" aria-hidden="false" aria-label="Example home icon">home
+                        </mat-icon>
                     </div>
                     <div class="col-md-8">
-                        <div class="row"><p style="line-height: 40px; font-size: 40px; float: right;">300</p></div>
-                        <div class="row"><p style="line-height: 24px;">Total Schools</p> </div>
+                        <div class="row">
+                            <p style="line-height: 40px; font-size: 40px; float: right;">{{total_schools}}</p>
+                        </div>
+                        <div class="row">
+                            <p style="line-height: 24px;">Total Schools</p>
+                        </div>
                     </div>
                 </div>
-                
-                
+
             </mat-card>
         </div>
         <div class="col-md-3">
             <mat-card class="card2">
                 <div class="row">
                     <div class="col-md-4">
-                        <mat-icon style="font-size: 50px;" aria-hidden="false" aria-label="Example home icon">person</mat-icon>
+                        <mat-icon style="font-size: 50px;" aria-hidden="false" aria-label="Example home icon">
+                            account_balance</mat-icon>
                     </div>
                     <div class="col-md-8">
-                        <div class="row"><p style="line-height: 40px; font-size: 40px; float: right;">2000</p></div>
-                        <div class="row"><p style="line-height: 24px;">Total Students</p> </div>
+                        <div class="row">
+                            <p style="line-height: 40px; font-size: 40px; float: right;">{{total_departments}}</p>
+                        </div>
+                        <div class="row">
+                            <p style="line-height: 24px;">Total Departments</p>
+                        </div>
                     </div>
                 </div>
             </mat-card>
@@ -37,11 +46,16 @@
             <mat-card class="card3">
                 <div class="row">
                     <div class="col-md-4">
-                        <mat-icon style="font-size: 50px;" aria-hidden="false" aria-label="Example home icon">account_balance</mat-icon>
+                        <mat-icon style="font-size: 50px;" aria-hidden="false" aria-label="Example home icon">all_inbox
+                        </mat-icon>
                     </div>
                     <div class="col-md-8">
-                        <div class="row"><p style="line-height: 40px; font-size: 40px; float: right;">30</p></div>
-                        <div class="row"><p style="line-height: 24px;">Total Departments</p> </div>
+                        <div class="row">
+                            <p style="line-height: 40px; font-size: 40px; float: right;">{{total_programme}}</p>
+                        </div>
+                        <div class="row">
+                            <p style="line-height: 24px;">Total Programme</p>
+                        </div>
                     </div>
                 </div>
             </mat-card>
@@ -50,14 +64,64 @@
             <mat-card class="card4">
                 <div class="row">
                     <div class="col-md-4">
-                        <mat-icon style="font-size: 50px;" aria-hidden="false" aria-label="Example home icon">all_inbox</mat-icon>
+                        <mat-icon style="font-size: 50px;" aria-hidden="false" aria-label="Example home icon">person
+                        </mat-icon>
                     </div>
                     <div class="col-md-8">
-                        <div class="row"><p style="line-height: 40px; font-size: 40px; float: right;">300</p></div>
-                        <div class="row"><p style="line-height: 24px;">Total Division</p> </div>
+                        <div class="row">
+                            <p style="line-height: 40px; font-size: 40px; float: right;">{{total_students}}</p>
+                        </div>
+                        <div class="row">
+                            <p style="line-height: 24px;">Total Students</p>
+                        </div>
                     </div>
                 </div>
             </mat-card>
         </div>
     </div>
+    <div class="row mt-4">
+        <div class="col-md-8 bg-white">
+            <div class="bg-white rounded">
+                <h5 class="charts-title m-0 px-2 py-3">Collection by Fee Type</h5>
+                <div id="chart">
+                    <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart"
+                        [dataLabels]="chartOptions.dataLabels" [colors]="colors"
+                        [plotOptions]="chartOptions.plotOptions" [xaxis]="chartOptions.xaxis"></apx-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 bg-white">
+            <div class="pt-5">
+                <h5 class="text-center">Payment Mode</h5>
+                <div id="chart4">
+                    <apx-chart [series]="chartOptions4.series" [chart]="chartOptions4.chart"
+                        [dataLabels]="chartOptions2.dataLabels" [labels]="chartOptions4.labels"
+                        [responsive]="chartOptions4.responsive"  [legend]="chartOptions4.legend"></apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-4 bg-white">
+            <div class="pt-5">
+                <h5 class="text-center">Collection by this year</h5>
+                <div id="chart3">
+                    <apx-chart [series]="chartOptions3.series" [chart]="chartOptions3.chart"
+                        [dataLabels]="chartOptions2.dataLabels" [labels]="chartOptions3.labels"
+                        [responsive]="chartOptions3.responsive" [legend]="chartOptions3.legend"></apx-chart>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 bg-white">
+            <div class="bg-white">
+                <h5 class="charts-title m-0 px-2 py-3">Collection by programmes</h5>
+                <div id="chart2">
+                    <apx-chart [series]="chartOptions2.series" [colors]="colors" [chart]="chartOptions2.chart"
+                        [dataLabels]="chartOptions2.dataLabels" [plotOptions]="chartOptions2.plotOptions"
+                        [xaxis]="chartOptions2.xaxis"></apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
 </div>

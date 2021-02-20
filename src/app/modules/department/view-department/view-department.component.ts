@@ -25,6 +25,13 @@ export class ViewDepartmentComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
         const schoolData = JSON.parse(sessionStorage.getItem('by-school'));
         let data;
         if (schoolData && this.router.url.includes('bySchool')) {
@@ -32,7 +39,7 @@ export class ViewDepartmentComponent implements OnInit {
                 schoolId: schoolData.id
             }
         }
-        this._dataService.getDepartmentList(data).subscribe(res => {
+        this._dataService.getDepartmentList(data, req).subscribe(res => {
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
         });

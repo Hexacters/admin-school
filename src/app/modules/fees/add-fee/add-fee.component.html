@@ -11,7 +11,17 @@
   <mat-card class="content_box">
     <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
       <div class="row m-0">
-        <div class="col-md-3 mr-2 ml-3">
+        <div class="col-md-3 mr-2 ml-1" *ngIf="isSUadmin">
+          <div class="row" style="display: flex;">
+            <label class="m-0" for="cars">University</label>
+            <select size="1" formControlName="universityId" required (ngModelChange)='selectUniversity($event)'>
+              <option value="" selected>Select University</option>
+              <option *ngFor=' let university of universityList' [value]="university.id">{{university.universityName}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
             <label class="m-0" for="cars">School</label>
             <select size="1" formControlName="schoolName" required (ngModelChange)='selectSchool($event)'>
@@ -31,7 +41,9 @@
             </select>
           </div>
         </div>
+      </div>
 
+      <div class="row m-0 mt-3">
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
             <label class="m-0" for="cars">programme</label>
@@ -42,10 +54,7 @@
           </div>
         </div>
 
-      </div>
-
-      <div class="row m-0 mt-3">
-        <div class="col-md-3 mr-2 ml-3">
+        <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
             <label class="m-0" for="cars">Semester</label>
             <select size="1" formControlName="semesterName" required (ngModelChange)='selectSemester($event)'>
@@ -55,7 +64,7 @@
           </div>
         </div>
 
-        <div class="col-md-3 mr-2 ml-1">
+        <div class="col-md-3 mr-2 ml-1" *ngIf="!isNodivision">
           <div class="row" style="display: flex;">
             <label class="m-0" class="m-0" for="cars">Division</label>
             <select size="1" formControlName="divisionName" required (ngModelChange)='selectDivision($event)'>
@@ -64,7 +73,8 @@
             </select>
           </div>
         </div>
-
+      </div>
+      <div class="row m-0 mt-3">
         <div class="col-md-3 mr-2 ml-1">
           <div class="row" style="display: flex;">
             <label class="m-0" for="cars">Select Frequency</label>
@@ -73,11 +83,18 @@
             </select>
           </div>
         </div>
+        <div class="col-md-3 mr-2 ml-1">
+          <div class="row" style="display: flex;">
+            <label class="m-0" for="cars">Total terms</label>
+            <input type="number" placeholder="Total terms" min="1" formControlName="frequencyStop" required />
+          </div>
+        </div>
       </div>
 
+      <hr/>
+      <h5 class="ml-3">Fee Details</h5>
       <div class="row m-0 mt-3">
-
-        <div class="col-md-3 mr-2 ml-3" formArrayName="feeType">
+        <div class="col-md-3 mr-2 ml-1" formArrayName="feeType">
           <div class="row" style="display: flex;" *ngFor="let fee of feeTypeList;index as i">
             <label class="m-0" for="cars">SELECT Type:</label>
             <select size="1" formControlName="{{i}}" (ngModelChange)='selectType($event, i)' required>
@@ -101,7 +118,7 @@
           </div>
         </div>
 
-        <div class="col-md-2" style="margin-top: 25px;" *ngIf="!isEdit">
+        <div class="col-md-1" style="margin-top: 25px;" *ngIf="!isEdit">
           <button mat-mini-fab color="default" class="shadow-none text-success" (click)='addFee()'>
             <mat-icon>add_circle</mat-icon>
           </button>

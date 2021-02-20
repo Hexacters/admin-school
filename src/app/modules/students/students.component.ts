@@ -12,7 +12,7 @@ import { UtilityServiceService } from 'src/app/utility-service.service';
     styleUrls: ['./students.component.scss']
 })
 export class StudentsComponent implements OnInit {
-    displayedColumns: string[] = ['index', 'schoolName', 'departmentName', 'firstName', 'lastName', 'emailId', 'phoneNo', 'update', 'delete'];
+    displayedColumns: string[] = ['index', 'firstName', 'rollNo', 'emailId', 'phoneNo', 'update', 'delete'];
     dataSource: MatTableDataSource<any>;
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -24,6 +24,13 @@ export class StudentsComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
         const reqData = JSON.parse(sessionStorage.getItem('by-division'));
         let data;
         if (reqData && this.router.url.includes('byDivision')) {
@@ -35,7 +42,7 @@ export class StudentsComponent implements OnInit {
                 divisionId: reqData.id
             }
         }
-        this._dataService.getStudent(data).subscribe(res => {
+        this._dataService.getStudent(data, req).subscribe(res => {
             this.dataSource = new MatTableDataSource(res.filter(e => e.id));
             this.dataSource.paginator = this.paginator;
         })

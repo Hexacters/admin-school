@@ -9,6 +9,16 @@
   <mat-card class="content_box">
     <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
       <div class="row m-0">
+        <div class="col-md-3" *ngIf="isSUadmin">
+          <div class="row mt-3 mr-2" style="display: flex;">
+            <label class="p-0 m-0" for="cars">University</label>
+            <select size="1" formControlName="universityId" required>
+              <option value="" selected>Select University</option>
+              <option *ngFor=' let university of universityList' [value]="university.id">{{university.universityName}}
+              </option>
+            </select>
+          </div>
+        </div>
         <div class="col-md-5" formArrayName="feeTypes">
           <div class="row mt-3" *ngFor="let feeType of feeTypeList;index as i">
             <div class="col-md-10 p-0 m-0">
@@ -18,7 +28,7 @@
             <div class="col-md-1 mt-1 pt-3">
               <button mat-mini-fab color="default" [disabled]="!i" class="shadow-none text-dark"
                 (click)='removeFeeType(i)'>
-                <mat-icon [ngClass]="{'text-light': !i}" >remove_circle</mat-icon>
+                <mat-icon [ngClass]="{'text-light': !i}">remove_circle</mat-icon>
               </button>
             </div>
           </div>

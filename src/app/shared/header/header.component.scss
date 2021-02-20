@@ -5,18 +5,27 @@ mat-toolbar{
     color: white;
 }
 
-.mat-menu-item.mat-ripple.active {
-    background-color: #4680ff;
-    color: #ffffff;
-    .mat-icon {
-        color: inherit;
-    }
-}
-
 mat-menu{
     padding: 0;
 }
-
 span{
-    display: flex;
+    display: inherit;
+}
+.mat-badge-medium.mat-badge-overlap.mat-badge-after .mat-badge-content {
+    right: 9px;
+    top: 3px;
+}
+.mat-menu-content:not(:empty) {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+.mat-menu-content{
+    padding: 0px;
+}
+.icon-notify{
+    min-width: 35px;
+    color: #fff;
+    padding: 0px;
+    border-radius: 50px;
+    margin: 4px;
 }

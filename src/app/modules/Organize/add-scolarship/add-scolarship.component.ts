@@ -14,10 +14,12 @@ export class AddScolarshipComponent implements OnInit {
     scholarshipForm: FormGroup;
     editFlag = true;
     public selectedFeeType = {};
+    public universityList: Array<any> = [{}];
     public typeList: Array<any> = [];
     public scholorsipList: Array<any> = [];
     public isEdit: boolean = false;
     public editData: object = {};
+    public isSUadmin: boolean = false;
 
     constructor(
         private _dataService: UtilityServiceService,
@@ -26,7 +28,14 @@ export class AddScolarshipComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '';
+
+        if (this.isSUadmin) {
+            this.getUniversity();
+        }
         this.scholarshipForm = new FormGroup({
+            'universityId': new FormControl(id, Validators.required),
             'typeId': new FormControl('', Validators.required),
             'scholorsip': new FormArray([])
         });
@@ -50,13 +59,26 @@ export class AddScolarshipComponent implements OnInit {
         })
     }
 
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
+    }
+
     public onAdd(data = {}) {
         this.scholorsipList.push(data);
         (<FormArray>this.scholarshipForm.get('scholorsip')).push(this.getScholarsip(data));
     }
 
     public getType(isEdit: boolean = false): void {
-        this._dataService.getFeetypeList().subscribe(res => {
+        const id = this._dataService.currentUniversity() || '';
+        let req;
+        if (id) {
+            req = {
+                universityId: id
+            }
+        }
+        this._dataService.getFeetypeList(req).subscribe(res => {
             this.typeList = [...res];
         })
     }
@@ -82,6 +104,7 @@ export class AddScolarshipComponent implements OnInit {
 
             body = data.scholorsip.map(e => {
                 e.typeId = data.typeId;
+                e.universityId = data.universityId;
                 return e;
             });
             if (!this.editFlag) {

@@ -14,13 +14,16 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
 
     objectForm: FormGroup;
     schoolList: Array<any> = [{}];
+    universityList: Array<any> = [{}];
     departmentList: Array<any> = [{}];
     schoolId: number = 0;
     editFlag = true;
     id = 0;
+    universityId: number;
     schoolName = '';
     departmentName = '';
     dprtObj;
+    isSUadmin: boolean = false;
 
     constructor(
         private _dataService: UtilityServiceService,
@@ -29,10 +32,22 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '';
+        let req;
+        if (this.isSUadmin) {
+            this.getUniversity();
+        } else {
+            req = {
+                universityId: id
+            }
+            this.getSchoolList(req);
+        }
+
         this.dprtObj = JSON.parse(sessionStorage.getItem('dprtmnt'));
         const bySchool = JSON.parse(sessionStorage.getItem('by-school'));
-        this.getDepartment();
         this.objectForm = new FormGroup({
+            'universityId': new FormControl(id, Validators.required),
             'schoolName': new FormControl('', Validators.required),
             'departments': new FormArray([])
         });
@@ -40,31 +55,36 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
         if (this.router.url.includes('edit')) {
             this.editFlag = false;
             this.id = this.dprtObj.id;
+            this.objectForm.patchValue({
+                universityId: this.dprtObj.universityId,
+                schoolName: this.dprtObj.schoolId,
+            });
+            this.selectUniversity(this.dprtObj.universityId);
             (<FormArray>this.objectForm.get('departments')).push(new FormControl(this.dprtObj.departmentName, Validators.required));
         } else {
             if (bySchool) {
                 this.schoolId = bySchool.id;
-                this.objectForm.get('schoolName').setValue(bySchool.id);
+                this.objectForm.patchValue({
+                    schoolName: bySchool.id,
+                    universityId: bySchool.universityId
+                });
+                this.getSchoolList(req);
             }
             (<FormArray>this.objectForm.get('departments')).push(new FormControl(null, Validators.required));
         }
     }
 
-    getDepartment() {
-        this._dataService.getSchoolList().subscribe(res => {
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
+    }
+
+    getSchoolList(data?) {
+        this._dataService.getSchoolList(data).subscribe(res => {
             this.schoolList = [...res];
             console.log(this.schoolList)
-            if (this.router.url.includes('edit')) {
-
-                this.schoolList.forEach(element => {
-                    if (element.schoolName === this.dprtObj.schoolName) {
-                        this.objectForm.get('schoolName').setValue(element.id);
-                        this.schoolId = element.id;
-                    }
-                });
-            }
-
-        })
+        });
     }
 
     addDepartment() {
@@ -79,6 +99,13 @@ export class AddDepartmentComponent implements OnInit, OnDestroy {
 
     selectSchool(event) {
         this.schoolId = event;
+    }
+
+    selectUniversity(event) {
+        this.universityId = event;
+        this.getSchoolList({
+            universityId: event || 0,
+        });
     }
 
     onSubmit() {

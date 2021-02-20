@@ -10,71 +10,84 @@ export class UtilityServiceService {
     constructor(private http: HttpClient) { }
     prodata;
 
-    // Category Block
-    createAuthorizationHeader(headers: Headers) {
-        headers.append('Authorization', 'Basic ' +
-            btoa('admin:admin'));
+    public currentUniversity(): number {
+        const data = JSON.parse(localStorage.getItem('userDetails') || '{}') || {};
+        if (!data) {
+            return 0;
+        }
+        return data.universityId;
     }
 
-    url = "http://testmode.aptimyst.com/interview/public/category/delete";
-
-    getProducts(): Observable<any> {
-        return this.http.get('http://testmode.aptimyst.com/interview/public/category/get')
-    };
-
-    saveCategory(category): Observable<any> {
-        return this.http.post('http://testmode.aptimyst.com/interview/public/category/save', category)
+    public isSuperAdmin(): boolean {
+        const data = JSON.parse(localStorage.getItem('userDetails') || '{}') || {};
+        if (!data) {
+            return false;
+        }
+        return data.role === 'superAdmin';
     }
 
-    deleteProduct(x): Observable<any> {
-        return this.http.delete('http://testmode.aptimyst.com/interview/public/category/delete', { headers: { "ids": x } })
+    public get isAdmin(): boolean {
+        const data = JSON.parse(localStorage.getItem('userDetails') || '{}') || {};
+        if (!data) {
+            return false;
+        }
+        return data.role === 'superAdmin' || data.role === 'admin';
     }
 
-    // Sub Category Block
-    getSubCategory(): Observable<any> {
-        return this.http.get('http://testmode.aptimyst.com/interview/public/sub-category/get')
-    }
-    savesubCategory(x, y, z): Observable<any> {
-        return this.http.post('http://testmode.aptimyst.com/interview/public/sub-category/save' + '?categoryId=' + x + '&name=' + y, z)
+    public isNodivisionSem(data: any[], id) {
+        const res = data.find(e => e.id == id);
+        return res && res.divisionAddition;
     }
 
-    deleteSubCategoryt(x): Observable<any> {
-        return this.http.delete('http://testmode.aptimyst.com/interview/public/sub-category/delete', { headers: { "ids": x } })
-    }
+    // University APIs Here =======>>>>>>>>>>>>
 
-    // sub sub-category block
-    getsubsubCategory(): Observable<any> {
-        return this.http.get('http://testmode.aptimyst.com/interview/public/sub-sub-category/get')
+    getUniversityList(): Observable<any> {
+        return this.http.get('/ivs/university')
     }
-    deletesubsubCategory(x, y): Observable<any> {
-        const headers = new HttpHeaders().set('ids', y).set('ids', x);
-        return this.http.delete('http://testmode.aptimyst.com/interview/public/sub-category/delete', { headers: headers })
-    }
-
-    // Department APIs Here =======>>>>>>>>>>>>
-
-    getSchoolList(): Observable<any> {
-        return this.http.get('/ivs/school')
-    }
-    saveSchool(schoolList): Observable<any> {
+    saveUniversity(schoolList): Observable<any> {
         let str = (schoolList.toString().split(',')).join('%2C');
         console.log(str, 'str')
-        return this.http.post('/ivs/school?schools=' + str, {})
+        return this.http.post('/ivs/university?universitys=' + str, {})
+    }
+
+    deleteUniversity(schoolId): Observable<any> {
+        return this.http.delete('/ivs/university/' + schoolId)
+    }
+
+    updateUniversity(schoolId, schoolNAme): Observable<any> {
+        return this.http.put('/ivs/university/' + schoolId + '?university=' + schoolNAme, {})
+    }
+
+
+    // School APIs Here =======>>>>>>>>>>>>
+
+    getSchoolList(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/school/byschool', {params});
+        }
+        return this.http.get('/ivs/school')
+    }
+
+    saveSchool(schoolList): Observable<any> {
+        return this.http.post('/ivs/school', schoolList)
     }
 
     deleteSchool(schoolId): Observable<any> {
         return this.http.delete('/ivs/school/' + schoolId)
     }
 
-    updateSchool(schoolId, schoolNAme): Observable<any> {
-        return this.http.put('/ivs/school/' + schoolId + '?school=' + schoolNAme, {})
+    updateSchool(schoolId, data): Observable<any> {
+        return this.http.put('/ivs/school/' + schoolId, data)
     }
 
 
     // Department APIs Here =======>>>>>>>>>>>>
-    getDepartmentList(params?): Observable<any> {
+    getDepartmentList(params?, byData?): Observable<any> {
         if (params) {
             return this.http.get('/ivs/department/byschool', {params});
+        }
+        if (byData) {
+            return this.http.get('/ivs/department', {params: byData});
         }
         return this.http.get('/ivs/department');
     }
@@ -92,9 +105,13 @@ export class UtilityServiceService {
     }
 
     // programm apis start here ===========>>>>>>>>>>>>
-    getProgrammeList(params?): Observable<any> {
+    getProgrammeList(params?, byUniversity?): Observable<any> {
         if (params) {
             return this.http.get('/ivs/program/bydepartment', {params})
+        }
+
+        if (byUniversity) {
+            return this.http.get('/ivs/program', {params: byUniversity})
         }
         return this.http.get('/ivs/program')
     }
@@ -112,9 +129,12 @@ export class UtilityServiceService {
     }
 
     // semester apis start here ===========>>>>>>>>>>>>
-    getsemesterList(params?): Observable<any> {
+    getsemesterList(params?, byUniversity?): Observable<any> {
         if (params) {
             return this.http.get('/ivs/semester/byprogram', {params})
+        }
+        if (byUniversity) {
+            return this.http.get('/ivs/semester', {params: byUniversity})
         }
         return this.http.get('/ivs/semester')
     }
@@ -133,11 +153,11 @@ export class UtilityServiceService {
 
     // division apis start here ===========>>>>>>>>>>>>
 
-    getDivisionList(params?): Observable<any> {
+    getDivisionList(params?, byUniversity?): Observable<any> {
         if (params) {
             return this.http.get('/ivs/division/byDivision', {params})
         }
-        return this.http.get('/ivs/division')
+        return this.http.get('/ivs/division', {params: byUniversity})
     }
 
     deleteDivision(divisionId): Observable<any> {
@@ -154,17 +174,20 @@ export class UtilityServiceService {
 
     // Type apis start here ===========>>>>>>>>>>>>
 
-    saveFeetype(FeetypeList): Observable<any> {
+    saveFeetype(FeetypeList, universityId): Observable<any> {
         let str = (FeetypeList.toString().split(',')).join('%2C');
         console.log(str, 'str')
-        return this.http.post('/ivs/type?types=' + str, {})
+        return this.http.post('/ivs/type?universityId=' + universityId + '&types=' + str, {})
     }
 
-    updateFeetype(id, typeName): Observable<any> {
-        return this.http.put('/ivs/type/' + id + '?type=' + typeName, {})
+    updateFeetype(id, typeName, universityId): Observable<any> {
+        return this.http.put('/ivs/type/' + id + '?universityId=' + universityId + '&type=' + typeName, {})
     }
 
-    getFeetypeList(): Observable<any> {
+    getFeetypeList(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/type', {params})
+        }
         return this.http.get('/ivs/type')
     }
 
@@ -198,12 +221,19 @@ export class UtilityServiceService {
 
     // Active Fee apis start here ===========>>>>>>>>>>>>
 
-    getActiveFee(): Observable<any> {
+    getActiveFee(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/activatefee', {params});
+        }
         return this.http.get('/ivs/activatefee');
     }
 
     addActiveFee(params): Observable<any> {
         return this.http.post('/ivs/activatefee', params);
+    }
+
+    getTerms(params): Observable<any> {
+        return this.http.get('/ivs/activatefee/term', {params});
     }
 
     // Type apis start here ===========>>>>>>>>>>>>
@@ -216,7 +246,10 @@ export class UtilityServiceService {
         return this.http.put(`/ivs/feetype/${id}`, body)
     }
 
-    getFee(): Observable<any> {
+    getFee(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/feetype', {params})
+        }
         return this.http.get('/ivs/feetype')
     }
 
@@ -235,7 +268,10 @@ export class UtilityServiceService {
         return this.http.put(`/ivs/scholarship/${id}`, body)
     }
 
-    getScholarship(): Observable<any> {
+    getScholarship(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/scholarship/getScholarship', {params});
+        }
         return this.http.get('/ivs/scholarship/getScholarship');
     }
 
@@ -261,9 +297,12 @@ export class UtilityServiceService {
         return this.http.put(`/ivs/student/updateStudent/${id}`, body)
     }
 
-    getStudent(params?): Observable<any> {
+    getStudent(params?, byUniversity?): Observable<any> {
         if (params) {
             return this.http.get('/ivs/student/byStudent', {params})
+        }
+        if (byUniversity) {
+            return  this.http.get('/ivs/student/getStudent', {params: byUniversity});
         }
         return this.http.get('/ivs/student/getStudent');
     }
@@ -286,7 +325,10 @@ export class UtilityServiceService {
         return this.http.put(`/ivs/assignScholarship/${id}`, body)
     }
 
-    getAssignScholarship(): Observable<any> {
+    getAssignScholarship(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/assignScholarship/getAssignScholarship', {params});
+        }
         return this.http.get('/ivs/assignScholarship/getAssignScholarship');
     }
 
@@ -304,7 +346,10 @@ export class UtilityServiceService {
         return this.http.put(`/ivs/penalty/updatePenalty/${id}`, body)
     }
 
-    getPenalty(): Observable<any> {
+    getPenalty(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/penalty/getPenalty', {params});
+        }
         return this.http.get('/ivs/penalty/getPenalty');
     }
 
@@ -322,7 +367,10 @@ export class UtilityServiceService {
         return this.http.put(`/ivs/admin/${id}`, body)
     }
 
-    getAdmin(): Observable<any> {
+    getAdmin(params?): Observable<any> {
+        if (params) {
+            return this.http.get('/ivs/admin', {params});
+        }
         return this.http.get('/ivs/admin');
     }
 
@@ -366,5 +414,67 @@ export class UtilityServiceService {
         return this.http.post('/ivs/payment/confirmstatus', params);
     }
 
+    // Notification API
+    getNotification(params?): Observable<any>{
+        if (params) {
+            return this.http.get('/ivs/notification/activatefee', {params});
+        }
+        return this.http.get('/ivs/notification/activatefee');
+    }
+
+    // Dashboard API
+
+    getDashBoardCount(params?): Observable<any>{
+        if (params) {
+            return this.http.get('dashboard/count', {params});
+        }
+        return this.http.get('dashboard/count');
+    }
+
+    getDashBoardPaymentMode(params?): Observable<any>{
+        if (params) {
+            return this.http.get('dashboard/paymentmode', {params});
+        }
+        return this.http.get('dashboard/paymentmode');
+    }
+
+    getDashBoardMonthly(params?): Observable<any>{
+        if (params) {
+            return this.http.get('dashboard/monthlyfee', {params});
+        }
+        return this.http.get('dashboard/monthlyfee');
+    }
+
+    getDashBoardPrograms(params?): Observable<any>{
+        if (params) {
+            return this.http.get('dashboard/topsevenfeesbyprograms', {params});
+        }
+        return this.http.get('dashboard/topsevenfeesbyprograms');
+    }
+
+    getDashBoardTopTypes(params?): Observable<any>{
+        if (params) {
+            return this.http.get('dashboard/topsevenfeetypes', {params});
+        }
+        return this.http.get('dashboard/topsevenfeetypes');
+    }
+
+    getReportStudent(params): Observable<any>{
+        return this.http.get('report/studentreport', {params});
+    }
+
+    getReportFeeStatus(params?): Observable<any>{
+        if (params) {
+            return this.http.get('report/feestatus', {params});
+        }
+        return this.http.get('report/feestatus', {params});
+    }
+
+    getReportPaymentStatus(params?): Observable<any>{
+        if (params) {
+            return this.http.get('report/paymentstatus', {params});
+        }
+        return this.http.get('report/paymentstatus');
+    }
 
 }

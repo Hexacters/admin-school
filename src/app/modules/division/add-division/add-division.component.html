@@ -12,6 +12,17 @@
     <mat-card class="content_box">
         <form action="" [formGroup]="objectForm" (submit)="onSubmit()">
             <div class="row m-0">
+                <div class="col-md-3 mr-2 ml-1" *ngIf="isSUadmin">
+                    <div class="row" style="display: flex;">
+                        <label class="m-0" for="cars">University</label>
+                        <select size="1" required formControlName="universityId" (ngModelChange)='selectUniversity($event)'>
+                            <option value="" selected>Select University</option>
+                            <option *ngFor="let university of universityList" [value]="university.id">{{university.universityName}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="col-md-3 mr-2 ml-1">
                     <div class="row" style="display: flex;">
                         <label class="m-0" for="cars">School</label>
@@ -35,8 +46,21 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-md-3 mr-2 ml-1" *ngIf="!isSUadmin">
+                    <div class="row" style="display: flex;">
+                        <label class="m-0" for="cars">programme</label>
+                        <select size="1" required formControlName="programmeName"
+                            (ngModelChange)='selectProgramme($event)'>
+                            <option value="" selected>Select programme</option>
+                            <option *ngFor=' let programme of programmeList' [value]="programme.id">
+                                {{programme.programName}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-                <div class="col-md-3 mr-2 ml-1">
+            <div class="row m-0 mt-3">
+                <div class="col-md-3 mr-2 ml-1" *ngIf="isSUadmin">
                     <div class="row" style="display: flex;">
                         <label class="m-0" for="cars">programme</label>
                         <select size="1" required formControlName="programmeName"
@@ -48,9 +72,6 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="row m-0 mt-3">
                 <div class="col-md-3 mr-2 ml-1">
                     <div class="row" style="display: flex;">
                         <label class="m-0" for="cars">Semester</label>
@@ -63,7 +84,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3 mr-2 ml-1" formArrayName="division">
+                <div class="col-md-3 mr-2 ml-1" formArrayName="division" *ngIf="!isNodivision">
                     <div class="row" *ngFor="let division of divisionList;index as i">
                         <div class="col-md-10 p-0 m-0">
                             <p class="m-0 mb-1"> Division Name * </p>

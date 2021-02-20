@@ -14,6 +14,7 @@ export class AddStudentComponent implements OnInit {
     studentForm: FormGroup;
     editFlag = false;
     public selectedFeeType = {};
+    public universityList: Array<any> = [];
     public studentsList: Array<any> = [];
     public schoolList: Array<any> = [];
     public departmentList: Array<any> = [];
@@ -26,6 +27,8 @@ export class AddStudentComponent implements OnInit {
     public programmeId: number = 0;
     public semesterId: number = 0;
     public divisionId: number = 0;
+    public isSUadmin: boolean = false;
+    public isNodivision: boolean = false;
 
     constructor(
         private _dataService: UtilityServiceService,
@@ -34,7 +37,19 @@ export class AddStudentComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.isSUadmin = this._dataService.isSuperAdmin();
+        const id = this._dataService.currentUniversity() || '';
+        let req;
+        if (this.isSUadmin) {
+            this.getUniversity();
+        } else {
+            req = {
+                universityId: id
+            }
+            this.getSchoolList(req);
+        }
         this.studentForm = new FormGroup({
+            'universityId': new FormControl(id, Validators.required),
             'schoolId': new FormControl('', Validators.required),
             'departmentId': new FormControl('', Validators.required),
             'programId': new FormControl('', Validators.required),
@@ -47,6 +62,7 @@ export class AddStudentComponent implements OnInit {
             this.editData = JSON.parse(sessionStorage.getItem('students'));
             this.studentForm.patchValue({ ...this.editData });
             this.onAdd(this.editData);
+            this.getSchoolList(req);
             this.getdepartmentList(this.editFlag);
             this.getprogrammeList(this.editFlag);
             this.getSemesterList(this.editFlag);
@@ -54,13 +70,13 @@ export class AddStudentComponent implements OnInit {
         } else {
             this.onAdd();
         }
-        this.getSchoolList(this.editFlag);
     }
 
     public getScholarsip(data) {
         return new FormGroup({
             'firstName': new FormControl(data['firstName'] || '', Validators.required),
-            'lastName': new FormControl(data['lastName'] || '', Validators.required),
+            'lastName': new FormControl(' '),
+            'rollNo': new FormControl(data['rollNo'] || '', Validators.required),
             'emailId': new FormControl(data['emailId'] || '', Validators.email),
             'phoneNo': new FormControl(data['phoneNo'] || '', Validators.required),
             'parentPhoneNo': new FormControl(data['parentPhoneNo'] || ''),
@@ -69,8 +85,14 @@ export class AddStudentComponent implements OnInit {
         })
     }
 
-    getSchoolList(isEdit: boolean = false): void {
-        this._dataService.getSchoolList().subscribe(res => {
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
+    }
+
+    getSchoolList(data?): void {
+        this._dataService.getSchoolList(data).subscribe(res => {
             this.schoolList = [...res];
         });
     }
@@ -90,13 +112,27 @@ export class AddStudentComponent implements OnInit {
     getSemesterList(isEdit: boolean = false, data?): void {
         this._dataService.getsemesterList(data).subscribe(res => {
             this.semesterList = [...res];
+            this.isNodivision = this._dataService.isNodivisionSem(this.semesterList, this.editData['semesterId']);
         })
     }
 
     getDivisionList(isEdit: boolean = false, data?): void {
         this._dataService.getDivisionList(data).subscribe(res => {
             this.divisionList = [...res];
+            if (this.isNodivision && !this.editData['semesterId']) {
+                const id =  res[0].id
+                this.studentForm.patchValue({
+                    divisionId: id
+                });
+                this.selectDivision(id);
+            }
         })
+    }
+
+    selectUniversity(event) {
+        this.getSchoolList({
+            universityId: event || 0,
+        });
     }
 
     selectSchool(event) {
@@ -125,6 +161,7 @@ export class AddStudentComponent implements OnInit {
 
     selectSemester(event) {
         this.semesterId = event;
+        this.isNodivision = this._dataService.isNodivisionSem(this.semesterList, event);
         this.getDivisionList(this.editFlag, {
             schoolId: this.schoolId,
             departmentId: this.departmentId,
@@ -159,7 +196,7 @@ export class AddStudentComponent implements OnInit {
     public onSubmit(): void {
         this.studentForm.markAllAsTouched();
         if (this.studentForm.valid) {
-        const data = this.studentForm.value;
+        const data = { ...this.studentForm.value };
         let body = {};
 
         body = data.students.map(e => {

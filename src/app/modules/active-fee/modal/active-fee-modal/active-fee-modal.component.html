@@ -1,6 +1,7 @@
 <form [formGroup]="objectForm" class="form-active-fee" (submit)="onSubmit()">
     <div mat-dialog-content>
-        <h5>Active Fee</h5>
+        <h5>Activate Fee</h5>
+        <p>Once activated, an email will be sent to the corresponding students. It can't be deactivated later</p>
         <div class="row m-0 mt-3 py-4">
             <div class="col-md-4 mr-2 ml-1">
                 <div class="row" style="display: flex;">
@@ -11,7 +12,16 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-4 p-0 ml-3">
+            <div class="col-md-4 mr-2 ml-1">
+                <div class="row" style="display: flex;">
+                    <label class="m-0" for="cars">Select Term</label>
+                    <select size="1" formControlName="term" required>
+                        <option value="" selected>Select Term</option>
+                        <option *ngFor='let term of terms' [value]="term">{{term}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 p-0 ml-1">
                 <label class="m-0" for="cars">Due Date</label>
                 <mat-form-field appearance="fill" class="w-100">
                     <input matInput [min]="minDate" formControlName="activationDate" [matDatepicker]="picker">
@@ -20,7 +30,7 @@
                 </mat-form-field>
             </div>
             <div class="col-md-4 p-0 ml-3">
-                <div class="m-0 mb-2" for="cars">Active Fee</div>
+                <div class="m-0 mb-2" for="cars">Activate Fee</div>
                 <mat-slide-toggle formControlName="activateFee"></mat-slide-toggle>
             </div>
         </div>

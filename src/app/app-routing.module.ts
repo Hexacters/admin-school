@@ -40,6 +40,9 @@ import { ChangePasswordComponent } from './modules/common/change-password/change
 import { StudentProfileComponent } from './modules/student-module/student-profile/student-profile.component';
 import { StudentPaymentComponent } from './modules/student-module/student-payment/student-payment.component';
 import { ForgotPasswordComponent } from './shared/forgot-password/forgot-password.component';
+import { UniversityComponent } from './modules/university/university.component';
+import { AddUniversityComponent } from './modules/university/add-university/add-university.component';
+import { ReportsComponent } from './modules/reports/reports.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -50,11 +53,18 @@ const routes: Routes = [
     children: [
       { path: "profile", component: StudentProfileComponent },
       { path: "change-password", component: ChangePasswordComponent },
-
+      { path: "reports", component: ReportsComponent },
+      
       { path: "dashboard", component: DashboardComponent },
+      
+      { path: "university/add", component: AddUniversityComponent },
+      { path: "university/edit", component: AddUniversityComponent },
+      { path: "university", component: UniversityComponent },
+      
       { path: "school/add", component: SchoolComponent },
       { path: "school/edit", component: SchoolComponent },
       { path: "school", component: ViewschoolComponent },
+      { path: "school/byuniversity", component: ViewschoolComponent },
       { path: "department/add", component: AddDepartmentComponent },
       { path: "department/edit", component: AddDepartmentComponent },
       { path: "department/bySchool", component: ViewDepartmentComponent },
@@ -103,7 +113,9 @@ const routes: Routes = [
 
       { path: "admin", component: AdminComponent },
       { path: "admin/add", component: AddAdminComponent },
+      { path: "admin/su-add", component: AddAdminComponent },
       { path: "admin/edit", component: AddAdminComponent },
+      { path: "admin/su-edit", component: AddAdminComponent },
 
       { path: "payment/online", component: OnlineComponent },
       { path: "payment/offline", component: OfflineComponent },

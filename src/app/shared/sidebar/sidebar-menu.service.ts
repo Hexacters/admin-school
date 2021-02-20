@@ -8,7 +8,7 @@ export interface ISideMenu {
     icon?: string;
     options?: object;
     children?: ISideMenu[];
-    role?: string;
+    role?: string[];
 }
 
 @Injectable({
@@ -21,125 +21,151 @@ export class SidebarMenuService {
             title: 'dashboard',
             link: '/dashboard',
             icon: 'dashboard',
-            role: 'admin'
+            role: ['admin', 'superAdmin']
         },
         {
             title: "Organization",
-            role: 'admin',
+            role: ['admin', 'superAdmin'],
             children: [
+                {
+                    title: "University",
+                    icon: "cast_for_education",
+                    link: "/university",
+                    role: ['superAdmin'],
+                },
                 {
                     title: "School",
                     icon: "business",
-                    link: "/school"
+                    link: "/school",
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     title: "Department",
                     link: "/department",
-                    icon: "account_balance"
+                    icon: "account_balance",
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     title: "Programme",
                     link: "/programm",
-                    icon: "assignment"
+                    icon: "assignment",
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     title: "Semester",
                     link: "/semester",
                     icon: 'content_paste',
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     title: "Division",
                     link: "/division",
                     icon: 'all_inbox',
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     icon: 'supervisor_account',
                     title: 'Students',
-                    link: '/students'
+                    link: '/students',
+                    role: ['admin', 'superAdmin'],
                 }
             ]
         },
         {
             title: "Fees",
-            role: 'admin',
+            role: ['admin', 'superAdmin'],
             children: [
                 {
                     title: "Fee Type",
                     link: "/feeType",
                     icon: 'table_chart',
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     title: "Fee",
                     link: "/fee",
-                    icon: 'list_alt'
+                    icon: 'list_alt',
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     title: "Activate Fee",
                     link: "/active-fee",
-                    icon: 'fact_check'
+                    icon: 'fact_check',
+                    role: ['admin', 'superAdmin'],
                 },
             ]
         },
         {
             title: "Scholarship",
-            role: 'admin',
+            role: ['admin', 'superAdmin'],
             children: [
                 {
                     icon: 'school',
                     title: "Scholarship",
-                    link: "/scholarship"
+                    link: "/scholarship",
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     icon: 'assignment',
                     title: "Assign Scholarship",
-                    link: "/assign"
+                    link: "/assign",
+                    role: ['admin', 'superAdmin'],
                 }
             ]
         },
         {
             title: "Payment",
-            role: 'admin',
+            role: ['admin', 'superAdmin'],
             children: [
                 {
                     title: "Fee Calculation",
                     icon: 'money',
-                    link: "/fee-calculation"
+                    link: "/fee-calculation",
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     title: "Offline Payment",
                     icon: 'payment',
-                    link: "/payment/offline"
+                    link: "/payment/offline",
+                    role: ['admin', 'superAdmin'],
                 },
                 {
                     title: "Online Payment",
                     icon: 'payments',
-                    link: "/payment/online"
+                    link: "/payment/online",
+                    role: ['others'],
                 }
             ]
         },
         {
             title: "Penalty",
             link: "/penalty",
-            role: 'admin',
+            role: ['admin', 'superAdmin'],
             icon: "account_balance_wallet",
         },
         {
             title: "Admin",
             link: "/admin",
-            role: 'admin',
+            role: ['admin', 'superAdmin'],
             icon: "admin_panel_settings",
         },
         {
             title: "Profile",
             link: "/profile",
-            role: 'student',
+            role: ['student'],
             icon: "person",
         },
         {
             title: "Fee Details",
             link: "/students/payment",
-            role: 'student',
+            role: ['student'],
             icon: "money",
+        },
+        {
+            title: "Reports",
+            link: "/reports",
+            role: ['admin', 'superAdmin'],
+            icon: "list_alt",
         }
     ]
 

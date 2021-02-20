@@ -15,7 +15,10 @@ export class AddAdminComponent implements OnInit {
 
     penaltyForm: FormGroup;
     adminList: Array<any> = [];
+    universityList: Array<any> = [];
     editFlag: boolean = false;
+    isSUAdmin: boolean = false;
+    userDetails: any = {};
     editData: object = {};
     frequency = [{ 'name': 'Weekly' }, { 'name': 'Monthly' }, { 'name': 'Quartly' }, { 'name': 'Half Yearly' }, { 'name': 'Yearly' }]
 
@@ -28,6 +31,14 @@ export class AddAdminComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}') || {};
+        this.isSUAdmin = this._dataService.isSuperAdmin();
+        if (this.router.url.includes('su') || !this.isSUAdmin) {
+            this.isSUAdmin = true;
+        } else {
+            this.getUniversity();
+            this.isSUAdmin = false;
+        }
         this.penaltyForm = new FormGroup({
             'admin': new FormArray([])
         });
@@ -42,12 +53,14 @@ export class AddAdminComponent implements OnInit {
     }
 
     public getPenalty(data) {
+        const id = this.userDetails.universityId || '';
         return new FormGroup({
             'name': new FormControl(data['name'] || '', Validators.required),
+            'universityId': new FormControl(data['universityId'] || id),
             'password': new FormControl(data['password'] || ''),
             'emailId': new FormControl(data['emailId'] || '', Validators.email),
             'phoneNo': new FormControl(data['phoneNo'] || '', Validators.required),
-            'role': new FormControl('admin', Validators.required),
+            'role': new FormControl((this.isSUAdmin && this.router.url.includes('su')) ? 'superAdmin' : 'admin', Validators.required),
         })
     }
 
@@ -80,6 +93,12 @@ export class AddAdminComponent implements OnInit {
 
     ngOnDestroy() {
         sessionStorage.clear();
+    }
+
+    getUniversity() {
+        this._dataService.getUniversityList().subscribe(e => {
+            this.universityList = e;
+        })
     }
 
     onUpdate() {

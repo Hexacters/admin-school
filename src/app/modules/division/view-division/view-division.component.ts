@@ -27,6 +27,13 @@ export class ViewDivisionComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
         const reqData = JSON.parse(sessionStorage.getItem('by-semester'));
         let data;
         if (reqData && this.router.url.includes('bySemester')) {
@@ -37,9 +44,9 @@ export class ViewDivisionComponent implements OnInit {
                 semesterId: reqData.id
             }
         }
-        this._dataService.getDivisionList(data).subscribe(res => {
+        this._dataService.getDivisionList(data, req).subscribe(res => {
             console.log(res, 'res')
-            this.dataSource = new MatTableDataSource(res);
+            this.dataSource = new MatTableDataSource(res.filter(e => !e.divisionAddition));
             this.dataSource.paginator = this.paginator;
         })
     }

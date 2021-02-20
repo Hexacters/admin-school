@@ -13,6 +13,16 @@
         <h5>Scholarship</h5>
         <form action="" [formGroup]="scholarshipForm" (submit)="onSubmit()">
             <div class="row m-0">
+                <div class="col-md-3" *ngIf="isSUadmin">
+                    <div class="row mr-1" style="display: flex;">
+                      <label class="p-0 m-0" for="cars">University</label>
+                      <select size="1" formControlName="universityId" required>
+                        <option value="" selected>Select University</option>
+                        <option *ngFor=' let university of universityList' [value]="university.id">{{university.universityName}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 <div class="col-md-4 ml-1">
                     <div class="row" style="display: flex;">
                         <label class="m-0" for="cars">Scholarship Applied on</label>
@@ -27,7 +37,7 @@
             <h6>Scholarship Details</h6>
             <div formArrayName="scholorsip">
                 <div class="row mt-3" *ngFor="let data of scholorsipList; let i = index;" [formGroupName]="i">
-                    <div class="col-md-3 ml-3">
+                    <div class="col-md-3 ml-3" *ngIf="false">
                         <div class="row">
                             <p class="m-0 mb-1"> Scholarship Type* </p>
                             <!-- <input type="text" placeholder="scholorsip Type" formControlName="scholarshipType" > -->

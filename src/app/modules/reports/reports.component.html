@@ -1,0 +1,401 @@
+<div class="container">
+    <div class="row">
+        <mat-card style="height: 60px; color: rgb(12, 26, 39);">
+            Reports
+        </mat-card>
+    </div>
+    <br>
+    <div class="row" style="margin-top: -20px;">
+        <mat-card class="content_box">
+            <mat-tab-group>
+                <mat-tab label="List of Fees Plans">
+                    <br>
+                    <form action="" [formGroup]="objectForm">
+                        <div class="row m-0">
+                          <div class="col-md-3 mr-2 ml-1" *ngIf="isSUadmin">
+                            <div class="row" style="display: flex;">
+                              <label class="m-0" for="cars">University</label>
+                              <select size="1" formControlName="universityId" required (ngModelChange)='selectUniversity($event)'>
+                                <option value="" selected>Select University</option>
+                                <option *ngFor=' let university of universityList' [value]="university.id">{{university.universityName}}</option>
+                              </select>
+                            </div>
+                          </div>
+                  
+                          <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                              <label class="m-0" for="cars">School</label>
+                              <select size="1" formControlName="schoolName" required (ngModelChange)='selectSchool($event)'>
+                                <option value="" selected>Select School</option>
+                                <option *ngFor=' let school of schoolList' [value]="school.id">{{school.schoolName}}</option>
+                              </select>
+                            </div>
+                          </div>
+                  
+                          <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                              <label class="m-0" for="cars">Department</label>
+                              <select size="1" formControlName="departmentName" required (ngModelChange)='selectDepartment($event)'>
+                                <option value="" selected>Select Department</option>
+                                <option *ngFor=' let department of departmentList' [value]="department.id">{{department.departmentName}}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                  
+                        <div class="row m-0 mt-3">
+                          <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                              <label class="m-0" for="cars">programme</label>
+                              <select size="1" formControlName="programmeName" required (ngModelChange)='selectProgramme($event)'>
+                                <option value="" selected>Select programme</option>
+                                <option *ngFor=' let programme of programmeList' [value]="programme.id">{{programme.programName}}</option>
+                              </select>
+                            </div>
+                          </div>
+                  
+                          <div class="col-md-3 mr-2 ml-1">
+                            <div class="row" style="display: flex;">
+                              <label class="m-0" for="cars">Semester</label>
+                              <select size="1" formControlName="semesterName" required (ngModelChange)='selectSemester($event)'>
+                                <option value="" selected>Select Semester</option>
+                                <option *ngFor=' let semester of semesterList' [value]="semester.id">{{semester.semesterName}}</option>
+                              </select>
+                            </div>
+                          </div>
+                  
+                          <div class="col-md-3 mr-2 ml-1" *ngIf="!isNodivision">
+                            <div class="row" style="display: flex;">
+                              <label class="m-0" class="m-0" for="cars">Division</label>
+                              <select size="1" formControlName="divisionName" required (ngModelChange)='selectDivision($event)'>
+                                <option value="" selected>Select Division</option>
+                                <option *ngFor='let division of divisionList' [value]="division.id">{{division.divisionName}}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                                    
+                      </form>
+                      <br>
+                      <hr />
+                    <div class="mat-elevation-z8">
+                        <h5 class="float-left text-dark ml-2">Fee Plans</h5>
+                        <div class="float-right">
+                            <input type="text" class="" placeholder="Search.. Ex: name" (keyup)="applyFilter1($event.target.value)" 
+                             style="width: auto;">
+                        </div>
+                        <table mat-table [dataSource]="dataSource1">
+        
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="index">
+                                <th mat-header-cell *matHeaderCellDef> No. </th>
+                                <td mat-cell *matCellDef="let element;index as i"> {{i+1}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="universityName">
+                                <th mat-header-cell *matHeaderCellDef> University </th>
+                                <td mat-cell *matCellDef="let element"> {{element.universityName}} </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="semesterName">
+                                <th mat-header-cell *matHeaderCellDef> Semester </th>
+                                <td mat-cell *matCellDef="let element"> {{element.semesterName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="typeName">
+                                <th mat-header-cell *matHeaderCellDef> Fee Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.typeName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="maxTerm">
+                                <th mat-header-cell *matHeaderCellDef> Max Term </th>
+                                <td mat-cell *matCellDef="let element"> {{element.maxTerm}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="maxDueDate">
+                                <th mat-header-cell *matHeaderCellDef> DueDate </th>
+                                <td mat-cell *matCellDef="let element"> {{element.maxDueDate | date: 'yyyy-MM-dd'}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="schoolName">
+                                <th mat-header-cell *matHeaderCellDef> School Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.schoolName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="departmentName">
+                                <th mat-header-cell *matHeaderCellDef> Department Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.departmentName}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="programName">
+                                <th mat-header-cell *matHeaderCellDef> Program Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.programName}} </td>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="feeType">
+                                <th mat-header-cell *matHeaderCellDef> Rule </th>
+                                <td mat-cell *matCellDef="let element"> {{element.feeType}} </td>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="activateFee">
+                                <th mat-header-cell *matHeaderCellDef> Active/Inactive </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-icon class="text-success" *ngIf="element.activateFee">
+                                        check_circle
+                                    </mat-icon>
+                                    <mat-icon class="text-danger" *ngIf="!element.activateFee">
+                                        cancel
+                                    </mat-icon>
+                                </td>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="divisionName">
+                                <th mat-header-cell *matHeaderCellDef> Division </th>
+                                <td mat-cell *matCellDef="let element"> {{element.divisionName}} </td>
+                            </ng-container>
+        
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                        </table>
+        
+                        <mat-paginator [length]='10' [pageSizeOptions]="[10, 15, 25]" showFirstLastButtons>
+                        </mat-paginator>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Student Wise Fees Report">
+                    <div class="row" style="width: 100%;">
+                        <div class="col-md-12" style="padding: 20px;">
+                            <div class="mat-elevation-z8">
+                                <div class="col-md-3 float-right" style="display: contents;">
+                                    <button mat-raised-button class="float-right" color="primary" (click)='onSearch()' *ngIf="!searching">
+                                        <mat-icon>search</mat-icon>
+                                        <span>search</span>
+                                    </button>
+                                    <button mat-raised-button class="float-right" color="primary" disabled *ngIf="searching">
+                                        <mat-spinner [diameter]="20" style="float: left;margin-top:6px;margin-right: 6px;"></mat-spinner>
+                                        <span>searching...</span>
+                                    </button>
+                                    <input type="text" class="float-right" placeholder="Enter Student ID" required style="width: auto;" [(ngModel)]='rollNo'>
+                                </div>
+                            </div>
+
+                            <div class="student-status" *ngIf="!isStudentReport">
+                                <br>
+                                <br>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align: center;">
+                                        <img src="../../../assets/no-records.svg" style="width: 200px" />
+                                        <br/>
+                                        <br/>
+                                        <h5>No Record Found</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="isStudentReport">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <ngx-avatar [size]="60" name="{{studentData?.firstName}} {{studentData?.lastName }}">
+                                                </ngx-avatar>
+                                                <div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <h4>{{studentData?.firstName}} {{studentData?.lastName }}</h4>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        {{studentData?.emailId}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="student-status" *ngIf="isStudentReport">
+                                <h5>Student Detail</h5>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="lable">
+                                            <div class="title">Full Name</div>
+                                            <div class="value" style="font-weight: bold;">{{studentData?.firstName}} {{studentData?.lastName }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="lable">
+                                            <div class="title">Mobile Number</div>
+                                            <div class="value"  style="font-weight: bold;">{{studentData?.phoneNo}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="lable">
+                                            <div class="title">Email ID</div>
+                                            <div class="value"  style="font-weight: bold;">{{studentData?.emailId}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="lable">
+                                            <div class="title">Parent Number</div>
+                                            <div class="value"  style="font-weight: bold;">{{studentData?.parentPhoneNo}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="lable">
+                                            <div class="title">Parent EmailID</div>
+                                            <div class="value"  style="font-weight: bold;">{{studentData?.parentEmailId}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="lable">
+                                            <div class="title">Department Name</div>
+                                            <div class="value"  style="font-weight: bold;">{{studentData?.departmentName}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="lable">
+                                            <div class="title">Program Name</div>
+                                            <div class="value"  style="font-weight: bold;">{{studentData?.programName}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="lable">
+                                            <div class="title">School Name</div>
+                                            <div class="value"  style="font-weight: bold;">{{studentData?.schoolName}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="lable">
+                                            <div class="title">University Name</div>
+                                            <div class="value"  style="font-weight: bold;">{{studentData?.universityName}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-12">
+                                        <h6>Payment History</h6>
+                                        <!-- <label>You can view the top 5 recent payments</label> -->
+                                        <table class="table">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>Bill No</th>
+                                                    <th>Received On</th>
+                                                    <th>Received By</th>
+                                                    <th>Amount</th>
+                                                    <th>Satus</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody *ngIf="studentPaymentData.length">
+                                                <tr *ngFor="let res of studentPaymentData; let i = index">
+                                                    <td>{{i+1}}</td>
+                                                    <td>{{res.transactionId}}</td>
+                                                    <td>{{res.paymentReceivedOn | date: 'MM/dd//yyyy'}}</td>
+                                                    <td>{{res.paymentReceivedBy}}</td>
+                                                    <td>{{res.amountReceived}}</td>
+                                                    <td>
+                                                        <mat-icon class="text-success" *ngIf="res.paymentStatus">
+                                                            check_circle
+                                                        </mat-icon>
+                                                        <mat-icon class="text-danger" *ngIf="!res.paymentStatus">
+                                                            cancel
+                                                        </mat-icon>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="text-center w-100" *ngIf="!studentPaymentData">
+                                            No Payment History found
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Student Bill Settlement ">
+                    <div class="mat-elevation-z8 mt-3">
+                        <h5 class="text-dark float-left mt-3 ml-2">Bill Settlement</h5>
+                        <div class="float-right mt-2 ml-3">
+                            <input type="text" class="float-right search-filter" (keyup)="applyFilter3($event.target.value)" 
+                            placeholder="Search.. Ex: name" style="width: auto;">
+                        </div>
+                        <div class="text-dark float-right">
+                            <mat-form-field>
+                                <input matInput
+                                    placeholder="Choose a date"
+                                    (dateChange)="onDateChange($event)"
+                                    [satDatepicker]="picker"
+                                    [value]="customeDateRange">
+                                <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+                                <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+                              </mat-form-field>
+                        </div>
+
+                        <table mat-table [dataSource]="dataSource3">
+                            <ng-container matColumnDef="index">
+                                <th mat-header-cell *matHeaderCellDef> No. </th>
+                                <td mat-cell *matCellDef="let element;index as i"> {{i+1}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="transactionId">
+                                <th mat-header-cell *matHeaderCellDef> Bill No </th>
+                                <td mat-cell *matCellDef="let element"> {{element.transactionId}} </td>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="paymentReceivedOn">
+                                <th mat-header-cell *matHeaderCellDef> Billing Date </th>
+                                <td mat-cell *matCellDef="let element"> {{element.paymentReceivedOn | date: 'MM/dd//yyyy'}} </td>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="paymentReceivedBy">
+                                <th mat-header-cell *matHeaderCellDef> Fee Head </th>
+                                <td mat-cell *matCellDef="let element"> {{element.paymentReceivedBy}} </td>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="amountReceived">
+                                <th mat-header-cell *matHeaderCellDef> Amount </th>
+                                <td mat-cell *matCellDef="let element"> {{element.amountReceived}} </td>
+                            </ng-container>
+        
+                            <ng-container matColumnDef="paymentMode">
+                                <th mat-header-cell *matHeaderCellDef> Payment Mode </th>
+                                <td mat-cell *matCellDef="let element"> {{element.paymentMode}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="penaltyAmount">
+                                <th mat-header-cell *matHeaderCellDef> Penalty Amount </th>
+                                <td mat-cell *matCellDef="let element"> {{element.penaltyAmount}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="paymentStatus">
+                                <th mat-header-cell *matHeaderCellDef> Status </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-icon class="text-success" *ngIf="element.paymentStatus">
+                                        check_circle
+                                    </mat-icon>
+                                    <mat-icon class="text-danger" *ngIf="!element.paymentStatus">
+                                        cancel
+                                    </mat-icon>
+                                </td>
+                            </ng-container>
+                            
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
+                        </table>
+        
+                        <mat-paginator [length]='10' [pageSizeOptions]="[10, 15, 25]" showFirstLastButtons>
+                        </mat-paginator>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>
+    <br/>
+</div>

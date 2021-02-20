@@ -27,6 +27,13 @@ export class ViewProgrammeComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        const id = this._dataService.currentUniversity();
+        let req;
+        if (id) {
+            req ={
+                universityId: this._dataService.currentUniversity()
+            }
+        }
         const schoolData = JSON.parse(sessionStorage.getItem('by-department'));
         let data;
         if (schoolData && this.router.url.includes('byDepartment')) {
@@ -36,7 +43,7 @@ export class ViewProgrammeComponent implements OnInit {
             }
         }
 
-        this._dataService.getProgrammeList(data).subscribe(res => {
+        this._dataService.getProgrammeList(data, req).subscribe(res => {
             console.log(res, 'res')
             this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;

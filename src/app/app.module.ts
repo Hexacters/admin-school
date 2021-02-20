@@ -10,6 +10,8 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { DailogComponent } from './modules/dailog/dailog.component';
 
+import { MatTabsModule } from '@angular/material';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
@@ -85,10 +87,18 @@ import { ChangePasswordComponent } from './modules/common/change-password/change
 import { PaymentStatusComponent } from './modules/common/payment-status/payment-status.component';
 import { StudentPaymentComponent } from './modules/student-module/student-payment/student-payment.component';
 import { ForgotPasswordComponent } from './shared/forgot-password/forgot-password.component';
+import { UniversityComponent } from './modules/university/university.component';
+import { AddUniversityComponent } from './modules/university/add-university/add-university.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { MatBadgeModule, MatCheckboxModule } from '@angular/material';
+import { ReportsComponent } from './modules/reports/reports.component';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, SatDatepickerModule } from 'saturn-datepicker'
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter'
 
 @NgModule({
     declarations: [
         AppComponent,
+        ReportsComponent,
         MainCompComponent,
         HeaderComponent,
         SidebarComponent,
@@ -138,7 +148,9 @@ import { ForgotPasswordComponent } from './shared/forgot-password/forgot-passwor
         StudentProfileComponent,
         ChangePasswordComponent,
         PaymentStatusComponent,
-        StudentPaymentComponent
+        StudentPaymentComponent,
+        UniversityComponent,
+        AddUniversityComponent
     ],
     entryComponents: [
         DailogComponent,
@@ -157,12 +169,18 @@ import { ForgotPasswordComponent } from './shared/forgot-password/forgot-passwor
             preventDuplicates: true,
         }),
         FormsModule,
+        MatTabsModule,
         MatTooltipModule,
         MatProgressBarModule,
         MatTreeModule,
+        NgApexchartsModule,
+        MatBadgeModule,
         ReactiveFormsModule,
+        SatDatepickerModule,
         MatCardModule,
+        MatProgressSpinnerModule,
         MatButtonModule,
+        MatCheckboxModule,
         MatListModule,
         MatDividerModule,
         MatMenuModule,
@@ -195,6 +213,8 @@ import { ForgotPasswordComponent } from './shared/forgot-password/forgot-passwor
             useClass: HeaderInterceptor,
             multi: true
         },
+        {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+        {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
         // {
         //     provide: DateAdapter,
         //     useClass: AppDateFormatAdapter
